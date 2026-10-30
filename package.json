@@ -1,0 +1,14 @@
+{
+  "name": "ashfall",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ASHFALL — a pixel-art horde survivor with PoE-style tag-linked damage math. Zero dependencies.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/run.js",
+    "balance": "node test/balance.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

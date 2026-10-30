@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>sprite sheet</title>
+<style>
+  body { margin: 0; background: #14161f; color: #cfd8e8; font: 12px monospace; padding: 20px; }
+  #grid { display: flex; flex-wrap: wrap; gap: 18px; }
+  .cell { text-align: center; }
+  .cell canvas { image-rendering: pixelated; background: #232636; border: 1px solid #333a52; display: block; }
+  .cell .n { margin-top: 4px; color: #8a93ab; }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script src="js/sprites.js"></script>
+<script>
+  const grid = document.getElementById('grid');
+  const SCALE = 6;
+  for (const name of Object.keys(SPRITES)) {
+    const s = SPRITES[name];
+    const c = document.createElement('canvas');
+    c.width = s.w * SCALE; c.height = s.h * SCALE;
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    for (let y = 0; y < s.h; y++) {
+      for (let x = 0; x < s.w; x++) {
+        const ch = s.rows[y][x];
+        if (ch === '.' || ch === ' ') continue;
+        const col = s.pal[ch];
+        if (!col) continue;
+        ctx.fillStyle = col;
+        ctx.fillRect(x * SCALE, y * SCALE, SCALE, SCALE);
+      }
+    }
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.appendChild(c);
+    const n = document.createElement('div');
+    n.className = 'n';
+    n.textContent = name + ' ' + s.w + 'x' + s.h;
+    cell.appendChild(n);
+    grid.appendChild(cell);
+  }
+</script>
+</body>
+</html>

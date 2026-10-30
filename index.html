@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASHFALL · 灰烬降临</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="world"></canvas>
+</div>
+
+<div id="ui">
+  <div id="xpbar"><div id="xpfill"></div></div>
+
+  <div id="top">
+    <div id="hpwrap">
+      <div id="hpbar"><div id="hpfill"></div></div>
+      <div id="hptext">100 / 100</div>
+    </div>
+    <div id="timer">00:00</div>
+  </div>
+
+  <div id="kills">击杀 <b id="killnum">0</b></div>
+  <div id="dpsbox">DPS <b id="dpsnum">0</b></div>
+
+  <div id="skills"></div>
+
+  <div id="gear"></div>
+
+  <div id="bagbtn">
+    <span class="key">TAB</span> 背包 <b id="bagcount">0</b>
+  </div>
+
+  <div id="hint">WASD / 方向键 移动 · 自动攻击 · TAB 背包</div>
+  <div id="toasts"></div>
+</div>
+
+<div id="modal" class="hidden">
+  <div id="modalbox"></div>
+</div>
+
+<div id="err" class="hidden"></div>
+
+<script src="js/sprites.js"></script>
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

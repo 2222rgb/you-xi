@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>debug</title>
+<style>body{background:#111;color:#0f0;font:12px monospace;white-space:pre}</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<pre id="out">running...</pre>
+<script src="js/sprites.js"></script>
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/render.js"></script>
+<script>
+(function(){
+  var log = [];
+  function L(s){ log.push(s); }
+
+  L('SPRITES keys = ' + (window.SPRITES ? Object.keys(SPRITES).length : 'MISSING'));
+  L('ENGINE = ' + (typeof ENGINE));
+
+  var st = SIM.create(12345);
+  var STEP = 1/60;
+  for (var i = 0; i < 60*40; i++) {
+    if (st.phase === 'levelup') { var ch = SIM.rollChoices(st); if (ch.length) SIM.applyChoice(st, ch[0]); continue; }
+    if (st.phase !== 'run') break;
+    var a = i/60;
+    SIM.step(st, STEP, {mx: Math.cos(a*0.7), my: Math.sin(a*0.7)});
+  }
+  L('sim: t=' + st.t.toFixed(1) + ' enemies=' + st.enemies.length + ' kills=' + st.kills + ' hp=' + Math.round(st.player.hp));
+
+  var cv = document.getElementById('world');
+  RENDER.init(cv);
+  var info = RENDER.debugInfo();
+  L('cache = ' + info.cacheKeys.length + ' keys: ' + info.cacheKeys.slice(0,6).join(','));
+  L('canvas ' + info.canvasW + 'x' + info.canvasH + ' scale=' + info.scale);
+
+  // 把玩家挪到世界中心，确保摄像机可定位
+  st.player.x = 1300; st.player.y = 1300;
+  RENDER.draw(st, 1.0);
+  var info2 = RENDER.debugInfo();
+  L('camera = ' + Math.round(info2.camX) + ',' + Math.round(info2.camY));
+
+  var ctx = cv.getContext('2d');
+  // 玩家在屏幕中心 (160,90)，采样它脚下的 12x12
+  var px = ctx.getImageData(154, 78, 12, 12).data;
+  var uniq = {};
+  for (var k = 0; k < px.length; k += 4) {
+    var key = px[k] + ',' + px[k+1] + ',' + px[k+2];
+    uniq[key] = (uniq[key] || 0) + 1;
+  }
+  L('player-area colors: ' + Object.keys(uniq).slice(0,6).join(' | '));
+
+  // 统计整屏非地板的亮色像素
+  var all = ctx.getImageData(0,0,320,180).data;
+  var bright = 0, red = 0;
+  for (var p = 0; p < all.length; p += 4) {
+    var r = all[p], g = all[p+1], b = all[p+2];
+    if (r + g + b > 200) bright++;
+    if (r > 150 && g < 90) red++;
+  }
+  L('bright px = ' + bright + '  red px = ' + red);
+
+  // 画一个敌人到固定位置验证 blit
+  RENDER.blitRaw('slime', 10, 10);
+  var probe = ctx.getImageData(10,10,10,10).data;
+  var nonBg = 0;
+  for (var q = 0; q < probe.length; q += 4) {
+    if (probe[q] + probe[q+1] + probe[q+2] > 120) nonBg++;
+  }
+  L('blitRaw(slime) non-bg pixels = ' + nonBg);
+
+  document.getElementById('out').textContent = log.join('\n');
+})();
+</script>
+</body>
+</html>
