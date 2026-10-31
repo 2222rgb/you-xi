@@ -510,7 +510,15 @@
     addFx(st, 'hit', p.x, p.y, 12, '#ff4d4d', 0.25);
     if (p.hp <= 0) {
       p.hp = 0;
-      if (!p.downed) downPlayer(st, p);
+      if (st.players.length <= 1) {
+        // 单人：直接死亡，不进入倒地状态
+        p.alive = false;
+        p.hp = 0;
+        ev(st, 'kill');
+        addFx(st, 'ring', p.x, p.y, 30, '#c0392b', 0.5);
+      } else if (!p.downed) {
+        downPlayer(st, p);
+      }
       if (!st.players.some(function (q) { return q.alive; })) st.phase = 'dead';
     }
   }
@@ -1283,6 +1291,18 @@
     }
   }
 
+  /** 倒地时放弃，直接死亡 */
+  function giveUp(st, p) {
+    if (!p) p = localPlayer(st);
+    if (!p.downed) return { ok: false, msg: '你没有倒地' };
+    p.downed = false;
+    p.reviveProg = 0;
+    p.alive = false;
+    ev(st, 'kill');
+    if (!st.players.some(function (q) { return q.alive; })) st.phase = 'dead';
+    return { ok: true };
+  }
+
   function activateStatue(st, p) {
     if (!p) p = localPlayer(st);
     const s = st.statue;
@@ -1679,7 +1699,7 @@
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
     setRune: setRune, runeModsOf: runeModsOf, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
-    activateStatue: activateStatue, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
+    activateStatue: activateStatue, giveUp: giveUp, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

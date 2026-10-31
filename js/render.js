@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
 
-  const W = 320, H = 180;
+  let W = 480, H = 270;
   const D = root.DATA, CFG = D.CONFIG;
 
   let canvas, ctx, scale = 1;
@@ -123,9 +123,21 @@
 
   function resize() {
     const vw = window.innerWidth, vh = window.innerHeight;
-    scale = Math.max(1, Math.floor(Math.min(vw / W, vh / H)));
-    canvas.style.width = (W * scale) + 'px';
-    canvas.style.height = (H * scale) + 'px';
+    if (vw < 8 || vh < 8) return;
+    const nh = 200;
+    const nw = Math.max(320, Math.round(nh * (vw / vh)));
+    if (nw !== W || nh !== H) {
+      W = nw;
+      H = nh;
+      canvas.width = W;
+      canvas.height = H;
+      ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+      buildSprites();
+    }
+    scale = vh / H;
+    canvas.style.width = vw + 'px';
+    canvas.style.height = vh + 'px';
   }
 
   /* ---------------- 工具 ---------------- */
@@ -678,7 +690,7 @@
 
   function drawMinimap(st, time) {
     if (!minimapOn) return;
-    const M = 78, pad = 6;
+    const M = 62, pad = 5;
     const x0 = W - M - pad, y0 = pad;
     const isTown = st.phase === 'town';
     const worldW = isTown ? D.TOWN.w : CFG.worldSize;

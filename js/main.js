@@ -185,6 +185,10 @@
       const k = ev.key.toLowerCase();
       keys[k] = true;
       if (UI.isOpen()) return;
+      if (k === ' ') {
+        if (st.player && st.player.downed) { ACT.run(st, 'giveup', []); }
+        return;
+      }
       if (k === 'f') {
         const rs = ACT.run(st, 'statue', []);
         if (rs && !rs.ok && rs.msg) UI.toast(rs.msg, 'bad');

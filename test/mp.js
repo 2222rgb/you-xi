@@ -199,5 +199,22 @@ stSt.rate.rank = 5;
 stSt.rate.idle = 0;
 for (let i = 0; i < 400; i++) SIM.step(stSt, STEP, {});
 T('5 秒不杀怪评级清零', stSt.rate.score === 0 && stSt.rate.rank === 0, 'score=' + stSt.rate.score);
+// 死亡规则：单人直接死、多人可放弃
+const stSolo = SIM.create(131, 1);
+SIM.chooseRift(stSolo, 0);
+const ps = stSolo.players[0];
+ps.invuln = 0;
+ps.hp = 1;
+stSolo.enemies.push({ id: 9001, typeId: 'skel', name: '测试怪', x: ps.x, y: ps.y, hp: 9999, maxHp: 9999, dmg: 999, r: 8, speed: 0, mass: 1, t: 0, flash: 0, chill: 0, burn: 0, burnDps: 0, shock: 0, elite: false, boss: false, dead: false, xp: 0, gold: 0, split: 0, charger: false, caster: false, flee: false, ranged: false, summoner: false, healer: false, wobble: 0, hitCd: 0 });
+let downed = false;
+for (let i = 0; i < 240 && ps.alive; i++) { SIM.step(stSolo, STEP, {}); if (ps.downed) downed = true; }
+T('单人模式直接死亡不倒地', ps.alive === false && downed === false, 'alive=' + ps.alive + ' downed=' + downed);
+
+const stGu = SIM.create(132, 2);
+SIM.chooseRift(stGu, 0);
+const pgu = stGu.players[0];
+pgu.downed = true; pgu.downT = 20;
+const rgu = SIM.giveUp(stGu, pgu);
+T('倒地后可直接放弃死亡', !!(rgu && rgu.ok && pgu.alive === false && pgu.downed === false), 'alive=' + pgu.alive);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
