@@ -37,6 +37,7 @@
   }
 
   function botStep(state, tt) {
+    for (let bi = 0; bi < state.players[0].skills.length; bi++) SIM.castSkill(state, bi, state.players[0]);
     if (state.phase === 'combat' && state.players[0] && state.players[0].bag.length < 20) {
       const gi = SIM.nearestGroundItem(state, state.players[0].x, state.players[0].y, 34);
       if (gi) SIM.takeItem(state, state.players[0]);
@@ -144,6 +145,7 @@
       else if (panel === 'settings') UI.showSettings();
       else if (panel === 'altar') UI.showAltar();
       else if (panel === 'rune') UI.showRunes(st);
+      else if (panel === 'skills') UI.showSkills(st);
     }
     let sawTut = params.get('notut') === '1';
     try { sawTut = sawTut || localStorage.getItem('ashfall.tutorial') === '1'; } catch (e) {}
@@ -183,6 +185,12 @@
       keys[k] = true;
       if (UI.isOpen()) return;
       if (k === 'm') { RENDER.toggleMinimap(); return; }
+      if (k === '1' || k === '2' || k === '3') {
+        const slot = parseInt(k, 10) - 1;
+        const r = ACT.run(st, 'cast', [slot]);
+        if (r && !r.ok && r.msg) UI.toast(r.msg, 'bad');
+        return;
+      }
       if (k === 'e') {
         if (st.phase === 'combat') {
           const g = SIM.nearestGroundItem(st, st.player.x, st.player.y, 34);
@@ -227,6 +235,8 @@
     if (altarBtn) altarBtn.onclick = function () { UI.showAltar(); };
     const runeBtn = document.getElementById('runebtn');
     if (runeBtn) runeBtn.onclick = function () { UI.showRunes(st); };
+    const skillBtn = document.getElementById('skillbtn');
+    if (skillBtn) skillBtn.onclick = function () { UI.showSkills(st); };
 
     if (ROOM && location.protocol !== 'file:') startNet();
 

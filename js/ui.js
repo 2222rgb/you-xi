@@ -1066,6 +1066,50 @@
     };
   };
 
+  /* ---------------- 技能面板（辅助插槽） ---------------- */
+  UI.showSkills = function (st) {
+    const p = st.player;
+    function render() {
+      let html = '<div class="mtitle">技能</div>';
+      html += '<div class="msub">按 <b>1 / 2 / 3</b> 手动施放；插「触媒·自动」后自动释放。每技能最多 3 个辅助。</div>';
+      for (let si = 0; si < 3; si++) {
+        const s = p.skills[si];
+        if (!s) {
+          html += '<div class="sect">技能栏 ' + (si + 1) + '</div><div class="empty">空</div>';
+          continue;
+        }
+        const def = D.SKILLS[s.id];
+        const sup = (p.supports && p.supports[s.id]) || [];
+        const auto = root.SIM.autoCast(p, s.id);
+        html += '<div class="sect">技能栏 ' + (si + 1) + ' · ' + def.name + ' Lv' + s.rank +
+          '<span style="color:' + (auto ? '#6fdc8f' : '#6f7a90') + ';font-size:10px"> · ' + (auto ? '自动释放' : '手动释放') + '</span></div>';
+        html += '<div class="opts">';
+        for (let k = 0; k < D.SUPPORTS.length; k++) {
+          const sp = D.SUPPORTS[k];
+          const on = sup.indexOf(sp.id) >= 0;
+          html += '<button class="opt' + (on ? ' on' : '') + '" data-sup="' + s.id + '|' + sp.id + '" title="' + sp.desc + '">' + sp.name + '</button>';
+        }
+        html += '</div>';
+      }
+      html += '<div class="note">' + D.SUPPORTS.map(function (x) { return '<b>' + x.name + '</b> ' + x.desc; }).join('<br>') + '</div>';
+      html += '<div class="mfoot"><button class="btn primary" data-close="1">关闭</button></div>';
+      openModal(html, 'wide');
+      $('modalbox').onclick = function (ev) {
+        let el = ev.target;
+        const box = $('modalbox');
+        while (el && el !== box && !el.getAttribute('data-sup') && !el.getAttribute('data-close')) el = el.parentNode;
+        if (!el || el === box) return;
+        if (el.getAttribute('data-close')) { UI.close(); return; }
+        const parts = el.getAttribute('data-sup').split('|');
+        const r = ACT.run(st, 'support', [parts[0], parts[1]]);
+        if (r && r.ok) UI.playSfx('ui');
+        else if (r) UI.toast(r.msg, 'bad');
+        render();
+      };
+    }
+    render();
+  };
+
   /* ---------------- 技能符文 ---------------- */
   UI.showRunes = function (st) {
     const p = st.player;

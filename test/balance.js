@@ -103,6 +103,7 @@ function run(seed, seconds, verbose) {
       const g = SIM.nearestGroundItem(st, st.players[0].x, st.players[0].y, 34);
       if (g) SIM.takeItem(st, st.players[0]);
     }
+    for (let ci = 0; ci < st.players[0].skills.length; ci++) SIM.castSkill(st, ci, st.players[0]);
     SIM.step(st, STEP, botStep(st, i / 60));
     if (st.player.talentPoints > 0) autoTalent(st);
     // 主城自动：买装备 + 卖垃圾 + 补药水

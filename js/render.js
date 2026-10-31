@@ -263,6 +263,14 @@
         }
         ctx.globalAlpha = left < 8 ? (Math.floor(time * 6) % 2 === 0 ? 0.3 : 1) : 1;
         blitWorld('chest', pk.x, pk.y + bob, false, false);
+        if (pk.item && pk.item.name && left > 1.5) {
+          ctx.font = '4px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillStyle = col;
+          ctx.globalAlpha = 0.92;
+          ctx.fillText(pk.item.name, sx(pk.x), sy(pk.y) - bh - 3);
+          ctx.globalAlpha = 1;
+        }
       } else if (pk.kind === 'mat') {
         ctx.globalAlpha = 0.85;
         ctx.fillStyle = '#ffb347';

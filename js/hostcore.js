@@ -29,7 +29,7 @@
     const gs = [];
     for (let i = 0; i < st.pickups.length; i++) {
       const g = st.pickups[i];
-      gs.push([r1(g.x), r1(g.y), g.kind, g.item ? g.item.rarity : 0]);
+      gs.push([r1(g.x), r1(g.y), g.kind, g.item ? g.item.rarity : 0, g.item ? g.item.name : '']);
     }
     return {
       t: st.phase, pt: r1(st.phaseT), cy: st.cycle, near: st.nearNpc || 0, k: st.kills,
@@ -116,7 +116,7 @@
     const picks = [];
     for (let i = 0; i < snap.gs.length; i++) {
       const a = snap.gs[i];
-      picks.push({ x: a[0], y: a[1], kind: a[2], t: 0, item: { rarity: a[3] || 0 } });
+      picks.push({ x: a[0], y: a[1], kind: a[2], t: 0, item: { rarity: a[3] || 0, name: a[4] || '' } });
     }
     view.pickups = picks;
 

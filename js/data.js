@@ -399,6 +399,16 @@
   };
 
   /* ---------------- 可选职业 ---------------- */
+  /* ---------------- 辅助技能（插槽在技能面板里） ---------------- */
+  const SUPPORTS = [
+    { id: 'trigger', name: '触媒·自动', trigger: true, desc: '该技能自动释放（不插则需按键 1/2/3）' },
+    { id: 'empower', name: '强化', mods: [{ k: 'dmg', v: 0.25 }, { k: 'rate', v: -0.10 }], desc: '伤害 +25%，攻速 -10%' },
+    { id: 'haste', name: '急速', mods: [{ k: 'rate', v: 0.25 }, { k: 'dmg', v: -0.10 }], desc: '攻速 +25%，伤害 -10%' },
+    { id: 'wide', name: '扩域', mods: [{ k: 'radius', v: 0.30 }, { k: 'dmg', v: -0.08 }], desc: '范围 +30%，伤害 -8%' },
+    { id: 'multi', name: '多重', mods: [{ k: 'proj', v: 1 }, { k: 'dmg', v: -0.20 }], desc: '投射物 +1，伤害 -20%' },
+    { id: 'pierce', name: '穿透', mods: [{ k: 'pierce', v: 2 }, { k: 'dmg', v: -0.12 }], desc: '穿透 +2，伤害 -12%' }
+  ];
+
   const CLASSES = [
     { id: 'blade', name: '刃行者', color: '#e05c4a', skill: 'dagger', talent: 'b1',
       desc: '近战物理，暴击高，血厚一点',
@@ -434,7 +444,7 @@
     ELE, TYPE_CN, SKILLS, SKILL_IDS, MAX_SKILL_LEVEL,
     AFFIXES, SLOTS, SLOT_CN, SLOT_ICON, RARITY_CN, RARITY_COLOR, BASE_NAMES, LEGENDARIES,
     TREES: TREES, TALENT_INDEX: TALENT_INDEX, TIER_GATE: TIER_GATE,
-    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES,
+    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS,
     ENEMIES, ELITE_MODS, WAVES, TOWN, PRICES, CONFIG
   };
 })(window);

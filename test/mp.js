@@ -158,5 +158,19 @@ T('已解锁符文不再扣材料', !!(rnB && rnB.ok && rnB.cost === 0 && prn.ma
 const rnC = SIM.setRune(stRune, 'dagger', null, prn);
 T('可以卸下符文回到基础值', !!(rnC && rnC.ok && Math.abs(prn.skillCalc.dagger.dps - baseDps) < 1e-6), 'dps=' + Math.round(prn.skillCalc.dagger.dps));
 
+// 辅助与自动释放
+const stSup = SIM.create(101, 1);
+SIM.chooseRift(stSup, 0);
+SIM.setClass(stSup, 0, 0);
+const psup = stSup.players[0];
+T('默认不自动释放', SIM.autoCast(psup, 'dagger') === false, 'auto=' + SIM.autoCast(psup, 'dagger'));
+SIM.setSupport(stSup, 'dagger', 'trigger', psup);
+T('插入触媒后自动释放', SIM.autoCast(psup, 'dagger') === true);
+SIM.setSupport(stSup, 'dagger', 'trigger', psup);
+T('再次点击移除触媒', SIM.autoCast(psup, 'dagger') === false);
+SIM.setSupport(stSup, 'dagger', 'empower', psup);
+const dpsSup1 = psup.skillCalc.dagger.dps;
+SIM.setSupport(stSup, 'dagger', 'empower', psup);
+T('辅助影响技能数值', psup.skillCalc.dagger.dps < dpsSup1, 'dps=' + Math.round(psup.skillCalc.dagger.dps) + ' vs ' + Math.round(dpsSup1));
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);

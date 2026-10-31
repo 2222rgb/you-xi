@@ -38,7 +38,7 @@
       face: 1, invuln: 2, hurtFlash: 0, walkT: 0, moving: false,
       skills: [], talents: {}, treeSpent: { blade: 0, ember: 0, storm: 0 }, talentPoints: 0,
       gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0, mats: 0,
-      downed: false, downT: 0, reviveProg: 0,
+      downed: false, downT: 0, reviveProg: 0, supports: {},
       gear: { helm: null, body: null, ring: null, amulet: null },
       bag: [],
       alive: true
@@ -158,6 +158,25 @@
     return { mods: out, active: active, counts: counts };
   }
 
+  function supportModsOf(p, skillId) {
+    if (!p.supports || !p.supports[skillId]) return null;
+    const ids = p.supports[skillId];
+    const out = [];
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = 0; j < D.SUPPORTS.length; j++) {
+        if (D.SUPPORTS[j].id === ids[i] && D.SUPPORTS[j].mods) {
+          for (let mi = 0; mi < D.SUPPORTS[j].mods.length; mi++) out.push(D.SUPPORTS[j].mods[mi]);
+        }
+      }
+    }
+    return out;
+  }
+
+  function autoCast(p, skillId) {
+    if (!p.supports || !p.supports[skillId]) return false;
+    return p.supports[skillId].indexOf('trigger') >= 0;
+  }
+
   function runeModsOf(p, skillId) {
     if (!p.runeOf) return null;
     const runeId = p.runeOf[skillId];
@@ -166,6 +185,41 @@
     if (!sk || !sk.runes) return null;
     for (let i = 0; i < sk.runes.length; i++) if (sk.runes[i].id === runeId) return sk.runes[i].mods;
     return null;
+  }
+
+  /** 手动施放（不依赖触媒） */
+  function castSkill(st, slot, p) {
+    if (!p) p = localPlayer(st);
+    const s = p.skills[slot];
+    if (!s) return { ok: false, msg: '该栏没有技能' };
+    if (s.cd > 0) return { ok: false, msg: '冷却中' };
+    const calc = p.skillCalc[s.id];
+    if (!calc) return { ok: false };
+    const ok = fireSkill(st, p, slot);
+    s.cd = (ok ? 1 / calc.rate : 0.12) * (p.frenzyT > 0 ? 0.65 : 1);
+    st._caster = null;
+    return { ok: ok };
+  }
+
+  /** 增删辅助（每技能最多 3 个） */
+  function setSupport(st, skillId, supportId, p) {
+    if (!p) p = localPlayer(st);
+    p.supports = p.supports || {};
+    let cur = (p.supports[skillId] || []).slice();
+    if (!supportId) {
+      p.supports[skillId] = [];
+      recompute(st, p);
+      return { ok: true, list: [] };
+    }
+    const at = cur.indexOf(supportId);
+    if (at >= 0) cur.splice(at, 1);
+    else {
+      if (cur.length >= 3) return { ok: false, msg: '每个技能最多插 3 个辅助' };
+      cur.push(supportId);
+    }
+    p.supports[skillId] = cur;
+    recompute(st, p);
+    return { ok: true, list: cur };
   }
 
   function setRune(st, skillId, runeId, p) {
@@ -207,7 +261,8 @@
     p.skillCalc = {};
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
-      p.skillCalc[s.id] = E.computeSkill(s.id, skillLevel(p, s), agg, runeModsOf(p, s.id));
+      const modsAll = (runeModsOf(p, s.id) || []).concat(supportModsOf(p, s.id) || []);
+        p.skillCalc[s.id] = E.computeSkill(s.id, skillLevel(p, s), agg, modsAll.length ? modsAll : null);
     }
     if (p === localPlayer(st)) {
       st.agg = agg;
@@ -727,6 +782,7 @@
       for (let j = 0; j < p.skills.length; j++) {
         const s = p.skills[j];
         s.cd -= dt;
+        if (!autoCast(p, s.id)) continue;
         if (s.cd <= 0) {
           const calc = p.skillCalc[s.id];
           if (calc) {
@@ -1043,14 +1099,25 @@
   /** E 拾取最近的装备 */
   function takeItem(st, p) {
     if (!p) p = localPlayer(st);
-    const pk = nearestGroundItem(st, p.x, p.y, 34);
-    if (!pk) return { ok: false, msg: '附近没有可拾取的装备' };
-    if (p.bag.length >= BAG_CAP) return { ok: false, msg: '背包已满' };
-    pk.dead = true;
-    p.bag.push(pk.item);
-    ev(st, 'item', { r: pk.item.rarity });
-    toast(st, '拾取 ' + pk.item.name, pk.item.rarity >= 2 ? 'rare' : '');
-    return { ok: true, item: pk.item };
+    const first = nearestGroundItem(st, p.x, p.y, 34);
+    if (!first) return { ok: false, msg: '附近没有可拾取的装备' };
+    const slot = first.item.slot;
+    const r2 = 46 * 46;
+    let n = 0, best = 0;
+    for (let i = st.pickups.length - 1; i >= 0; i--) {
+      const pk = st.pickups[i];
+      if (pk.dead || pk.kind !== 'item' || !pk.item || pk.item.slot !== slot) continue;
+      if (dist2(pk.x, pk.y, p.x, p.y) > r2) continue;
+      if (p.bag.length >= BAG_CAP) break;
+      pk.dead = true;
+      p.bag.push(pk.item);
+      n++;
+      if (pk.item.rarity > best) best = pk.item.rarity;
+    }
+    if (!n) return { ok: false, msg: '背包已满' };
+    ev(st, 'item', { r: best });
+    toast(st, '拾取 ' + n + ' 件' + (D.SLOT_CN[slot] || '装备'), best >= 2 ? 'rare' : '');
+    return { ok: true, count: n };
   }
 
   /** 开魔盒 */
@@ -1368,7 +1435,8 @@
     let dps = 0;
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
-      const c = E.computeSkill(s.id, skillLevel(p, s), agg, runeModsOf(p, s.id));
+      const modsAll2 = (runeModsOf(p, s.id) || []).concat(supportModsOf(p, s.id) || []);
+        const c = E.computeSkill(s.id, skillLevel(p, s), agg, modsAll2.length ? modsAll2 : null);
       if (c) dps += c.dps;
     }
     const hp = Math.max(1, Math.round((CFG.baseHp + CFG.hpPerLevel * (p.level - 1) + agg.life) * (1 + agg.lifePct)));
@@ -1513,7 +1581,7 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
-    setRune: setRune, runeModsOf: runeModsOf,
+    setRune: setRune, runeModsOf: runeModsOf, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,
