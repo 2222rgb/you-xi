@@ -1,0 +1,11 @@
+{
+  "_comment": "ashfall 美术批次#1（代码生成）。规格见 docs/ART.md：PNG 透明底、1x 不放大、统一调色板、描边 #0a0a12、左上受光。",
+  "hero_idle":  { "file": "hero_idle.png",  "w": 12, "h": 18 },
+  "hero_walk1": { "file": "hero_walk1.png", "w": 12, "h": 18 },
+  "hero_walk2": { "file": "hero_walk2.png", "w": 12, "h": 18 },
+  "slime":      { "file": "slime.png",      "w": 12, "h": 12 },
+  "bat":        { "file": "bat.png",        "w": 14, "h": 12 },
+  "skel":       { "file": "skel.png",       "w": 12, "h": 20 },
+  "tile_ground": { "file": "tile_ground.png", "w": 16, "h": 16, "tileable": true },
+  "tile_town":   { "file": "tile_town.png",   "w": 16, "h": 16, "tileable": true }
+}
