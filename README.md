@@ -1,5 +1,7 @@
 ﻿# ASHFALL · 灰烬降临
 
+![ASHFALL 封面](ashfall_cover.png)
+
 像素风割草 + PoE 式标签联动伤害 + 主城经济 + 四人联机。**纯网页、零依赖、零外部素材。**
 
 ![四人合作](shot_coop.png)
