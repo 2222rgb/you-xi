@@ -67,6 +67,10 @@
       if (!UI._tipHold) UI.hideTip();
     });
     document.addEventListener('mouseleave', function () { UI.hideTip(); });
+    // 把提示框挂到 body，避免被弹窗所在的层叠上下文盖住
+    const tipEl = document.getElementById('tip');
+    if (tipEl && tipEl.parentElement !== document.body) document.body.appendChild(tipEl);
+
     UI.st = st;
     buildSkills();
     buildGear();
@@ -520,6 +524,7 @@
 
   /* ---------------- 商人 ---------------- */
   UI.showShop = function (st) {
+    UI._tipItems = st.shop;
     const p = st.player;
     let html = '<div class="mtitle">商人 卡兰</div>';
     html += '<div class="msub">金币 ' + coin(p.gold) + ' · 药水 ' + p.potions + '/9</div>';
@@ -579,6 +584,7 @@
 
   /* ---------------- 铁匠 ---------------- */
   UI.showSmith = function (st) {
+    UI._tipItems = st.player.bag;
     const p = st.player;
     let html = '<div class="mtitle">铁匠 格罗姆</div>';
     html += '<div class="msub">金币 ' + coin(p.gold) + ' · 选择一件装备进行打造</div>';
@@ -701,6 +707,7 @@
 
   /* ---------------- 交易行 ---------------- */
   UI.showMarket = function (st) {
+    UI._tipItems = st.marketStock;
     const p = st.player;
     let html = '<div class="mtitle">交易行</div>';
     html += '<div class="msub">金币 ' + coin(p.gold) + ' · 出售装备，或竞拍一件稀有品</div>';
