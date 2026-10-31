@@ -17,7 +17,13 @@ const aggA = E.buildAgg({ ring: itA });
 const okA = Math.abs(aggA.ampAil - 0.25) < 1e-9 && Math.abs(aggA.shockChance - 0.4) < 1e-9;
 console.log((okA ? '  PASS  ' : '  FAIL  ') + '异常增伤词缀进入聚合   ampAil=' + aggA.ampAil + ' shock=' + aggA.shockChance);
 if (okA) pass++;
-const total = res.length + 1;
+const total = res.length + 2;
+
+// 元素反应表完整性
+const R = D.REACTIONS || [];
+const okR = R.length >= 6 && R.every(function (r) { return r.a && r.b && r.name && r.mult > 1; });
+console.log((okR ? '  PASS  ' : '  FAIL  ') + '元素反应表完整   ' + R.length + ' 条');
+if (okR) pass++;
 
 console.log('\n' + pass + '/' + total + ' passed');
 

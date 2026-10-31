@@ -477,6 +477,19 @@
     { id: 'pierce', name: '穿透', mods: [{ k: 'pierce', v: 2 }, { k: 'dmg', v: -0.12 }], desc: '穿透 +2，伤害 -12%' }
   ];
 
+  /* ---------------- 元素反应表 ----------------
+     当「本击元素」命中「身上已有另一系异常」的敌人时触发 */
+  const REACTIONS = [
+    { a: 'fire', b: 'cold', name: '融化', mult: 1.5, color: '#ffb347' },
+    { a: 'cold', b: 'fire', name: '融化', mult: 1.5, color: '#ffb347' },
+    { a: 'lightning', b: 'cold', name: '感电', mult: 1.35, color: '#ffe066' },
+    { a: 'cold', b: 'lightning', name: '感电', mult: 1.35, color: '#ffe066' },
+    { a: 'fire', b: 'lightning', name: '爆燃', mult: 1.4, color: '#ff6b2b' },
+    { a: 'lightning', b: 'fire', name: '爆燃', mult: 1.4, color: '#ff6b2b' },
+    { a: 'phys', b: 'cold', name: '碎冰', mult: 1.25, color: '#9fd7ff' },
+    { a: 'phys', b: 'fire', name: '裂焰', mult: 1.2, color: '#ff8a3d' }
+  ];
+
   /* ---------------- 打宝雕像 / 评分 ---------------- */
   const RANKS = ['D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
   const RANK_GATE = [0, 18, 40, 75, 120, 190, 280];
@@ -543,7 +556,7 @@
     ELE, TYPE_CN, SKILLS, SKILL_IDS, MAX_SKILL_LEVEL,
     AFFIXES, SLOTS, SLOT_CN, SLOT_ICON, RARITY_CN, RARITY_COLOR, BASE_NAMES, LEGENDARIES,
     TREES: TREES, TALENT_INDEX: TALENT_INDEX, TIER_GATE: TIER_GATE,
-    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES, RANKS: RANKS, RANK_GATE: RANK_GATE, RANK_COLOR: RANK_COLOR, STATUE: STATUE,
+    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES, REACTIONS: REACTIONS, RANKS: RANKS, RANK_GATE: RANK_GATE, RANK_COLOR: RANK_COLOR, STATUE: STATUE,
     ENEMIES, ELITE_MODS, WAVES, TOWN, PRICES, CONFIG
   };
 })(window);

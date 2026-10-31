@@ -419,6 +419,22 @@
     if (ag && ag.ampAil > 0 && (e.burn > 0 || e.chill > 0 || (e.shock || 0) > 0)) {
       dmg *= (1 + ag.ampAil);
     }
+    // 元素反应：本击元素 × 敌人身上的另一系异常
+    if (type && D.REACTIONS) {
+      const has = {
+        fire: (e.burn || 0) > 0,
+        cold: (e.chill || 0) > 0,
+        lightning: (e.shock || 0) > 0
+      };
+      for (let ri = 0; ri < D.REACTIONS.length; ri++) {
+        const rc = D.REACTIONS[ri];
+        if (rc.a !== type || !has[rc.b]) continue;
+        dmg *= rc.mult;
+        addText(st, e.x, e.y - 8, rc.name, true, rc.color);
+        ev(st, 'crit');
+        break;
+      }
+    }
     if (type === 'lightning' && ag && ag.shockChance > 0 && rand(st) < ag.shockChance) {
       e.shock = Math.max(e.shock || 0, 3);
     }
