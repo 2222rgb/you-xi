@@ -176,6 +176,7 @@
   }
 
   function autoCast(p, skillId) {
+    if (p.roguePicks && p.roguePicks.autocast) return true;
     if (!p.supports || !p.supports[skillId]) return false;
     return p.supports[skillId].indexOf('trigger') >= 0;
   }
@@ -1361,7 +1362,8 @@
   }
 
   function rollRogue(st, p) {
-    const pool = D.ROGUE_UPGRADES.slice();
+    const picked = p.roguePicks || {};
+    const pool = D.ROGUE_UPGRADES.filter(function (u) { return !picked[u.id]; });
     const picks = [];
     for (let i = 0; i < 3 && pool.length; i++) {
       const idx = Math.floor(rand(st) * pool.length);

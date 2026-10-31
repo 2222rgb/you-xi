@@ -1174,6 +1174,35 @@
     };
   };
 
+  /* ---------------- 开局菜单 ---------------- */
+  UI.hideStartMenu = function () {
+    window.__menuOpen = false;
+    const el = document.getElementById('startmenu');
+    if (el) el.classList.add('hidden');
+  };
+
+  UI.showStartMenu = function (onSolo) {
+    window.__menuOpen = true;
+    const el = document.getElementById('startmenu');
+    if (!el) { if (onSolo) onSolo(); return; }
+    el.classList.remove('hidden');
+    el.onclick = function (ev) {
+      const el2 = ev.target;
+      const kind = el2.getAttribute && el2.getAttribute('data-sm');
+      if (!kind) return;
+      UI.playSfx('ui');
+      if (kind === 'solo') { UI.hideStartMenu(); if (onSolo) onSolo(); return; }
+      const base = location.origin + location.pathname;
+      if (kind === 'host') {
+        const code = Math.random().toString(36).slice(2, 6).toUpperCase();
+        location.href = base + '?room=' + code + '&host=1';
+      } else {
+        const code = (window.prompt('输入房间码（4 位）') || '').trim().toUpperCase();
+        if (code) location.href = base + '?room=' + code;
+      }
+    };
+  };
+
   /* ---------------- 变数：局内 3 选 1 ---------------- */
   UI.showRogue = function (st, onPick) {
     const p = st.player;

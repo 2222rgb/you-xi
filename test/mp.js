@@ -216,5 +216,16 @@ const pgu = stGu.players[0];
 pgu.downed = true; pgu.downT = 20;
 const rgu = SIM.giveUp(stGu, pgu);
 T('倒地后可直接放弃死亡', !!(rgu && rgu.ok && pgu.alive === false && pgu.downed === false), 'alive=' + pgu.alive);
+// 变数「自律」：全技能自动释放，且波次内不再出现
+const stAc = SIM.create(141, 1);
+SIM.chooseRift(stAc, 0);
+SIM.setClass(stAc, 0, 3);
+const pac = stAc.players[0];
+T('默认不自动释放', SIM.autoCast(pac, 'dagger') === false, 'auto=' + SIM.autoCast(pac, 'dagger'));
+pac.roguePicks = { autocast: 1 };
+T('自律让所有技能自动释放', SIM.autoCast(pac, 'dagger') === true && SIM.autoCast(pac, 'axe') === true);
+SIM.gainXp(stAc, pac, pac.xpNext + 1);
+const chAc = pac.rogueChoices || [];
+T('已选过的选项不再出现', chAc.indexOf('autocast') === -1, 'choices=' + chAc.join(','));
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);

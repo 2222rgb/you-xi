@@ -174,8 +174,12 @@
         if (savedCls !== null && sawTut) { done(savedCls); return; }
         UI.showClasses(done);
       };
-      if (!sawTut) UI.showTutorial(chooseClass);
-      else chooseClass();
+      const startSolo = function () {
+        if (!sawTut) UI.showTutorial(chooseClass);
+        else chooseClass();
+      };
+      if (params.get('quick') === '1') { UI.hideStartMenu(); startSolo(); }
+      else UI.showStartMenu(startSolo);
     }
     if (FF > 0) fastForward(FF);
 
@@ -457,7 +461,7 @@
       return;
     }
 
-    const paused = UI.isOpen() || st.phase === 'dead' || st.phase === 'rift';
+    const paused = UI.isOpen() || st.phase === 'dead' || st.phase === 'rift' || window.__menuOpen;
 
     if (!paused) {
       acc += dt;
