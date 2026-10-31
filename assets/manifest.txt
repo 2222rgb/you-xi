@@ -1,4 +1,22 @@
-﻿ASHFALL art batch 2 (ART_REQUEST.md: 1.2 + 1.3 + 5-icons + town background) - manifest
-license: original work, hand-coded pixel art commissioned for ashfall (no external assets, no AI-model output) - rights transfer with project
-weapons grip = [x, y from bottom-left of 24x32 canvas]
+﻿ASHFALL art batch 3 (boss idle anim + npc frame 2) - manifest
+license: original work, hand-coded pixel art commissioned for ashfall - rights transfer with project
+boss idle = 4 frames @ 6fps loop; npc idle = 2 frames alternating
 
+boss2_idle1.png  32x32  bottom-center  anim:idle-4frames-6fps
+boss2_idle2.png  32x32  bottom-center  anim:idle-4frames-6fps
+boss2_idle3.png  32x32  bottom-center  anim:idle-4frames-6fps
+boss2_idle4.png  32x32  bottom-center  anim:idle-4frames-6fps
+warden_idle1.png  32x32  bottom-center  anim:idle-4frames-6fps
+warden_idle2.png  32x32  bottom-center  anim:idle-4frames-6fps
+warden_idle3.png  32x32  bottom-center  anim:idle-4frames-6fps
+warden_idle4.png  32x32  bottom-center  anim:idle-4frames-6fps
+boss_idle1.png  32x32  center  anim:idle-4frames-6fps
+boss_idle2.png  32x32  center  anim:idle-4frames-6fps
+boss_idle3.png  32x32  center  anim:idle-4frames-6fps
+boss_idle4.png  32x32  center  anim:idle-4frames-6fps
+npc24_smith2.png  24x32  bottom-center  anim:idle-2frames
+npc24_merchant2.png  24x32  bottom-center  anim:idle-2frames
+npc24_gambler2.png  24x32  bottom-center  anim:idle-2frames
+npc24_warehouse2.png  24x32  bottom-center  anim:idle-2frames
+npc24_wardenkeeper2.png  24x32  bottom-center  anim:idle-2frames
+npc24_horsekeeper2.png  24x32  bottom-center  anim:idle-2frames

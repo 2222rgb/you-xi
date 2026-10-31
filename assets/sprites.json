@@ -704,37 +704,43 @@
                         "file":  "npc24_smith.png",
                         "w":  24,
                         "h":  32,
-                        "anchor":  "bottom-center"
+                        "anchor":  "bottom-center",
+                        "anim":  "idle 2 frames (alternate with npc24_smith2.png)"
                     },
     "npc24_merchant":  {
                            "file":  "npc24_merchant.png",
                            "w":  24,
                            "h":  32,
-                           "anchor":  "bottom-center"
+                           "anchor":  "bottom-center",
+                           "anim":  "idle 2 frames (alternate with npc24_merchant2.png)"
                        },
     "npc24_gambler":  {
                           "file":  "npc24_gambler.png",
                           "w":  24,
                           "h":  32,
-                          "anchor":  "bottom-center"
+                          "anchor":  "bottom-center",
+                          "anim":  "idle 2 frames (alternate with npc24_gambler2.png)"
                       },
     "npc24_warehouse":  {
                             "file":  "npc24_warehouse.png",
                             "w":  24,
                             "h":  32,
-                            "anchor":  "bottom-center"
+                            "anchor":  "bottom-center",
+                            "anim":  "idle 2 frames (alternate with npc24_warehouse2.png)"
                         },
     "npc24_wardenkeeper":  {
                                "file":  "npc24_wardenkeeper.png",
                                "w":  24,
                                "h":  32,
-                               "anchor":  "bottom-center"
+                               "anchor":  "bottom-center",
+                               "anim":  "idle 2 frames (alternate with npc24_wardenkeeper2.png)"
                            },
     "npc24_horsekeeper":  {
                               "file":  "npc24_horsekeeper.png",
                               "w":  24,
                               "h":  32,
-                              "anchor":  "bottom-center"
+                              "anchor":  "bottom-center",
+                              "anim":  "idle 2 frames (alternate with npc24_horsekeeper2.png)"
                           },
     "emote_laugh":  {
                         "file":  "emote_laugh.png",
@@ -1300,5 +1306,132 @@
                             "file":  "town_background.png",
                             "anchor":  "parallax-far (1120x720)",
                             "h":  720
-                        }
+                        },
+    "_batch7":  "boss idle anim x4 (6fps) per docs/ART.md animation spec + npc frame 2",
+    "boss2_idle1":  {
+                        "file":  "boss2_idle1.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "bottom-center",
+                        "anim":  "idle 4 frames @ 6fps loop (with boss2.png as frame base)"
+                    },
+    "boss2_idle2":  {
+                        "file":  "boss2_idle2.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "bottom-center",
+                        "anim":  "idle 4 frames @ 6fps loop (with boss2.png as frame base)"
+                    },
+    "boss2_idle3":  {
+                        "file":  "boss2_idle3.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "bottom-center",
+                        "anim":  "idle 4 frames @ 6fps loop (with boss2.png as frame base)"
+                    },
+    "boss2_idle4":  {
+                        "file":  "boss2_idle4.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "bottom-center",
+                        "anim":  "idle 4 frames @ 6fps loop (with boss2.png as frame base)"
+                    },
+    "warden_idle1":  {
+                         "file":  "warden_idle1.png",
+                         "w":  32,
+                         "h":  32,
+                         "anchor":  "bottom-center",
+                         "anim":  "idle 4 frames @ 6fps loop (with warden.png as frame base)"
+                     },
+    "warden_idle2":  {
+                         "file":  "warden_idle2.png",
+                         "w":  32,
+                         "h":  32,
+                         "anchor":  "bottom-center",
+                         "anim":  "idle 4 frames @ 6fps loop (with warden.png as frame base)"
+                     },
+    "warden_idle3":  {
+                         "file":  "warden_idle3.png",
+                         "w":  32,
+                         "h":  32,
+                         "anchor":  "bottom-center",
+                         "anim":  "idle 4 frames @ 6fps loop (with warden.png as frame base)"
+                     },
+    "warden_idle4":  {
+                         "file":  "warden_idle4.png",
+                         "w":  32,
+                         "h":  32,
+                         "anchor":  "bottom-center",
+                         "anim":  "idle 4 frames @ 6fps loop (with warden.png as frame base)"
+                     },
+    "boss_idle1":  {
+                       "file":  "boss_idle1.png",
+                       "w":  32,
+                       "h":  32,
+                       "anchor":  "center",
+                       "anim":  "idle 4 frames @ 6fps loop (with boss.png as frame base)"
+                   },
+    "boss_idle2":  {
+                       "file":  "boss_idle2.png",
+                       "w":  32,
+                       "h":  32,
+                       "anchor":  "center",
+                       "anim":  "idle 4 frames @ 6fps loop (with boss.png as frame base)"
+                   },
+    "boss_idle3":  {
+                       "file":  "boss_idle3.png",
+                       "w":  32,
+                       "h":  32,
+                       "anchor":  "center",
+                       "anim":  "idle 4 frames @ 6fps loop (with boss.png as frame base)"
+                   },
+    "boss_idle4":  {
+                       "file":  "boss_idle4.png",
+                       "w":  32,
+                       "h":  32,
+                       "anchor":  "center",
+                       "anim":  "idle 4 frames @ 6fps loop (with boss.png as frame base)"
+                   },
+    "npc24_smith2":  {
+                         "file":  "npc24_smith2.png",
+                         "w":  24,
+                         "h":  32,
+                         "anchor":  "bottom-center",
+                         "anim":  "idle 2 frames (alternate with npc24_smith.png)"
+                     },
+    "npc24_merchant2":  {
+                            "file":  "npc24_merchant2.png",
+                            "w":  24,
+                            "h":  32,
+                            "anchor":  "bottom-center",
+                            "anim":  "idle 2 frames (alternate with npc24_merchant.png)"
+                        },
+    "npc24_gambler2":  {
+                           "file":  "npc24_gambler2.png",
+                           "w":  24,
+                           "h":  32,
+                           "anchor":  "bottom-center",
+                           "anim":  "idle 2 frames (alternate with npc24_gambler.png)"
+                       },
+    "npc24_warehouse2":  {
+                             "file":  "npc24_warehouse2.png",
+                             "w":  24,
+                             "h":  32,
+                             "anchor":  "bottom-center",
+                             "anim":  "idle 2 frames (alternate with npc24_warehouse.png)"
+                         },
+    "npc24_wardenkeeper2":  {
+                                "file":  "npc24_wardenkeeper2.png",
+                                "w":  24,
+                                "h":  32,
+                                "anchor":  "bottom-center",
+                                "anim":  "idle 2 frames (alternate with npc24_wardenkeeper.png)"
+                            },
+    "npc24_horsekeeper2":  {
+                               "file":  "npc24_horsekeeper2.png",
+                               "w":  24,
+                               "h":  32,
+                               "anchor":  "bottom-center",
+                               "anim":  "idle 2 frames (alternate with npc24_horsekeeper.png)"
+                           }
 }
