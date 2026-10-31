@@ -227,5 +227,15 @@ T('自律让所有技能自动释放', SIM.autoCast(pac, 'dagger') === true && S
 SIM.gainXp(stAc, pac, pac.xpNext + 1);
 const chAc = pac.rogueChoices || [];
 T('已选过的选项不再出现', chAc.indexOf('autocast') === -1, 'choices=' + chAc.join(','));
+// 角色切换：applyChar 刷新派生属性
+const stCh = SIM.create(151, 1);
+SIM.chooseRift(stCh, 0);
+const pch = stCh.players[0];
+pch.level = 30;
+pch.gold = 5000;
+pch.mats = 77;
+SIM.applyChar(stCh, pch);
+T('切换角色后属性刷新', pch.maxHp > 300 && pch.xpNext > 0 && pch.hp === pch.maxHp,
+  'hp=' + Math.round(pch.maxHp) + ' xpNext=' + pch.xpNext);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);

@@ -915,6 +915,8 @@
     }
     html += '<button class="opt' + (A.muted ? ' on' : '') + '" data-mute="1">' + (A.muted ? '已静音' : '静音') + '</button>';
     html += '</div>';
+    html += '<div class="msub" style="margin-top:16px">角色</div>';
+    html += '<div class="opts"><button class="opt" data-roster="1">角色与切换</button></div>';
     html += '<div class="msub" style="margin-top:16px">操作方式</div>';
     html += '<div class="msub">操作方式</div>';
     html += '<div class="opts">';
@@ -934,6 +936,7 @@
       const vol = el.getAttribute('data-vol');
       if (vol) { if (root.AUDIO) { root.AUDIO.muted = false; root.AUDIO.setVolume(parseFloat(vol)); root.AUDIO.unlock(); root.AUDIO.play('ui'); } UI.showSettings(); return; }
       if (el.getAttribute('data-mute')) { if (root.AUDIO) root.AUDIO.toggleMute(); UI.showSettings(); return; }
+      if (el.getAttribute('data-roster')) { const s = window.__st ? window.__st() : null; if (s) UI.showRoster(s); return; }
       const ctl = el.getAttribute('data-ctl');
       if (ctl) {
         UI.controls = ctl;
@@ -1172,6 +1175,65 @@
       try { localStorage.setItem('ashfall.tutorial', '1'); } catch (e) {}
       if (onDone) onDone();
     };
+  };
+
+  /* ---------------- 角色名册 ---------------- */
+  UI.showRoster = function (st) {
+    const R = root.ROSTER;
+    if (!R) { UI.toast('名册不可用', 'bad'); return; }
+    R.saveCurrent(st);
+    const list = R.list();
+    const activeId = R.activeId();
+    function render() {
+      let html = '<div class="mtitle">角色</div>';
+      html += '<div class="msub">共 ' + R.list().length + ' 个角色 · 切换后当前进度会保存</div>';
+      const arr = R.list();
+      if (!arr.length) html += '<div class="empty">还没有角色</div>';
+      for (let i = 0; i < arr.length; i++) {
+        const ch = arr[i];
+        const cls = (root.DATA.CLASSES || []).find(function (c) { return c.id === ch.cls; });
+        const on = ch.id === activeId;
+        html += '<div class="altar-row' + (on ? ' can' : '') + '">' +
+          '<span class="an" style="color:' + (cls ? cls.color : '#cfd8e8') + '">' + ch.name + (on ? ' (当前)' : '') + '</span>' +
+          '<span class="ad">' + (cls ? cls.name : '?') + ' · Lv ' + ch.level + ' · ' + (ch.gold || 0) + ' 金币 · 装备 ' + (ch.gearCount || 0) + ' 件</span>' +
+          '<span class="al">生命 ' + (ch.hp || 0) + '</span>' +
+          '<span class="ac">DPS ' + (ch.dps || 0) + '</span>' +
+          '</div>';
+        html += '<div class="opts" style="margin:2px 0 8px">' +
+          '<button class="opt" data-ch="switch|' + ch.id + '">切换到此角色</button>' +
+          '<button class="opt" data-ch="del|' + ch.id + '">删除</button>' +
+          '</div>';
+      }
+      html += '<div class="mfoot">' +
+        '<button class="btn" data-ch="new|">新建角色</button>' +
+        '<button class="btn primary" data-close="1">关闭</button></div>';
+      openModal(html, 'wide');
+      $('modalbox').onclick = function (ev) {
+        let el = ev.target;
+        const box = $('modalbox');
+        while (el && el !== box && !el.getAttribute('data-ch') && !el.getAttribute('data-close')) el = el.parentNode;
+        if (!el || el === box) return;
+        if (el.getAttribute('data-close')) { UI.close(); return; }
+        const parts = el.getAttribute('data-ch').split('|');
+        if (parts[0] === 'switch') {
+          R.saveCurrent(st);
+          const rec = R.list().find(function (c) { return c.id === parts[1]; });
+          if (rec && R.restore(st, rec)) { UI.toast('已切换到 ' + rec.name, 'good'); UI.close(); }
+          else UI.toast('切换失败', 'bad');
+          return;
+        }
+        if (parts[0] === 'del') {
+          R.remove(parts[1]);
+          render();
+          return;
+        }
+        if (parts[0] === 'new') {
+          R.createNew(st, '流亡者' + (R.list().length + 1));
+          location.reload();
+        }
+      };
+    }
+    render();
   };
 
   /* ---------------- 开局菜单 ---------------- */

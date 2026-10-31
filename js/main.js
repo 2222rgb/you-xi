@@ -148,6 +148,7 @@
       else if (panel === 'altar') UI.showAltar();
       else if (panel === 'rune') UI.showRunes(st);
       else if (panel === 'skills') UI.showSkills(st);
+      else if (panel === 'roster') UI.showRoster(st);
     }
     let sawTut = params.get('notut') === '1';
     try { sawTut = sawTut || localStorage.getItem('ashfall.tutorial') === '1'; } catch (e) {}

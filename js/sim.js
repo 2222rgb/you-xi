@@ -241,6 +241,15 @@
   }
 
   /** 祭坛买到新加成后，立刻作用到当前这局 */
+  /** 名册切换后刷新派生属性 */
+  function applyChar(st, p) {
+    if (!p) p = localPlayer(st);
+    p.xpNext = E.xpForLevel(p.level || 1);
+    recompute(st, p);
+    p.hp = p.maxHp;
+    return p;
+  }
+
   function applyMeta(st, bonus) {
     if (bonus) st.meta = Object.assign({}, st.meta, bonus);
     for (let i = 0; i < st.players.length; i++) recompute(st, st.players[i]);
@@ -1751,7 +1760,7 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
-    setRune: setRune, runeModsOf: runeModsOf, applyMeta: applyMeta, setSkill: setSkill, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
+    setRune: setRune, runeModsOf: runeModsOf, applyMeta: applyMeta, applyChar: applyChar, setSkill: setSkill, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
     activateStatue: activateStatue, giveUp: giveUp, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
