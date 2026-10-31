@@ -189,6 +189,26 @@
       cl.textContent = (cdef ? cdef.name : '流亡者') + ' · Lv ' + p.level;
     }
 
+    // 首领血条
+    const bb = $('bossbar');
+    if (bb) {
+      let boss = null;
+      if (st.enemies) {
+        for (let bi = 0; bi < st.enemies.length; bi++) {
+          const en = st.enemies[bi];
+          if (en.boss && !en.dead) { boss = en; break; }
+        }
+      }
+      if (boss) {
+        bb.classList.remove('hidden');
+        const pct = boss.maxHp ? Math.max(0, boss.hp / boss.maxHp) : (boss.hpPct !== undefined ? boss.hpPct : 0);
+        $('bossfill').style.width = (pct * 100).toFixed(1) + '%';
+        $('bossname').textContent = (boss.name || '首领') + '  ' + Math.ceil(pct * 100) + '%';
+      } else if (!bb.classList.contains('hidden')) {
+        bb.classList.add('hidden');
+      }
+    }
+
     // 打宝评分
     const rk = $('rankchip');
     if (rk) {
@@ -727,6 +747,27 @@
         UI.showBag(st);
         return;
       }
+      const bulk = ev.target && ev.target.getAttribute ? ev.target.getAttribute('data-bulk') : null;
+      if (bulk) {
+        let cnt = 0;
+        if (bulk === 'salv') {
+          while (st.player.bag.length > 0 && cnt < 60) {
+            const rs = ACT.run(st, 'salvage', [0]);
+            if (!rs || !rs.ok) break;
+            cnt++;
+          }
+          UI.toast('批量回收 ' + cnt + ' 件', 'good');
+        } else {
+          while (st.player.bag.length > 0 && cnt < 60) {
+            const rd = ACT.run(st, 'drop', [0]);
+            if (!rd || !rd.ok) break;
+            cnt++;
+          }
+          UI.toast('批量丢弃 ' + cnt + ' 件', 'good');
+        }
+        UI.showBag(st);
+        return;
+      }
       const el = pickRow(ev);
       if (!el) return;
       if (el.getAttribute('data-close')) { UI.close(); return; }
@@ -780,7 +821,35 @@
   };
 
   /* ---------------- 背包 ---------------- */
+  UI.act = function (kind, idx) {
+    const st = UI._st;
+    if (!st) return;
+    if (kind === 'salv') {
+      const rs = ACT.run(st, 'salvage', [idx]);
+      if (rs && rs.ok) { UI.toast('回收获得 ' + rs.mats + ' 材料', 'good'); UI.playSfx('buy'); }
+      else if (rs) UI.toast(rs.msg, 'bad');
+    } else {
+      const rd = ACT.run(st, 'drop', [idx]);
+      if (rd && rd.ok) UI.toast('已丢在地上', 'good');
+    }
+    UI.showBag(st);
+  };
+
+  UI.bulk = function (kind) {
+    const st = UI._st;
+    if (!st) return;
+    let cnt = 0;
+    while (st.player.bag.length > 0 && cnt < 80) {
+      const r = ACT.run(st, kind === 'salv' ? 'salvage' : 'drop', [0]);
+      if (!r || !r.ok) break;
+      cnt++;
+    }
+    UI.toast((kind === 'salv' ? '批量回收 ' : '批量丢弃 ') + cnt + ' 件', 'good');
+    UI.showBag(st);
+  };
+
   UI.showBag = function (st) {
+    UI._st = st;
     UI._tipItems = st.player.bag;
     let html = '<div class="mtitle">背包</div>';
     html += '<div class="msub">点击装备 · ' + st.player.bag.length + '/24' + (st.player.boxes ? ' · 魔盒 ' + st.player.boxes : '') + '</div>';
@@ -803,13 +872,17 @@
     }
     if (!st.player.bag.length) html += '<div class="empty">空</div>';
     for (let i = 0; i < st.player.bag.length; i++) {
-      html += itemRow(st.player.bag[i],
-        '<span class="mini" data-mini="salv" data-i="' + i + '" title="回收成材料">回</span>' +
-        '<span class="mini" data-mini="drop" data-i="' + i + '" title="丢到地上">丢</span>', 'eq', i);
+      html += itemRow(st.player.bag[i], '', 'eq', i);
+      html += '<div class="irow sub">' +
+        '<span class="mini" onclick="event.stopPropagation();UI.act(&#39;salv&#39;,' + i + ')">回收成材料</span>' +
+        '<span class="mini" onclick="event.stopPropagation();UI.act(&#39;drop&#39;,' + i + ')">丢到地上</span>' +
+        '</div>';
     }
-    html += '</div></div>';
-    html += '<div class="mfoot"><button class="btn" data-close="1">关闭 (TAB)</button></div>';
-    openModal(html);
+    html += '<div class="mfoot" style="gap:6px;flex-wrap:wrap">' +
+      '<button class="btn" onclick="UI.bulk(&#39;salv&#39;)">全部回收</button>' +
+      '<button class="btn" onclick="UI.bulk(&#39;drop&#39;)">全部丢弃</button>' +
+      '<button class="btn primary" data-close="1">关闭 (TAB)</button></div>';
+    openModal(html, 'wide');
 
     $('modalbox').onclick = function (ev) {
       const el = pickRow(ev);

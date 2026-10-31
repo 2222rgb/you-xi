@@ -479,6 +479,7 @@
     handlePhase();
   }
 
+  window.__st = function () { return st; };
   let rogueDebugDone = false;
   let statueDebugDone = false;
   function handlePhase() {

@@ -1238,6 +1238,7 @@
       id: st.nextId++, type: typeId, sprite: stats.sprite, boss: stats.boss,
       x: x, y: y, hp: stats.hp, maxHp: stats.hp,
       dmg: stats.dmg, speed: stats.speed, r: stats.r,
+      name: (D.ENEMIES[typeId] && D.ENEMIES[typeId].name) || typeId,
       xp: stats.xp, gold: stats.gold, mass: stats.mass, wobble: stats.wobble,
       ranged: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].ranged),
       flee: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].flee),

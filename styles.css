@@ -441,3 +441,13 @@ body.touch #joystick { display: block; }
   background: rgba(8,8,12,.8); pointer-events: none;
 }
 #rankchip.hidden { display: none; }
+
+/* 首领血条 */
+#bossbar {
+  position: absolute; top: 74px; left: 50%; transform: translateX(-50%);
+  width: 420px; pointer-events: none; text-align: center;
+}
+#bossbar.hidden { display: none; }
+#bossname { font-size: 12px; letter-spacing: .24em; color: #ff8a8a; margin-bottom: 3px; text-shadow: 0 0 10px rgba(192,57,43,.8); }
+#bosstrack { height: 10px; background: #14090a; border: 1px solid #6a2020; }
+#bossfill { height: 100%; width: 100%; background: linear-gradient(90deg, #7a1f1f, #ff4d6d); transition: width .12s linear; }
