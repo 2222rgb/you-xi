@@ -19,9 +19,11 @@ html, body {
   margin: 0; padding: 0;
   width: 100%; height: 100%;
   overflow: hidden;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
   background: var(--ink);
   color: var(--text);
-  font-family: "Consolas", "SF Mono", "Microsoft YaHei", monospace;
+  font-family: "Fusion Pixel 12px Proportional Simplified Chinese", "Microsoft YaHei", monospace;
   font-size: 13px;
   user-select: none;
   -webkit-user-select: none;
