@@ -34,6 +34,7 @@
     return {
       t: st.phase, pt: r1(st.phaseT), cy: st.cycle, near: st.nearNpc || 0, k: st.kills,
       ps: ps, es: es, ss: ss, gs: gs, ev: (st.events || []).slice(0, 12), rf: st.rift ? st.rift.name : '',
+      rk: st.rate ? st.rate.rank : 0, ron: st.statue && st.statue.on ? 1 : 0, rs: st.rate ? Math.round(st.rate.score) : 0,
       evt: st.event ? [st.event.type, Math.max(0, Math.round(st.event.t))] : null,
       eh: (st.eshots || []).map(function (s) { return [r1(s.x), r1(s.y)]; })
     };
@@ -69,6 +70,9 @@
     view.phaseT = snap.pt;
     view.kills = snap.k || 0;
     view.riftName = snap.rf || '';
+    view.rateRank = snap.rk || 0;
+    view.statueOn = !!snap.ron;
+    view.rateScore = snap.rs || 0;
     view.event = snap.evt || null;
     view.cycle = snap.cy;
     view.nearNpc = snap.near || null;

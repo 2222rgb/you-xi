@@ -98,6 +98,8 @@
       shop: [], marketStock: [],
       rift: null, riftChoices: [], bossKills: 0, dailyKey: '', started: false,
       event: null, eventCd: 40,
+      statue: { x: CFG.worldSize / 2 + 120, y: CFG.worldSize / 2 - 90, on: false },
+      rate: { score: 0, rank: 0, idle: 0 },
       meta: metaBonus || { startGold: 0, goldMul: 0, hp: 0, talent: 0, drop: 0, riftChoice: 0, heirloom: 0, frenzy: 0 },
       agg: null, skills: {}, depth: 1,
       cleanAcc: 0
@@ -383,6 +385,7 @@
   function damageEnemy(st, e, dmg, crit, type) {
     if (e.dead) return;
     const caster = st._caster || null;
+    if (st.statue && st.statue.on && st.rate) dmg *= (1 + st.rate.rank * D.STATUE.dmgPerRank);
     const ag = caster && caster.agg ? caster.agg : null;
     if ((e.shock || 0) > 0) dmg *= 1.25;
     if (ag && ag.ampAil > 0 && (e.burn > 0 || e.chill > 0 || (e.shock || 0) > 0)) {
@@ -405,6 +408,14 @@
     e.dead = true;
     st.kills++;
     ev(st, 'kill');
+    if (st.rate && st.statue && st.statue.on) {
+      const add = e.boss ? D.STATUE.scoreBoss : (e.elite ? D.STATUE.scoreElite : D.STATUE.scorePerKill);
+      st.rate.score += add;
+      st.rate.idle = 0;
+      let nr = 0;
+      for (let ri = 1; ri < D.RANK_GATE.length; ri++) if (st.rate.score >= D.RANK_GATE[ri]) nr = ri;
+      st.rate.rank = nr;
+    }
 
     // 经验：范围内的玩家都吃（屏蔽外不吃）
     awardXp(st, e.x, e.y, e.xp * ((st.rift && st.rift.xp) || 1));
@@ -687,6 +698,8 @@
       stepEnemies(st, dt);
       stepShots(st, dt);
       stepEvent(st, dt);
+      stepStatue(st, dt);
+      stepStatue(st, dt);
       stepEnemyShots(st, dt);
       stepZones(st, dt);
       stepPickups(st, dt);
@@ -746,6 +759,14 @@
       p.downed = false;
       p.alive = false;
       ev(st, 'kill');
+    if (st.rate && st.statue && st.statue.on) {
+      const add = e.boss ? D.STATUE.scoreBoss : (e.elite ? D.STATUE.scoreElite : D.STATUE.scorePerKill);
+      st.rate.score += add;
+      st.rate.idle = 0;
+      let nr = 0;
+      for (let ri = 1; ri < D.RANK_GATE.length; ri++) if (st.rate.score >= D.RANK_GATE[ri]) nr = ri;
+      st.rate.rank = nr;
+    }
       if (!st.players.some(function (q) { return q.alive; })) st.phase = 'dead';
     }
   }
@@ -760,7 +781,8 @@
       const len = Math.hypot(mx, my);
       if (len > 0.01) {
         mx /= len; my /= len;
-        const spd = p.speed * (p.frenzyT > 0 ? 1.2 : 1);
+        const stMul = (st.statue && st.statue.on && st.rate) ? (1 + st.rate.rank * D.STATUE.movePerRank) : 1;
+        const spd = p.speed * (p.frenzyT > 0 ? 1.2 : 1) * stMul;
         p.x += mx * spd * dt;
         p.y += my * spd * dt;
         p.face = mx >= 0 ? 1 : -1;
@@ -794,7 +816,8 @@
           if (calc) {
             const ok = fireSkill(st, p, j);
             st._caster = null;
-            s.cd = (ok ? 1 / calc.rate : 0.08) * (p.frenzyT > 0 ? 0.65 : 1);
+            const rateMul = (st.statue && st.statue.on && st.rate) ? (1 + st.rate.rank * D.STATUE.ratePerRank) : 1;
+            s.cd = (ok ? 1 / (calc.rate * rateMul) : 0.08) * (p.frenzyT > 0 ? 0.65 : 1);
           }
         }
       }
@@ -1182,7 +1205,8 @@
   function spawnStep(st, dt) {
     const w = waveAt(st.phaseT);
     const R = st.rift;
-    const bloodmoon = st.event && st.event.type === 'bloodmoon' ? 1.8 : 1;
+    const rankBoost = (st.statue && st.statue.on && st.rate) ? st.rate.rank : 0;
+    const bloodmoon = (st.event && st.event.type === 'bloodmoon' ? 1.8 : 1) * (1 + rankBoost * D.STATUE.spawnPerRank);
     const rate = w.rate * ((R && R.spawn && R.spawn.rate) || 1) * bloodmoon;
     const cap = Math.round(w.cap * ((R && R.spawn && R.spawn.cap) || 1));
     if (st.enemies.length >= cap) return;
@@ -1195,7 +1219,7 @@
       let r = rand(st) * total;
       let typeId = 'slime';
       for (const k in pool) { r -= pool[k]; if (r <= 0) { typeId = k; break; } }
-      const eliteMul = (st.rift && st.rift.elite) || 1;
+      const eliteMul = ((st.rift && st.rift.elite) || 1) * (1 + rankBoost * D.STATUE.elitePerRank);
       const elite = st.phaseT > 40 && rand(st) < Math.min(0.35, 0.05 * eliteMul);
       spawnEnemy(st, typeId, elite);
     }
@@ -1255,6 +1279,36 @@
       const p = st.players[i];
       if (!p.alive) continue;
       if (dist2(p.x, p.y, x, y) <= r2) gainXp(st, p, v);
+    }
+  }
+
+  function activateStatue(st, p) {
+    if (!p) p = localPlayer(st);
+    const s = st.statue;
+    if (!s) return { ok: false, msg: '这里没有雕像' };
+    const d = Math.hypot(p.x - s.x, p.y - s.y);
+    if (d > 52) return { ok: false, msg: '走近雕像再按 F' };
+    if (!s.on) {
+      s.on = true;
+      st.rate.score = 0;
+      st.rate.rank = 0;
+      st.rate.idle = 0;
+      ev(st, 'boss');
+      toast(st, '打宝雕像启动了 — 杀怪冲评级', 'rare');
+      return { ok: true, on: true };
+    }
+    return { ok: true, on: true, msg: '雕像已在运转' };
+  }
+
+  function stepStatue(st, dt) {
+    const s = st.statue;
+    if (!s || !s.on || !st.rate) return;
+    st.rate.idle += dt;
+    if (st.rate.idle >= D.STATUE.idleReset && st.rate.score > 0) {
+      st.rate.score = 0;
+      st.rate.rank = 0;
+      st.rate.idle = 0;
+      toast(st, '评级中断', 'bad');
     }
   }
 
@@ -1623,7 +1677,8 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
-    setRune: setRune, runeModsOf: runeModsOf, pickRogue: pickRogue, rogueModsOf: rogueModsOf, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
+    setRune: setRune, runeModsOf: runeModsOf, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
+    activateStatue: activateStatue, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

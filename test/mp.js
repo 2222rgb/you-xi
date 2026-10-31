@@ -184,5 +184,20 @@ T('升级后出现 3 个选项', !!(prg.rogueChoices && prg.rogueChoices.length 
 const incBefore = prg.agg.inc.all || 0;
 const rp = SIM.pickRogue(stRg, 0, prg);
 T('选择后生效并清空选项', !!(rp && rp.ok && prg.rogueChoices === null && Object.keys(prg.roguePicks).length === 1), 'picks=' + JSON.stringify(prg.roguePicks));
+// 打宝雕像
+const stSt = SIM.create(121, 1);
+SIM.chooseRift(stSt, 0);
+const pst = stSt.players[0];
+const far = SIM.activateStatue(stSt, pst);
+T('离雕像太远无法开启', !!(far && !far.ok), 'msg=' + (far && far.msg));
+pst.x = stSt.statue.x + 8;
+pst.y = stSt.statue.y + 8;
+const near = SIM.activateStatue(stSt, pst);
+T('靠近后按 F 开启雕像', !!(near && near.ok && stSt.statue.on === true), 'on=' + stSt.statue.on);
+stSt.rate.score = 130;
+stSt.rate.rank = 5;
+stSt.rate.idle = 0;
+for (let i = 0; i < 400; i++) SIM.step(stSt, STEP, {});
+T('5 秒不杀怪评级清零', stSt.rate.score === 0 && stSt.rate.rank === 0, 'score=' + stSt.rate.score);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);

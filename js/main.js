@@ -185,6 +185,11 @@
       const k = ev.key.toLowerCase();
       keys[k] = true;
       if (UI.isOpen()) return;
+      if (k === 'f') {
+        const rs = ACT.run(st, 'statue', []);
+        if (rs && !rs.ok && rs.msg) UI.toast(rs.msg, 'bad');
+        return;
+      }
       if (k === 'm') { RENDER.toggleMinimap(); return; }
       if (k === '1' || k === '2' || k === '3') {
         const slot = parseInt(k, 10) - 1;
@@ -207,7 +212,7 @@
           } else doInteract();
         } else doInteract();
       }
-      if (k === 'f') { if (ACT.run(st, 'potion', [])) UI.toast('饮下药水'); }
+      if (k === 'q') { if (ACT.run(st, 'potion', [])) UI.toast('饮下药水'); }
     });
     window.addEventListener('keyup', function (ev) { keys[ev.key.toLowerCase()] = false; });
     window.addEventListener('blur', function () { for (const k in keys) keys[k] = false; });
@@ -475,7 +480,15 @@
   }
 
   let rogueDebugDone = false;
+  let statueDebugDone = false;
   function handlePhase() {
+    if (params.get('statue') === '1' && !statueDebugDone && st.statue) {
+      statueDebugDone = true;
+      const sp = st.players[0];
+      sp.x = st.statue.x + 10;
+      sp.y = st.statue.y + 10;
+      SIM.activateStatue(st, sp);
+    }
     if (params.get('rogue') === '1' && st.phase === 'rift' && st.riftChoices && st.riftChoices.length) { SIM.chooseRift(st, 0); return; }
     if (params.get('rogue') === '1' && !rogueDebugDone && st.phase === 'combat' && st.player && SIM.classOf(st.player).rogue) {
       rogueDebugDone = true;

@@ -189,6 +189,20 @@
       cl.textContent = (cdef ? cdef.name : '流亡者') + ' · Lv ' + p.level;
     }
 
+    // 打宝评分
+    const rk = $('rankchip');
+    if (rk) {
+      const rank = st.rateRank || 0;
+      const on = st.statueOn || (st.statue && st.statue.on);
+      if (on) {
+        rk.classList.remove('hidden');
+        rk.textContent = D.RANKS[rank] + '  ' + (st.rateScore || (st.rate && st.rate.score) || 0);
+        rk.style.color = D.RANK_COLOR[rank];
+      } else if (!rk.classList.contains('hidden')) {
+        rk.classList.add('hidden');
+      }
+    }
+
     // 事件提示
     const chip = $('evchip');
     if (chip) {

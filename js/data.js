@@ -409,6 +409,22 @@
     { id: 'pierce', name: '穿透', mods: [{ k: 'pierce', v: 2 }, { k: 'dmg', v: -0.12 }], desc: '穿透 +2，伤害 -12%' }
   ];
 
+  /* ---------------- 打宝雕像 / 评分 ---------------- */
+  const RANKS = ['D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
+  const RANK_GATE = [0, 18, 40, 75, 120, 190, 280];
+  const RANK_COLOR = ['#6f7a90', '#9fd7ff', '#6fdc8f', '#ffd54f', '#ff8a3d', '#ff5c5c', '#b07cff'];
+  const STATUE = {
+    idleReset: 5,
+    dmgPerRank: 0.12,
+    movePerRank: 0.04,
+    ratePerRank: 0.06,
+    spawnPerRank: 0.35,
+    elitePerRank: 0.40,
+    scorePerKill: 1,
+    scoreElite: 5,
+    scoreBoss: 20
+  };
+
   /* ---------------- 局内 3 选 1（变数职业专属） ---------------- */
   const ROGUE_UPGRADES = [
     { id: 'might', name: '蛮力', color: '#e05c4a', desc: '伤害 +35%', mods: [{ k: 'inc', t: 'all', v: 0.35 }] },
@@ -459,7 +475,7 @@
     ELE, TYPE_CN, SKILLS, SKILL_IDS, MAX_SKILL_LEVEL,
     AFFIXES, SLOTS, SLOT_CN, SLOT_ICON, RARITY_CN, RARITY_COLOR, BASE_NAMES, LEGENDARIES,
     TREES: TREES, TALENT_INDEX: TALENT_INDEX, TIER_GATE: TIER_GATE,
-    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES,
+    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES, RANKS: RANKS, RANK_GATE: RANK_GATE, RANK_COLOR: RANK_COLOR, STATUE: STATUE,
     ENEMIES, ELITE_MODS, WAVES, TOWN, PRICES, CONFIG
   };
 })(window);

@@ -315,6 +315,7 @@
     // 主角永远画在最上层，避免被怪群淹没
     drawOthers(st, time);
     drawPlayer(st, time);
+    drawStatue(st, time);
     drawMinimap(st, time);
 
     if (isTown) drawNpcs(st, time);
@@ -649,6 +650,30 @@
     }
   }
 
+  function drawStatue(st, time) {
+    const s = st.statue;
+    if (!s || st.phase === 'town') return;
+    const x = sx(s.x), y = sy(s.y);
+    if (x < -30 || x > W + 30 || y < -40 || y > H + 30) return;
+    // 底座
+    ctx.fillStyle = '#2a2436';
+    ctx.fillRect(x - 7, y + 2, 14, 4);
+    // 柱身
+    ctx.fillStyle = s.on ? '#5a4a7a' : '#3a3448';
+    ctx.fillRect(x - 4, y - 18, 8, 20);
+    // 顶部宝石
+    const pulse = 0.5 + 0.5 * Math.sin(time * 4);
+    ctx.globalAlpha = s.on ? 0.9 : 0.45;
+    ctx.fillStyle = s.on ? D.RANK_COLOR[st.rate.rank] : '#6f7a90';
+    ctx.fillRect(x - 3, y - 24, 6, 5);
+    if (s.on) {
+      ctx.globalAlpha = 0.18 + pulse * 0.22;
+      ctx.beginPath();
+      ctx.arc(x, y - 10, 16 + pulse * 6, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
   let minimapOn = true;
 
   function drawMinimap(st, time) {
