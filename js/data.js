@@ -234,6 +234,9 @@
     boss: { id: 'boss', name: '深渊之眼', sprite: 'boss', hp: 700, dmg: 16, speed: 18, r: 11, xp: 80, gold: 200, mass: 12, boss: true },
     boss3: { id: 'boss3', name: '虚空之心', sprite: 'boss', hp: 760, dmg: 13, speed: 15, r: 12, xp: 95, gold: 260, mass: 15, boss: true, caster: true },
     boss2: { id: 'boss2', name: '骸骨之王', sprite: 'boss2', hp: 820, dmg: 19, speed: 22, r: 11, xp: 90, gold: 240, mass: 14, boss: true },
+    splitter: { id: 'splitter', name: '裂魂体', sprite: 'slime', hp: 42, dmg: 6, speed: 32, r: 7, xp: 5, gold: 10, mass: 2, split: 2 },
+    summoner: { id: 'summoner', name: '唤骸者', sprite: 'skel', hp: 58, dmg: 5, speed: 24, r: 7, xp: 8, gold: 16, mass: 3, summoner: true },
+    healer: { id: 'healer', name: '腐化祭司', sprite: 'wraith', hp: 46, dmg: 4, speed: 28, r: 6, xp: 7, gold: 14, mass: 2, healer: true },
     charger: { id: 'charger', name: '冲锋者', sprite: 'wraith', hp: 30, dmg: 6.5, speed: 30, r: 6, xp: 4, gold: 9, mass: 3, charger: true },
     goblin: { id: 'goblin', name: '宝藏地精', sprite: 'slime', hp: 55, dmg: 4, speed: 62, r: 6, xp: 30, gold: 140, mass: 2, flee: true },
     spitter: { id: 'spitter', name: '腐化喷吐者', sprite: 'spitter', hp: 14, dmg: 2.6, speed: 28, r: 5, xp: 2, gold: 5, mass: 1, ranged: true, shotSpeed: 118, shotCd: 3.2, range: 165 }
@@ -254,10 +257,10 @@
     { t: 0, rate: 3.4, cap: 55, pool: { slime: 10, bat: 4 } },
     { t: 25, rate: 4.2, cap: 75, pool: { slime: 8, bat: 7, skel: 4 } },
     { t: 50, rate: 5.2, cap: 100, pool: { slime: 5, bat: 7, skel: 7, wraith: 3, spitter: 2, charger: 3 } },
-    { t: 75, rate: 6.0, cap: 130, pool: { bat: 6, skel: 8, wraith: 6, spitter: 2, charger: 4 } },
-    { t: 100, rate: 6.8, cap: 160, pool: { skel: 7, wraith: 8, brute: 2 } },
-    { t: 125, rate: 7.6, cap: 190, pool: { bat: 6, skel: 7, wraith: 6, brute: 3 } },
-    { t: 150, rate: 8.4, cap: 220, pool: { skel: 6, wraith: 8, brute: 4 } }
+    { t: 75, rate: 6.0, cap: 130, pool: { bat: 6, skel: 8, wraith: 6, spitter: 2, charger: 4, splitter: 3, healer: 2 } },
+    { t: 100, rate: 6.8, cap: 160, pool: { skel: 7, wraith: 8, brute: 2, summoner: 2, healer: 2 } },
+    { t: 125, rate: 7.6, cap: 190, pool: { bat: 6, skel: 7, wraith: 6, brute: 3, summoner: 3, splitter: 3 } },
+    { t: 150, rate: 8.4, cap: 220, pool: { skel: 6, wraith: 8, brute: 4, summoner: 4, healer: 3, splitter: 4 } }
   ];
 
   /* ---------------- 主城 ---------------- */
@@ -312,7 +315,19 @@
     { id: 'frenzy', name: '躁动', color: '#ff8a3d', desc: '敌人攻速更快但血量 -20%，掉落品质 +1',
       enemy: { dmg: 1.25, hp: 0.8, speed: 1.15 }, loot: 1 },
     { id: 'calm', name: '静水', mild: true, color: '#9fd7ff', desc: '敌人变慢，但金币减半',
-      enemy: { speed: 0.7, dmg: 0.85 }, gold: 0.5, loot: 1 }
+      enemy: { speed: 0.7, dmg: 0.85 }, gold: 0.5, loot: 1 },
+    { id: 'bonetide', name: '白骨之潮', color: '#d9d4c0', desc: '敌人血量 -30%，数量 +40%，金币 -20%',
+      enemy: { hp: 0.7 }, spawn: { rate: 1.2, cap: 1.4 }, gold: 0.8 },
+    { id: 'stormrage', name: '雷暴', color: '#ffe066', desc: '敌人伤害 +25%，经验 +60%',
+      enemy: { dmg: 1.25 }, xp: 1.6 },
+    { id: 'gluttony', name: '贪食', color: '#6fdc8f', desc: '治疗 +100%，敌人伤害 +30%',
+      heal: 2, enemy: { dmg: 1.3 } },
+    { id: 'echo', name: '回声', color: '#b07cff', desc: '首领提前 30 秒，金币 +60%，品质 +1',
+      bossEarly: 30, gold: 1.6, loot: 1 },
+    { id: 'hive', name: '蜂群', color: '#e0c060', desc: '刷怪速度 +80%，但敌人血量 -25%',
+      spawn: { rate: 1.8, cap: 1.3 }, enemy: { hp: 0.75 } },
+    { id: 'crystal', name: '结晶', color: '#9fd7ff', desc: '掉落品质 +3，金币 -40%',
+      loot: 3, gold: 0.6 }
   ];
 
   /* ---------------- 词缀共鸣：同一标签堆到阈值就解锁效果 ---------------- */

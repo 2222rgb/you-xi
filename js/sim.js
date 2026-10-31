@@ -305,6 +305,23 @@
 
     // 经验：范围内的玩家都吃（屏蔽外不吃）
     awardXp(st, e.x, e.y, e.xp * ((st.rift && st.rift.xp) || 1));
+    // 裂魂体：死亡分裂成两只更小的
+    if (e.split > 0 && e.typeId === 'splitter') {
+      for (let si = 0; si < 2; si++) {
+        const child = spawnEnemy(st, 'splitter', false);
+        child.x = e.x + (si ? 11 : -11);
+        child.y = e.y + (si ? -7 : 7);
+        child.maxHp = Math.max(6, Math.round(e.maxHp * 0.34));
+        child.hp = child.maxHp;
+        child.r = Math.max(3, e.r * 0.68);
+        child.split = e.split - 1;
+        child.xp = Math.max(1, Math.round(e.xp * 0.3));
+        child.gold = Math.max(1, Math.round(e.gold * 0.3));
+        child.dmg = e.dmg * 0.7;
+      }
+      addFx(st, 'ring', e.x, e.y, 20, '#6fdc8f', 0.3);
+    }
+
     const killer = nearestPlayer(st, e.x, e.y);
     if (killer) {
       killer.frenzy = Math.min(100, killer.frenzy + 2.5);
@@ -705,6 +722,32 @@
       if (!target) continue;
       const dx = target.x - e.x, dy = target.y - e.y;
       const d = Math.hypot(dx, dy) || 1;
+      // 唤骸者：定期召唤小怪
+      if (e.summoner) {
+        e.sumCd -= dt;
+        if (e.sumCd <= 0 && st.enemies.length < 190) {
+          e.sumCd = 6.5;
+          const m = spawnEnemy(st, 'slime', false);
+          m.x = e.x + rr(st, -14, 14);
+          m.y = e.y + rr(st, -14, 14);
+          addFx(st, 'ring', e.x, e.y, 18, '#b07cff', 0.3);
+        }
+      }
+      // 腐化祭司：治疗附近敌人
+      if (e.healer) {
+        e.healCd -= dt;
+        if (e.healCd <= 0) {
+          e.healCd = 3.5;
+          const grp = enemiesNear(st, e.x, e.y, 74);
+          let healed = false;
+          for (let gi = 0; gi < grp.length; gi++) {
+            const q = grp[gi];
+            if (q.hp < q.maxHp) { q.hp = Math.min(q.maxHp, q.hp + q.maxHp * 0.12); healed = true; }
+          }
+          if (healed) addFx(st, 'ring', e.x, e.y, 26, '#6fdc8f', 0.35);
+        }
+      }
+
       // 虚空之心：环形弹幕
       if (e.caster) {
         e.castCd -= dt;
@@ -1050,6 +1093,9 @@
       flee: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].flee),
       charger: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].charger),
       caster: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].caster), castCd: 2.5,
+      split: (D.ENEMIES[typeId] && D.ENEMIES[typeId].split) || 0,
+      summoner: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].summoner), sumCd: 3,
+      healer: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].healer), healCd: 2.5,
       cstate: null, cd: 1.5, st: 0, cdir: 0,
       range: (D.ENEMIES[typeId] && D.ENEMIES[typeId].range) || 0,
       shotSpeed: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotSpeed) || 0,
