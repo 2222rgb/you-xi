@@ -1235,7 +1235,7 @@
   /* ---------------- 技能面板（辅助插槽） ---------------- */
   UI.showSkills = function (st) {
     const p = st.player;
-    const ALL = ['dagger', 'axe', 'fireball', 'meteor', 'bolt', 'frostnova', 'bloodlet', 'toxic'];
+    const ALL = ['dagger', 'axe', 'fireball', 'meteor', 'bolt', 'frostnova', 'bloodlet', 'toxic', 'venom', 'cleave', 'thunder', 'frostbolt'];
     function render() {
       let html = '<div class="mtitle">技能</div>';
       html += '<div class="msub">选 3 个技能 · 按 <b>1 / 2 / 3</b> 施放 · 插「触媒·自动」可自动释放 · 符文在「符文」面板</div>';

@@ -64,6 +64,34 @@
       ],
       desc: '掷出会回旋的战斧，穿透路径上的所有敌人。'
     },
+    venom: {
+      id: 'venom', name: '毒矢', icon: 'icon_dagger', color: '#8fdc6f',
+      kind: 'projectile', tags: ['phys', 'projectile', 'dot'],
+      base: { phys: [7, 11] }, perLevel: 1.25,
+      rate: 1.7, speed: 230, radius: 18, range: 300, pierce: 2, dot: 0.5, dotDur: 3,
+      desc: '射出带毒的弩矢，穿透两名敌人并附加中毒。'
+    },
+    cleave: {
+      id: 'cleave', name: '横扫', icon: 'icon_axe', color: '#e8b070',
+      kind: 'melee', tags: ['phys', 'melee', 'area'],
+      base: { phys: [12, 18] }, perLevel: 1.23,
+      rate: 1.5, range: 66, arc: 2.8,
+      desc: '大范围横斩，一次扫到身前的所有敌人。'
+    },
+    thunder: {
+      id: 'thunder', name: '落雷', icon: 'icon_bolt', color: '#ffe066',
+      kind: 'meteor', tags: ['lightning', 'area', 'spell'],
+      base: { lightning: [18, 26] }, perLevel: 1.28,
+      rate: 0.7, radius: 50, delay: 0.45,
+      desc: '在敌人头顶落下一道雷，命中后扩散。'
+    },
+    frostbolt: {
+      id: 'frostbolt', name: '冰锥', icon: 'icon_frost', color: '#9fd7ff',
+      kind: 'projectile', tags: ['cold', 'projectile', 'spell'],
+      base: { cold: [9, 14] }, perLevel: 1.26,
+      rate: 1.35, speed: 270, radius: 20, range: 320,
+      desc: '高速冰锥，命中后减速目标。'
+    },
     bloodlet: {
       id: 'bloodlet', name: '血刃', icon: 'icon_dagger', color: '#c0392b',
       kind: 'melee', tags: ['phys', 'melee', 'strike'],
@@ -150,6 +178,46 @@
 
   /* ---------------- 传奇 ---------------- */
   const LEGENDARIES = [
+    { id: 'voidheart', slot: 'amulet', name: '虚空之心', base: '琥珀护符',
+      mods: [
+        { k: 'more', t: 'all', v: 0.30, label: '30% 更多全部伤害' },
+        { k: 'lifePct', v: -0.20, label: '最大生命 -20%' }
+      ] },
+    { id: 'stormlord', slot: 'helm', name: '风暴之主', base: '灰烬铁面盔',
+      mods: [
+        { k: 'inc', t: 'lightning', v: 0.80, label: '+80% 闪电伤害' },
+        { k: 'chain', v: 2, label: '闪电连锁 +2' }
+      ] },
+    { id: 'winterveil', slot: 'body', name: '凛冬帷幕', base: '幽邃布甲',
+      mods: [
+        { k: 'inc', t: 'cold', v: 0.70, label: '+70% 冰霜伤害' },
+        { k: 'life', v: 120, label: '+120 生命' }
+      ] },
+    { id: 'venomfang', slot: 'ring', name: '毒牙', base: '裂纹指环',
+      mods: [
+        { k: 'inc', t: 'area', v: 0.60, label: '+60% 范围伤害' },
+        { k: 'ampAil', v: 0.35, label: '对异常状态敌人 +35% 伤害' }
+      ] },
+    { id: 'bloodoath', slot: 'amulet', name: '血誓', base: '琥珀护符',
+      mods: [
+        { k: 'more', t: 'phys', v: 0.45, label: '45% 更多物理伤害' },
+        { k: 'critMulti', v: 0.60, label: '+60% 暴击伤害' }
+      ] },
+    { id: 'greedstone', slot: 'ring', name: '贪欲之石', base: '符文指环',
+      mods: [
+        { k: 'gold', v: 1.20, label: '金币 +120%' },
+        { k: 'pickup', v: 90, label: '拾取范围 +90' }
+      ] },
+    { id: 'bulwark', slot: 'body', name: '壁垒', base: '幽邃布甲',
+      mods: [
+        { k: 'life', v: 260, label: '+260 生命' },
+        { k: 'lifePct', v: 0.25, label: '最大生命 +25%' }
+      ] },
+    { id: 'swiftshadow', slot: 'helm', name: '疾影', base: '灰烬铁面盔',
+      mods: [
+        { k: 'speed', v: 0.45, label: '+45% 攻击速度' },
+        { k: 'move', v: 0.25, label: '+25% 移动速度' }
+      ] },
     {
       id: 'slayer', slot: 'ring', name: '屠戮者', base: '裂纹指环',
       mods: [
