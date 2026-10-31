@@ -14,6 +14,10 @@
       kind: 'melee', tags: ['phys', 'melee', 'strike'],
       base: { phys: [7, 11] }, perLevel: 1.22,
       rate: 2.1, range: 46, arc: 1.5,
+      runes: [
+        { id: 'wide', name: '横扫', desc: '范围 +35%，伤害 -10%，材料 20', mods: [{ k: 'range', v: 0.35 }, { k: 'dmg', v: -0.10 }], cost: 20 },
+        { id: 'deep', name: '穿骨', desc: '伤害 +28%，攻速 -8%，材料 20', mods: [{ k: 'dmg', v: 0.28 }, { k: 'rate', v: -0.08 }], cost: 20 }
+      ],
       desc: '向最近的敌人挥出一记快速的弧形斩击。'
     },
     fireball: {
@@ -21,6 +25,10 @@
       kind: 'projectile', tags: ['fire', 'projectile', 'area'],
       base: { fire: [13, 19] }, perLevel: 1.26,
       rate: 1.05, speed: 190, radius: 26, range: 300,
+      runes: [
+        { id: 'big', name: '巨型', desc: '爆炸范围 +40%，伤害 -12%，材料 25', mods: [{ k: 'radius', v: 0.40 }, { k: 'dmg', v: -0.12 }], cost: 25 },
+        { id: 'fast', name: '速燃', desc: '攻速 +25%，伤害 -15%，材料 25', mods: [{ k: 'rate', v: 0.25 }, { k: 'dmg', v: -0.15 }], cost: 25 }
+      ],
       desc: '掷出火球，命中后爆炸并点燃范围内的敌人。'
     },
     frostnova: {
@@ -28,6 +36,10 @@
       kind: 'aura', tags: ['cold', 'area', 'spell'],
       base: { cold: [11, 17] }, perLevel: 1.24,
       rate: 0.85, radius: 58,
+      runes: [
+        { id: 'wide', name: '霜原', desc: '范围 +45%，伤害 -15%，材料 25', mods: [{ k: 'radius', v: 0.45 }, { k: 'dmg', v: -0.15 }], cost: 25 },
+        { id: 'bite', name: '刺骨', desc: '伤害 +30%，范围 -12%，材料 25', mods: [{ k: 'dmg', v: 0.30 }, { k: 'radius', v: -0.12 }], cost: 25 }
+      ],
       desc: '以自身为中心爆发寒冰，减速命中的敌人。'
     },
     bolt: {
@@ -35,6 +47,10 @@
       kind: 'chain', tags: ['lightning', 'spell'],
       base: { lightning: [7, 13] }, perLevel: 1.28,
       rate: 1.25, chain: 2, chainRange: 74, range: 220,
+      runes: [
+        { id: 'fork', name: '分叉', desc: '连锁 +2，伤害 -18%，材料 30', mods: [{ k: 'chain', v: 2 }, { k: 'dmg', v: -0.18 }], cost: 30 },
+        { id: 'overload', name: '过载', desc: '伤害 +32%，攻速 -10%，材料 30', mods: [{ k: 'dmg', v: 0.32 }, { k: 'rate', v: -0.10 }], cost: 30 }
+      ],
       desc: '闪电在敌人之间跳跃，每次跳跃伤害递减。'
     },
     axe: {
@@ -42,6 +58,10 @@
       kind: 'boomerang', tags: ['phys', 'projectile', 'area'],
       base: { phys: [15, 22] }, perLevel: 1.24,
       rate: 0.75, speed: 160, radius: 22, range: 220, pierce: 4,
+      runes: [
+        { id: 'heavy', name: '重斧', desc: '伤害 +35%，攻速 -12%，材料 30', mods: [{ k: 'dmg', v: 0.35 }, { k: 'rate', v: -0.12 }], cost: 30 },
+        { id: 'pierce', name: '贯穿', desc: '穿透 +3，伤害 -10%，材料 30', mods: [{ k: 'pierce', v: 3 }, { k: 'dmg', v: -0.10 }], cost: 30 }
+      ],
       desc: '掷出会回旋的战斧，穿透路径上的所有敌人。'
     },
     bloodlet: {
@@ -49,6 +69,10 @@
       kind: 'melee', tags: ['phys', 'melee', 'strike'],
       base: { phys: [9, 14] }, perLevel: 1.24,
       rate: 1.9, range: 48, arc: 1.8, lifesteal: 0.3,
+      runes: [
+        { id: 'thirst', name: '渴血', desc: '范围 +40%，伤害 -10%，材料 30', mods: [{ k: 'range', v: 0.40 }, { k: 'dmg', v: -0.10 }], cost: 30 },
+        { id: 'rend', name: '撕裂', desc: '伤害 +30%，材料 30', mods: [{ k: 'dmg', v: 0.30 }], cost: 30 }
+      ],
       desc: '挥出带血的斩击，命中伤害的 30% 转化为生命。'
     },
     toxic: {
@@ -56,6 +80,10 @@
       kind: 'aura', tags: ['phys', 'area', 'dot', 'spell'],
       base: { phys: [5, 8] }, perLevel: 1.22,
       rate: 0.9, radius: 64, dot: 0.55, dotDur: 3.5,
+      runes: [
+        { id: 'spread', name: '扩散', desc: '范围 +45%，伤害 -12%，材料 30', mods: [{ k: 'radius', v: 0.45 }, { k: 'dmg', v: -0.12 }], cost: 30 },
+        { id: 'rot', name: '腐化', desc: '伤害 +30%，范围 -10%，材料 30', mods: [{ k: 'dmg', v: 0.30 }, { k: 'radius', v: -0.10 }], cost: 30 }
+      ],
       desc: '向四周扩散剧毒，命中的敌人持续掉血。'
     },
     meteor: {
@@ -63,6 +91,10 @@
       kind: 'meteor', tags: ['fire', 'area', 'spell'],
       base: { fire: [26, 38] }, perLevel: 1.30,
       rate: 0.5, radius: 44, delay: 0.55,
+      runes: [
+        { id: 'wide', name: '天罚', desc: '范围 +45%，伤害 -10%，材料 35', mods: [{ k: 'radius', v: 0.45 }, { k: 'dmg', v: -0.10 }], cost: 35 },
+        { id: 'core', name: '陨核', desc: '伤害 +40%，范围 -15%，材料 35', mods: [{ k: 'dmg', v: 0.40 }, { k: 'radius', v: -0.15 }], cost: 35 }
+      ],
       desc: '在敌群中召唤陨石，短暂延迟后砸下。'
     }
   };

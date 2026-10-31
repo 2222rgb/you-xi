@@ -1066,6 +1066,55 @@
     };
   };
 
+  /* ---------------- 技能符文 ---------------- */
+  UI.showRunes = function (st) {
+    const p = st.player;
+    function render() {
+      let html = '<div class="mtitle">技能符文</div>';
+      html += '<div class="msub">材料 <b class="gold">' + (p.mats || 0) + '</b> · 首次解锁需要材料，之后可自由切换</div>';
+      if (!p.skills.length) html += '<div class="empty">还没学会任何技能</div>';
+      for (let si = 0; si < p.skills.length; si++) {
+        const s = p.skills[si];
+        const def = D.SKILLS[s.id];
+        if (!def) continue;
+        const cur = (p.runeOf && p.runeOf[s.id]) || null;
+        html += '<div class="sect" style="color:' + (def.color || '#cfd8e8') + '">' + def.name + ' Lv' + s.rank +
+          '<span style="color:#6f7a90;font-size:10px"> · ' + (cur ? '已装备符文' : '无符文') + '</span></div>';
+        html += '<div class="opts">';
+        html += '<button class="opt' + (!cur ? ' on' : '') + '" data-rune="' + s.id + '|">无</button>';
+        for (let ri = 0; ri < def.runes.length; ri++) {
+          const r = def.runes[ri];
+          const key = s.id + ':' + r.id;
+          const unlocked = p.runeUnlocked && p.runeUnlocked[key];
+          const on = cur === r.id;
+          html += '<button class="opt' + (on ? ' on' : '') + '" data-rune="' + s.id + '|' + r.id + '" title="' + r.desc + '">' +
+            r.name + (unlocked ? '' : ' <span style="color:#e0c060">' + r.cost + '</span>') + '</button>';
+        }
+        html += '</div>';
+        html += '<div class="note" style="margin:2px 0 10px">';
+        for (let ri = 0; ri < def.runes.length; ri++) html += def.runes[ri].name + '：' + def.runes[ri].desc + '<br>';
+        html += '</div>';
+      }
+      html += '<div class="mfoot"><button class="btn primary" data-close="1">关闭</button></div>';
+      openModal(html, 'wide');
+      $('modalbox').onclick = function (ev) {
+        let el = ev.target;
+        const box = $('modalbox');
+        while (el && el !== box && !el.getAttribute('data-rune') && !el.getAttribute('data-close')) el = el.parentNode;
+        if (!el || el === box) return;
+        if (el.getAttribute('data-close')) { UI.close(); return; }
+        const parts = el.getAttribute('data-rune').split('|');
+        const r = ACT.run(st, 'rune', [parts[0], parts[1] || null]);
+        if (r && r.ok) {
+          UI.playSfx('craft');
+          UI.toast(r.cost ? '解锁符文 -' + r.cost + ' 材料' : '已切换符文', 'good');
+        } else if (r) UI.toast(r.msg, 'bad');
+        render();
+      };
+    }
+    render();
+  };
+
   /* ---------------- 深渊祭坛 ---------------- */
   UI.showAltar = function () {
     const M = root.META;

@@ -158,6 +158,39 @@
     return { mods: out, active: active, counts: counts };
   }
 
+  function runeModsOf(p, skillId) {
+    if (!p.runeOf) return null;
+    const runeId = p.runeOf[skillId];
+    if (!runeId) return null;
+    const sk = D.SKILLS[skillId];
+    if (!sk || !sk.runes) return null;
+    for (let i = 0; i < sk.runes.length; i++) if (sk.runes[i].id === runeId) return sk.runes[i].mods;
+    return null;
+  }
+
+  function setRune(st, skillId, runeId, p) {
+    if (!p) p = localPlayer(st);
+    const sk = D.SKILLS[skillId];
+    if (!sk || !sk.runes) return { ok: false, msg: '该技能没有符文' };
+    p.runeOf = p.runeOf || {};
+    p.runeUnlocked = p.runeUnlocked || {};
+    if (!runeId) { delete p.runeOf[skillId]; recompute(st, p); return { ok: true, runeId: null }; }
+    let rune = null;
+    for (let i = 0; i < sk.runes.length; i++) if (sk.runes[i].id === runeId) rune = sk.runes[i];
+    if (!rune) return { ok: false, msg: '没有这个符文' };
+    const key = skillId + ':' + runeId;
+    let cost = 0;
+    if (!p.runeUnlocked[key]) {
+      if ((p.mats || 0) < rune.cost) return { ok: false, msg: '材料不足（需 ' + rune.cost + '）' };
+      p.mats -= rune.cost;
+      p.runeUnlocked[key] = true;
+      cost = rune.cost;
+    }
+    p.runeOf[skillId] = runeId;
+    recompute(st, p);
+    return { ok: true, runeId: runeId, cost: cost };
+  }
+
   function recompute(st, p) {
     if (!p) p = localPlayer(st);
     const res = resonanceMods(p.gear);
@@ -174,7 +207,7 @@
     p.skillCalc = {};
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
-      p.skillCalc[s.id] = E.computeSkill(s.id, skillLevel(p, s), agg);
+      p.skillCalc[s.id] = E.computeSkill(s.id, skillLevel(p, s), agg, runeModsOf(p, s.id));
     }
     if (p === localPlayer(st)) {
       st.agg = agg;
@@ -450,7 +483,11 @@
     if (!s) return false;
     const calc = p.skillCalc[s.id];
     if (!calc) return false;
-    const sk = calc.skill;
+    const sk = Object.assign({}, calc.skill);
+    if (calc.range) sk.range = calc.range;
+    if (calc.radius) sk.radius = calc.radius;
+    if (calc.pierce !== undefined) sk.pierce = calc.pierce;
+    if (calc.chain !== undefined) sk.chain = calc.chain;
 
     let target = nearestEnemy(st, p.x, p.y, sk.range || (sk.radius ? sk.radius + 40 : 80));
 
@@ -1331,7 +1368,7 @@
     let dps = 0;
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
-      const c = E.computeSkill(s.id, skillLevel(p, s), agg);
+      const c = E.computeSkill(s.id, skillLevel(p, s), agg, runeModsOf(p, s.id));
       if (c) dps += c.dps;
     }
     const hp = Math.max(1, Math.round((CFG.baseHp + CFG.hpPerLevel * (p.level - 1) + agg.life) * (1 + agg.lifePct)));
@@ -1476,6 +1513,7 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
+    setRune: setRune, runeModsOf: runeModsOf,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

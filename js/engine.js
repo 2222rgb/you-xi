@@ -136,7 +136,7 @@
   }
 
   /* ---------------- 技能计算 ---------------- */
-  function computeSkill(skillId, level, agg) {
+  function computeSkill(skillId, level, agg, runeMods) {
     const sk = D.SKILLS[skillId];
     if (!sk) return null;
     const lv = clamp(level || 1, 1, D.MAX_SKILL_LEVEL);
@@ -157,6 +157,27 @@
       });
     }
 
+    // 符文：只改数值，机制不动
+    let rDmg = 1, rRate = 1, rRadius = 1, rRange = 1, rProj = 0, rPierce = 0, rChain = 0;
+    if (runeMods) {
+      for (let ri = 0; ri < runeMods.length; ri++) {
+        const m = runeMods[ri];
+        if (m.k === 'dmg') rDmg *= (1 + m.v);
+        else if (m.k === 'rate') rRate *= (1 + m.v);
+        else if (m.k === 'radius') rRadius *= (1 + m.v);
+        else if (m.k === 'range') rRange *= (1 + m.v);
+        else if (m.k === 'proj') rProj += m.v;
+        else if (m.k === 'pierce') rPierce += m.v;
+        else if (m.k === 'chain') rChain += m.v;
+      }
+    }
+    if (rDmg !== 1) {
+      for (let pi = 0; pi < parts.length; pi++) {
+        parts[pi].min *= rDmg;
+        parts[pi].max *= rDmg;
+      }
+    }
+
     let crit = 0.05 * (1 + agg.crit);
     crit = clamp(crit, 0, 1);
     const critMulti = 1.5 * (1 + agg.critMulti);
@@ -165,7 +186,7 @@
     let moreSpeed = 1;
     for (let i = 0; i < agg.moreSpeed.length; i++) moreSpeed *= (1 + agg.moreSpeed[i]);
     const cdr = clamp(agg.cdr, 0, 0.6);
-    const rate = sk.rate * (1 + agg.speed) * moreSpeed / (1 - cdr);
+    const rate = sk.rate * (1 + agg.speed) * moreSpeed / (1 - cdr) * rRate;
 
     let dmgMin = 0, dmgMax = 0, dmgAvg = 0;
     for (let i = 0; i < parts.length; i++) {
@@ -181,10 +202,11 @@
       min: dmgMin, max: dmgMax, avg: dmgAvg,
       hitAvg: hitAvg, dps: dps, rate: rate,
       crit: crit, critMulti: critMulti, critExpected: critExpected,
-      proj: 1 + agg.proj,
-      pierce: (sk.pierce || 0) + agg.pierce,
-      chain: (sk.chain || 0) + agg.chain,
-      radius: sk.radius || 0,
+      proj: 1 + agg.proj + rProj,
+      pierce: (sk.pierce || 0) + agg.pierce + rPierce,
+      chain: (sk.chain || 0) + agg.chain + rChain,
+      radius: (sk.radius || 0) * rRadius,
+      range: (sk.range || 0) * rRange,
       tags: sk.tags
     };
   }

@@ -143,6 +143,7 @@
       else if (panel === 'gambler') UI.showGambler(st);
       else if (panel === 'settings') UI.showSettings();
       else if (panel === 'altar') UI.showAltar();
+      else if (panel === 'rune') UI.showRunes(st);
     }
     let sawTut = params.get('notut') === '1';
     try { sawTut = sawTut || localStorage.getItem('ashfall.tutorial') === '1'; } catch (e) {}
@@ -224,6 +225,8 @@
     }
     const altarBtn = document.getElementById('altar-btn');
     if (altarBtn) altarBtn.onclick = function () { UI.showAltar(); };
+    const runeBtn = document.getElementById('runebtn');
+    if (runeBtn) runeBtn.onclick = function () { UI.showRunes(st); };
 
     if (ROOM && location.protocol !== 'file:') startNet();
 

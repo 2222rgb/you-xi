@@ -36,6 +36,7 @@
       case 'enhance': return SIM.enhance(st, a[0], p);
       case 'salvage': return SIM.salvage(st, a[0], p);
       case 'drop': return SIM.dropItem(st, a[0], p);
+      case 'rune': return SIM.setRune(st, a[0], a[1], p);
       case 'potion': return SIM.drinkPotion(st, p);
       case 'leave': return SIM.interact(st);
       case 'take': return SIM.takeItem(st, p);

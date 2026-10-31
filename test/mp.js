@@ -142,5 +142,21 @@ const rd2 = SIM.dropItem(stSv, 0, psv);
 const dropped = stSv.pickups[stSv.pickups.length - 1];
 T('丢弃装备落地且 60 秒后消失', !!(rd2 && rd2.ok && stSv.pickups.length === pcount + 1 && dropped.kind === 'item' && dropped.life === 60),
   'life=' + (dropped && dropped.life));
+// 技能符文
+const stRune = SIM.create(91, 1);
+SIM.chooseRift(stRune, 0);
+SIM.setClass(stRune, 0, 0);
+const prn = stRune.players[0];
+prn.mats = 100;
+const baseDps = prn.skillCalc.dagger.dps;
+const rnA = SIM.setRune(stRune, 'dagger', 'deep', prn);
+const newDps = prn.skillCalc.dagger.dps;
+T('符文解锁并提升伤害', !!(rnA && rnA.ok && newDps > baseDps && prn.mats === 80),
+  'dps ' + Math.round(baseDps) + '→' + Math.round(newDps) + ' 材料=' + prn.mats);
+const rnB = SIM.setRune(stRune, 'dagger', 'deep', prn);
+T('已解锁符文不再扣材料', !!(rnB && rnB.ok && rnB.cost === 0 && prn.mats === 80), 'cost=' + (rnB && rnB.cost));
+const rnC = SIM.setRune(stRune, 'dagger', null, prn);
+T('可以卸下符文回到基础值', !!(rnC && rnC.ok && Math.abs(prn.skillCalc.dagger.dps - baseDps) < 1e-6), 'dps=' + Math.round(prn.skillCalc.dagger.dps));
+
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
