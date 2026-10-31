@@ -204,6 +204,7 @@
     brute: { id: 'brute', name: '巨兽', sprite: 'brute', hp: 58, dmg: 10, speed: 30, r: 7, xp: 6, gold: 14, mass: 3 },
     boss: { id: 'boss', name: '深渊之眼', sprite: 'boss', hp: 700, dmg: 16, speed: 18, r: 11, xp: 80, gold: 200, mass: 12, boss: true },
     boss2: { id: 'boss2', name: '骸骨之王', sprite: 'boss2', hp: 820, dmg: 19, speed: 22, r: 11, xp: 90, gold: 240, mass: 14, boss: true },
+    charger: { id: 'charger', name: '冲锋者', sprite: 'wraith', hp: 30, dmg: 6.5, speed: 30, r: 6, xp: 4, gold: 9, mass: 3, charger: true },
     goblin: { id: 'goblin', name: '宝藏地精', sprite: 'slime', hp: 55, dmg: 4, speed: 62, r: 6, xp: 30, gold: 140, mass: 2, flee: true },
     spitter: { id: 'spitter', name: '腐化喷吐者', sprite: 'spitter', hp: 14, dmg: 2.6, speed: 28, r: 5, xp: 2, gold: 5, mass: 1, ranged: true, shotSpeed: 118, shotCd: 3.2, range: 165 }
   };
@@ -222,8 +223,8 @@
   const WAVES = [
     { t: 0, rate: 3.4, cap: 55, pool: { slime: 10, bat: 4 } },
     { t: 25, rate: 4.2, cap: 75, pool: { slime: 8, bat: 7, skel: 4 } },
-    { t: 50, rate: 5.2, cap: 100, pool: { slime: 5, bat: 7, skel: 7, wraith: 3, spitter: 2 } },
-    { t: 75, rate: 6.0, cap: 130, pool: { bat: 6, skel: 8, wraith: 6, spitter: 2 } },
+    { t: 50, rate: 5.2, cap: 100, pool: { slime: 5, bat: 7, skel: 7, wraith: 3, spitter: 2, charger: 3 } },
+    { t: 75, rate: 6.0, cap: 130, pool: { bat: 6, skel: 8, wraith: 6, spitter: 2, charger: 4 } },
     { t: 100, rate: 6.8, cap: 160, pool: { skel: 7, wraith: 8, brute: 2 } },
     { t: 125, rate: 7.6, cap: 190, pool: { bat: 6, skel: 7, wraith: 6, brute: 3 } },
     { t: 150, rate: 8.4, cap: 220, pool: { skel: 6, wraith: 8, brute: 4 } }

@@ -689,6 +689,42 @@
       if (!target) continue;
       const dx = target.x - e.x, dy = target.y - e.y;
       const d = Math.hypot(dx, dy) || 1;
+      // 冲锋者：蓄力 → 冲刺 → 冷却
+      if (e.charger) {
+        e.cd = (e.cd || 0) - dt;
+        if (e.cstate === 'wind') {
+          e.st -= dt;
+          e.flash = 0.06;
+          if (e.st <= 0) {
+            e.cstate = 'dash';
+            e.st = 0.42;
+            e.cdir = Math.atan2(dy, dx);
+            ev(st, 'hit');
+          }
+          continue;
+        }
+        if (e.cstate === 'dash') {
+          e.st -= dt;
+          e.x += Math.cos(e.cdir) * 250 * dt;
+          e.y += Math.sin(e.cdir) * 250 * dt;
+          e.flash = 0.08;
+          if (dist2(e.x, e.y, target.x, target.y) < 256) {
+            hurtPlayer(st, target, e.dmg);
+            e.cstate = null;
+            e.cd = 2.6;
+            addFx(st, 'ring', e.x, e.y, 18, '#ff8a3d', 0.3);
+            continue;
+          }
+          if (e.st <= 0) { e.cstate = null; e.cd = 2.6; }
+          continue;
+        }
+        if (e.cd <= 0 && d < 170) {
+          e.cstate = 'wind';
+          e.st = 0.55;
+          continue;
+        }
+      }
+
       const spd = e.speed * (e.chill > 0 ? 0.5 : 1);
       if (d > 2) {
         let wob = 0;
@@ -950,6 +986,8 @@
       xp: stats.xp, gold: stats.gold, mass: stats.mass, wobble: stats.wobble,
       ranged: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].ranged),
       flee: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].flee),
+      charger: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].charger),
+      cstate: null, cd: 1.5, st: 0, cdir: 0,
       range: (D.ENEMIES[typeId] && D.ENEMIES[typeId].range) || 0,
       shotSpeed: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotSpeed) || 0,
       shotCdMax: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotCd) || 2.3,

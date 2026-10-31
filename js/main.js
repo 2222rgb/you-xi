@@ -199,6 +199,14 @@
     if (!e) return;
     if (e.t === 'item') AUDIO.play('item', { rarity: e.r });
     else AUDIO.play(e.t);
+
+    // 打击反馈：震屏强度按事件类型分级
+    if (window.RENDER && window.RENDER.addShake) {
+      if (e.t === 'hurt') window.RENDER.addShake(2.4);
+      else if (e.t === 'down') window.RENDER.addShake(6);
+      else if (e.t === 'boss') window.RENDER.addShake(4.2);
+      else if (e.t === 'crit') window.RENDER.addShake(0.8);
+    }
   }
 
   function flushAudio(state) {
