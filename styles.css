@@ -421,3 +421,14 @@ body.touch #joystick { display: block; }
 #tip .tline { border-top: 1px solid rgba(255,255,255,.07); margin: 6px 0; }
 #tip .tfoot { color: #e0c060; font-size: 10.5px; }
 .irow.box { border-color: #6a5520; background: #14110a; }
+
+.dotmat { display: inline-block; width: 7px; height: 7px; background: #ffb347; box-shadow: 0 0 6px rgba(255,179,71,.8); margin-right: 4px; transform: rotate(45deg); }
+.mini { cursor: pointer; font-size: 10px; color: #6f7a90; border: 1px solid #2a2a38; padding: 1px 5px; margin-left: 4px; }
+.mini:hover { color: var(--gold); border-color: var(--gold); }
+
+/* 背包行：名字不要被按钮挤掉 */
+.irow .nm { flex: 1 1 auto; min-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.irow .lvl { flex: 0 0 auto; color: #6f7a90; font-size: 10px; }
+.irow .mini { flex: 0 0 auto; }
+
+.irow .mini { font-size: 10px; padding: 1px 4px; margin-left: 2px; line-height: 1.3; }

@@ -30,7 +30,7 @@
       more: [], moreSpeed: [],
       speed: 0, cdr: 0, crit: 0, critMulti: 0,
       life: 0, lifePct: 0, move: 0, pickup: 0, gold: 0,
-      proj: 0, pierce: 0, chain: 0
+      proj: 0, pierce: 0, chain: 0, ampAil: 0, shockChance: 0
     };
   }
 
@@ -54,6 +54,8 @@
       case 'proj': agg.proj += v; break;
       case 'pierce': agg.pierce += v; break;
       case 'chain': agg.chain += v; break;
+      case 'ampAil': agg.ampAil += v; break;
+      case 'shockChance': agg.shockChance += v; break;
       default: break;
     }
   }
@@ -105,6 +107,7 @@
     agg.life += t.life; agg.lifePct += t.lifePct;
     agg.move += t.move; agg.pickup += t.pickup; agg.gold += t.gold;
     agg.proj += t.proj; agg.pierce += t.pierce; agg.chain += t.chain;
+    agg.ampAil += t.ampAil; agg.shockChance += t.shockChance;
     if (extraMods) for (let i = 0; i < extraMods.length; i++) applyMod(agg, extraMods[i]);
     return agg;
   }

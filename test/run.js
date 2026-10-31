@@ -1,4 +1,4 @@
-const path = require('path');
+﻿const path = require('path');
 global.window = global;
 require(path.join(__dirname, '..', 'js', 'data.js'));
 require(path.join(__dirname, '..', 'js', 'engine.js'));
@@ -11,7 +11,15 @@ for (const r of res) {
   if (r.pass) pass++;
   console.log((r.pass ? '  PASS  ' : '  FAIL  ') + r.name + '   ' + (r.detail || ''));
 }
-console.log('\n' + pass + '/' + res.length + ' passed');
+// 异常增伤词缀进入聚合
+const itA = { slot: 'ring', ilvl: 10, rarity: 2, plus: 0, name: 'T', mods: [{ k: 'ampAil', v: 0.25 }, { k: 'shockChance', v: 0.4 }] };
+const aggA = E.buildAgg({ ring: itA });
+const okA = Math.abs(aggA.ampAil - 0.25) < 1e-9 && Math.abs(aggA.shockChance - 0.4) < 1e-9;
+console.log((okA ? '  PASS  ' : '  FAIL  ') + '异常增伤词缀进入聚合   ampAil=' + aggA.ampAil + ' shock=' + aggA.shockChance);
+if (okA) pass++;
+const total = res.length + 1;
+
+console.log('\n' + pass + '/' + total + ' passed');
 
 /* ---- 数值曲线体检 ---- */
 console.log('\n--- 技能 DPS 随等级（无装备） ---');
@@ -41,4 +49,4 @@ for (const t of [0, 120, 240, 360, 480]) {
   console.log('  ' + String(t).padStart(3) + 's  腐质 ' + String(s.hp).padStart(4) + '  巨兽 ' + String(b.hp).padStart(4) + '  首领 ' + E.enemyStats('boss', t).hp);
 }
 
-process.exit(pass === res.length ? 0 : 1);
+process.exit(pass === total ? 0 : 1);

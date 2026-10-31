@@ -263,6 +263,13 @@
         }
         ctx.globalAlpha = left < 8 ? (Math.floor(time * 6) % 2 === 0 ? 0.3 : 1) : 1;
         blitWorld('chest', pk.x, pk.y + bob, false, false);
+      } else if (pk.kind === 'mat') {
+        ctx.globalAlpha = 0.85;
+        ctx.fillStyle = '#ffb347';
+        ctx.fillRect(sx(pk.x) - 1, sy(pk.y) - 2 + bob, 2, 2);
+        ctx.globalAlpha = 0.25 + 0.2 * Math.sin(time * 7 + pk.x);
+        ctx.fillRect(sx(pk.x) - 2, sy(pk.y) - 3 + bob, 4, 4);
+        ctx.globalAlpha = 1;
       } else {
         blitWorld('heart', pk.x, pk.y + bob, false, false);
       }
@@ -452,6 +459,23 @@
       ctx.globalAlpha = 0.5 + 0.3 * Math.sin(time * 12);
       ctx.fillStyle = '#ff8a3d';
       ctx.fillRect(sx(e.x) - 1, sy(e.y) - 14, 2, 2);
+      ctx.globalAlpha = 1;
+    }
+    if (e.shock > 0) {
+      const sk = 0.55 + 0.45 * Math.sin(time * 18);
+      ctx.globalAlpha = 0.65 * sk;
+      ctx.strokeStyle = '#ffe066';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(sx(e.x) - 4, sy(e.y) - 12);
+      ctx.lineTo(sx(e.x) - 1, sy(e.y) - 8);
+      ctx.lineTo(sx(e.x) - 4, sy(e.y) - 5);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(sx(e.x) + 3, sy(e.y) - 13);
+      ctx.lineTo(sx(e.x) + 6, sy(e.y) - 9);
+      ctx.lineTo(sx(e.x) + 3, sy(e.y) - 6);
+      ctx.stroke();
       ctx.globalAlpha = 1;
     }
 

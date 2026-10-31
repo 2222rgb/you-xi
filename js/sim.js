@@ -37,7 +37,7 @@
       speed: CFG.baseSpeed, pickup: CFG.pickupRange,
       face: 1, invuln: 2, hurtFlash: 0, walkT: 0, moving: false,
       skills: [], talents: {}, treeSpent: { blade: 0, ember: 0, storm: 0 }, talentPoints: 0,
-      gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0,
+      gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0, mats: 0,
       downed: false, downT: 0, reviveProg: 0,
       gear: { helm: null, body: null, ring: null, amulet: null },
       bag: [],
@@ -288,6 +288,15 @@
   /* ---------------- 战斗 ---------------- */
   function damageEnemy(st, e, dmg, crit, type) {
     if (e.dead) return;
+    const caster = st._caster || null;
+    const ag = caster && caster.agg ? caster.agg : null;
+    if ((e.shock || 0) > 0) dmg *= 1.25;
+    if (ag && ag.ampAil > 0 && (e.burn > 0 || e.chill > 0 || (e.shock || 0) > 0)) {
+      dmg *= (1 + ag.ampAil);
+    }
+    if (type === 'lightning' && ag && ag.shockChance > 0 && rand(st) < ag.shockChance) {
+      e.shock = Math.max(e.shock || 0, 3);
+    }
     e.hp -= dmg;
     e.flash = 0.1;
     st.hitCount = (st.hitCount || 0) + 1;
@@ -338,6 +347,9 @@
       });
     }
 
+    if (rand(st) < 0.28) {
+      st.pickups.push({ kind: 'mat', value: 1 + Math.floor(rand(st) * 3), x: e.x + rr(st, -8, 8), y: e.y + rr(st, -8, 8), t: 0, life: CFG.lootLife });
+    }
     if (st.players.length && rand(st) < 0.0015) {
       const bn = nearestPlayer(st, e.x, e.y);
       if (bn) { bn.boxes = (bn.boxes || 0) + 1; toast(st, '魔盒！' + bn.name + ' 获得了魔盒', 'rare'); ev(st, 'level'); }
@@ -433,6 +445,7 @@
 
   /* ---------------- 技能释放 ---------------- */
   function fireSkill(st, p, slot) {
+    st._caster = p;
     const s = p.skills[slot];
     if (!s) return false;
     const calc = p.skillCalc[s.id];
@@ -681,6 +694,7 @@
           const calc = p.skillCalc[s.id];
           if (calc) {
             const ok = fireSkill(st, p, j);
+            st._caster = null;
             s.cd = (ok ? 1 / calc.rate : 0.08) * (p.frenzyT > 0 ? 0.65 : 1);
           }
         }
@@ -710,6 +724,7 @@
       e.t += dt;
       if (e.flash > 0) e.flash -= dt;
       if (e.chill > 0) e.chill -= dt;
+      if (e.shock > 0) e.shock -= dt;
       if (e.burn > 0) {
         e.burn -= dt;
         e.hp -= e.burnDps * dt;
@@ -963,6 +978,7 @@
           toast(st, '补给箱：' + it.name, 'rare');
         }
         else if (pk.kind === 'gold') { near.gold += pk.value; st.goldEarned += pk.value; ev(st, 'gold'); }
+        else if (pk.kind === 'mat') { near.mats = (near.mats || 0) + pk.value; ev(st, 'gold'); }
         else if (pk.kind === 'item') {
           // 装备不再自动拾取：落地后按 E 拾取
         } else if (pk.kind === 'heal') {
@@ -1100,7 +1116,7 @@
       range: (D.ENEMIES[typeId] && D.ENEMIES[typeId].range) || 0,
       shotSpeed: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotSpeed) || 0,
       shotCdMax: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotCd) || 2.3,
-      elite: !!elite, flash: 0, chill: 0, burn: 0, burnDps: 0,
+      elite: !!elite, flash: 0, chill: 0, burn: 0, burnDps: 0, shock: 0,
       t: 0, seed: rand(st) * 10, hitCd: 0, dead: false
     };
     if (st.rift && st.rift.enemy) {
@@ -1333,6 +1349,33 @@
     return id;
   }
 
+  /** 回收装备 → 材料 */
+  function salvage(st, idx, p) {
+    if (!p) p = localPlayer(st);
+    const it = p.bag[idx];
+    if (!it) return { ok: false, msg: '没有这件装备' };
+    const mats = Math.max(1, Math.round(E.itemPrice(it) * 0.6));
+    p.bag.splice(idx, 1);
+    p.mats = (p.mats || 0) + mats;
+    ev(st, 'gold');
+    return { ok: true, mats: mats };
+  }
+
+  /** 丢到地上：其他玩家可以捡，60 秒后消失 */
+  function dropItem(st, idx, p) {
+    if (!p) p = localPlayer(st);
+    const it = p.bag[idx];
+    if (!it) return { ok: false, msg: '没有这件装备' };
+    p.bag.splice(idx, 1);
+    st.pickups.push({
+      kind: 'item', item: it,
+      x: p.x + rr(st, -16, 16), y: p.y + rr(st, -16, 16),
+      t: 0, life: CFG.lootLife, value: 0
+    });
+    addFx(st, 'ring', p.x, p.y, 14, D.RARITY_COLOR[it.rarity], 0.3);
+    return { ok: true };
+  }
+
   /** 强化：+1 级，费用随等级指数上涨 */
   function enhance(st, slot, p) {
     if (!p) p = localPlayer(st);
@@ -1432,7 +1475,7 @@
     recompute: recompute, recomputeAll: recomputeAll, skillLevel: skillLevel,
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
-    classOf: classOf, setClass: setClass, enhance: enhance,
+    classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

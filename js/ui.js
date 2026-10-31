@@ -170,6 +170,9 @@
     const dpsInt = Math.round(dps);
     if (force || dpsInt !== L.dps) { $('dpsnum').textContent = dpsInt; L.dps = dpsInt; }
 
+    const mn = document.getElementById('matnum');
+    if (mn && mn.textContent != String(p.mats || 0)) mn.textContent = p.mats || 0;
+
     // 狂潮条
     const fz = p.frenzy || 0, ft = p.frenzyT || 0;
     const frenzyOn = ft > 0;
@@ -692,9 +695,24 @@
     html += '</div></div>';
 
     html += '<div class="mfoot"><button class="btn" data-close="1">关闭 (E)</button></div>';
-    openModal(html);
+    openModal(html, 'wide');
 
     $('modalbox').onclick = function (ev) {
+      const mnTarget = ev.target;
+      const mini = mnTarget && mnTarget.getAttribute ? mnTarget.getAttribute('data-mini') : null;
+      if (mini) {
+        const mi = parseInt(mnTarget.getAttribute('data-i'), 10);
+        if (mini === 'salv') {
+          const rs = ACT.run(st, 'salvage', [mi]);
+          if (rs && rs.ok) { UI.toast('回收获得 ' + rs.mats + ' 材料', 'good'); UI.playSfx('buy'); }
+          else if (rs) UI.toast(rs.msg, 'bad');
+        } else {
+          const rd = ACT.run(st, 'drop', [mi]);
+          if (rd && rd.ok) UI.toast('已丢在地上', 'good');
+        }
+        UI.showBag(st);
+        return;
+      }
       const el = pickRow(ev);
       if (!el) return;
       if (el.getAttribute('data-close')) { UI.close(); return; }
@@ -770,7 +788,11 @@
         '<span class="lvl">点击开启</span></div>';
     }
     if (!st.player.bag.length) html += '<div class="empty">空</div>';
-    for (let i = 0; i < st.player.bag.length; i++) html += itemRow(st.player.bag[i], '', 'eq', i);
+    for (let i = 0; i < st.player.bag.length; i++) {
+      html += itemRow(st.player.bag[i],
+        '<span class="mini" data-mini="salv" data-i="' + i + '" title="回收成材料">回</span>' +
+        '<span class="mini" data-mini="drop" data-i="' + i + '" title="丢到地上">丢</span>', 'eq', i);
+    }
     html += '</div></div>';
     html += '<div class="mfoot"><button class="btn" data-close="1">关闭 (TAB)</button></div>';
     openModal(html);

@@ -115,6 +115,13 @@
     if (SCENE === 'town') { SIM.startTown(st); st.cycle = 2; }
     if (SCENE === 'rift') { SIM.openRiftChoice(st); }
     // 调试：?loot=1 在脚边撒几件不同稀有度的装备
+    // 调试：?bag=1 背包里塞四件装备，方便看回收/丢弃按钮
+    if (params.get('bag') === '1') {
+      const slotsB = ['helm', 'body', 'ring', 'amulet'];
+      for (let bi = 0; bi < 4; bi++) {
+        st.players[0].bag.push(window.ENGINE.rollItem(slotsB[bi], 9, Math.random, bi));
+      }
+    }
     if (params.get('loot') === '1') {
       const me = st.players[0];
       const slots = ['helm', 'body', 'ring', 'amulet'];

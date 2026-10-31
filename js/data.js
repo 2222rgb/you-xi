@@ -75,6 +75,8 @@
   */
   const AFFIXES = [
     { id: 'life', slots: ['helm', 'body', 'ring', 'amulet'], m: { k: 'life' }, fmt: '+{v} 生命', tiers: [[16, 24, 1], [26, 38, 5], [40, 56, 9], [58, 80, 13], [82, 110, 17]] },
+    { id: 'amp_ail', slots: ['ring', 'amulet'], m: { k: 'ampAil' }, pct: true, fmt: '对异常状态敌人 +{v}% 伤害', tiers: [[6, 9, 1], [10, 15, 6], [16, 24, 11], [25, 36, 16], [37, 52, 21]] },
+    { id: 'shock_hit', slots: ['ring', 'amulet'], m: { k: 'shockChance' }, pct: true, fmt: '{v}% 概率使敌人麻痹', tiers: [[6, 10, 1], [11, 16, 6], [17, 24, 11], [25, 34, 16], [35, 48, 21]] },
     { id: 'inc_all', slots: ['ring', 'amulet'], m: { k: 'inc', t: 'all' }, pct: true, fmt: '+{v}% 全部伤害', tiers: [[7, 10, 1], [11, 16, 5], [17, 24, 9], [25, 34, 13], [35, 48, 17]] },
     { id: 'inc_fire', slots: ['helm', 'ring', 'amulet'], m: { k: 'inc', t: 'fire' }, pct: true, fmt: '+{v}% 火焰伤害', tiers: [[12, 18, 1], [19, 28, 5], [29, 42, 9], [43, 58, 13], [59, 80, 17]] },
     { id: 'inc_cold', slots: ['helm', 'ring', 'amulet'], m: { k: 'inc', t: 'cold' }, pct: true, fmt: '+{v}% 冰霜伤害', tiers: [[12, 18, 1], [19, 28, 5], [29, 42, 9], [43, 58, 13], [59, 80, 17]] },

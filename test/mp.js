@@ -128,5 +128,19 @@ for (let i = 0; i < 30; i++) SIM.step(stG, STEP, {});
 const notAuto = pg.bag.length === 0;
 const rt = SIM.takeItem(stG, pg);
 T('装备不自动拾取，按 E 才能拿', notAuto && !!(rt && rt.ok && pg.bag.length === 1), 'bag=' + pg.bag.length);
+// 回收 / 丢弃
+const stSv = SIM.create(81, 1);
+SIM.chooseRift(stSv, 0);
+const psv = stSv.players[0];
+psv.bag.push({ name: '测试甲', slot: 'body', ilvl: 10, rarity: 2, mods: [], plus: 0 });
+const rs = SIM.salvage(stSv, 0, psv);
+T('回收装备产出材料', !!(rs && rs.ok && rs.mats > 0 && psv.bag.length === 0 && psv.mats === rs.mats), 'mats=' + psv.mats);
+
+psv.bag.push({ name: '测试乙', slot: 'ring', ilvl: 10, rarity: 1, mods: [], plus: 0 });
+const pcount = stSv.pickups.length;
+const rd2 = SIM.dropItem(stSv, 0, psv);
+const dropped = stSv.pickups[stSv.pickups.length - 1];
+T('丢弃装备落地且 60 秒后消失', !!(rd2 && rd2.ok && stSv.pickups.length === pcount + 1 && dropped.kind === 'item' && dropped.life === 60),
+  'life=' + (dropped && dropped.life));
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
