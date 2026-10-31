@@ -1186,12 +1186,21 @@
     const el = document.getElementById('startmenu');
     if (!el) { if (onSolo) onSolo(); return; }
     el.classList.remove('hidden');
+    const isFile = location.protocol === 'file:';
     el.onclick = function (ev) {
       const el2 = ev.target;
       const kind = el2.getAttribute && el2.getAttribute('data-sm');
       if (!kind) return;
       UI.playSfx('ui');
       if (kind === 'solo') { UI.hideStartMenu(); if (onSolo) onSolo(); return; }
+      if (isFile) {
+        const note = document.querySelector('#startmenu .smnote');
+        if (note) {
+          note.innerHTML = '联机需要先从命令行启动服务器：<br><b>node server.js</b><br>然后用 http://localhost:8123 打开本页';
+          note.style.color = '#e0c060';
+        }
+        return;
+      }
       const base = location.origin + location.pathname;
       if (kind === 'host') {
         const code = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -1202,6 +1211,7 @@
       }
     };
   };
+
 
   /* ---------------- 变数：局内 3 选 1 ---------------- */
   UI.showRogue = function (st, onPick) {
