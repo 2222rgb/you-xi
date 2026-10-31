@@ -269,7 +269,7 @@
   function doInteract() {
     if (UI.isOpen() || st.phase !== 'town') return;
     const id = SIM.interact(st);
-    if (!id) return;
+    if (!id) { UI.toast('走近商人 / 铁匠 / 赌徒再按 E', 'bad'); return; }
     if (id === 'merchant') UI.showShop(st);
     else if (id === 'smith') UI.showSmith(st);
     else if (id === 'stash') UI.showStash(st);

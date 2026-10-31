@@ -1200,7 +1200,7 @@
 
   function stepTown(st, dt) {
     const lp = localPlayer(st);
-    let near = null, nd = 46 * 46;
+    let near = null, nd = 64 * 64;
     for (let i = 0; i < D.TOWN.npcs.length; i++) {
       const n = D.TOWN.npcs[i];
       const d = dist2(lp.x, lp.y, n.x, n.y);
