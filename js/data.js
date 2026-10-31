@@ -203,6 +203,7 @@
     wraith: { id: 'wraith', name: '幽魂', sprite: 'wraith', hp: 14, dmg: 5, speed: 54, r: 5, xp: 2, gold: 4, mass: 0.8 },
     brute: { id: 'brute', name: '巨兽', sprite: 'brute', hp: 58, dmg: 10, speed: 30, r: 7, xp: 6, gold: 14, mass: 3 },
     boss: { id: 'boss', name: '深渊之眼', sprite: 'boss', hp: 700, dmg: 16, speed: 18, r: 11, xp: 80, gold: 200, mass: 12, boss: true },
+    boss3: { id: 'boss3', name: '虚空之心', sprite: 'boss', hp: 760, dmg: 13, speed: 15, r: 12, xp: 95, gold: 260, mass: 15, boss: true, caster: true },
     boss2: { id: 'boss2', name: '骸骨之王', sprite: 'boss2', hp: 820, dmg: 19, speed: 22, r: 11, xp: 90, gold: 240, mass: 14, boss: true },
     charger: { id: 'charger', name: '冲锋者', sprite: 'wraith', hp: 30, dmg: 6.5, speed: 30, r: 6, xp: 4, gold: 9, mass: 3, charger: true },
     goblin: { id: 'goblin', name: '宝藏地精', sprite: 'slime', hp: 55, dmg: 4, speed: 62, r: 6, xp: 30, gold: 140, mass: 2, flee: true },

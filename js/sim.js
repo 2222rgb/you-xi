@@ -550,7 +550,7 @@
       const bt = Math.min(Math.max(40, CFG.bossAt - ((st.rift && st.rift.bossEarly) || 0)), ct - 25);
       if (st.phaseT >= bt && !st.bossSpawned) {
         st.bossSpawned = true;
-        const bossType = (st.cycle % 2 === 0) ? 'boss2' : 'boss';
+        const bossType = ['boss', 'boss2', 'boss3'][st.cycle % 3];
         const b = spawnEnemy(st, bossType, false);
         if (b) toast(st, '深渊之眼降临', 'bad');
       }
@@ -689,6 +689,20 @@
       if (!target) continue;
       const dx = target.x - e.x, dy = target.y - e.y;
       const d = Math.hypot(dx, dy) || 1;
+      // 虚空之心：环形弹幕
+      if (e.caster) {
+        e.castCd -= dt;
+        if (e.castCd <= 0) {
+          e.castCd = 3.4;
+          for (let k = 0; k < 8; k++) {
+            const a = k * 0.7854 + e.t * 0.6;
+            st.eshots.push({ x: e.x, y: e.y, vx: Math.cos(a) * 108, vy: Math.sin(a) * 108, dmg: e.dmg * 0.4, r: 4, t: 0, dead: false });
+          }
+          addFx(st, 'ring', e.x, e.y, 34, '#b07cff', 0.4);
+          ev(st, 'hit');
+        }
+      }
+
       // 冲锋者：蓄力 → 冲刺 → 冷却
       if (e.charger) {
         e.cd = (e.cd || 0) - dt;
@@ -987,6 +1001,7 @@
       ranged: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].ranged),
       flee: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].flee),
       charger: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].charger),
+      caster: !!(D.ENEMIES[typeId] && D.ENEMIES[typeId].caster), castCd: 2.5,
       cstate: null, cd: 1.5, st: 0, cdir: 0,
       range: (D.ENEMIES[typeId] && D.ENEMIES[typeId].range) || 0,
       shotSpeed: (D.ENEMIES[typeId] && D.ENEMIES[typeId].shotSpeed) || 0,

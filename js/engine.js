@@ -311,7 +311,7 @@
     const t = phaseT / 60;
     const c = Math.max(0, (cycle || 1) - 1) * CFG.enemyScalePerCycle;
     const hpMul = (1 + t * 0.55) * (1 + c);
-    const dmgMul = (1 + t * 0.28) * (1 + c * 1.22);
+    const dmgMul = (1 + t * 0.28) * (1 + c * 1.14);
     return {
       id: b.id, name: b.name, sprite: b.sprite, boss: !!b.boss,
       hp: Math.round(b.hp * hpMul),
