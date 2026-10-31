@@ -947,12 +947,12 @@
       }
       if (!near) continue;
       const dd = Math.sqrt(nd) || 1;
-      if (dd < near.pickup) {
+      if (dd < near.pickup && pk.kind !== 'item') {
         const pull = 300 * dt / Math.max(6, dd);
         pk.x += (near.x - pk.x) * pull * 3;
         pk.y += (near.y - pk.y) * pull * 3;
       }
-      if (dd < 11) {
+      if (dd < 11 && pk.kind !== 'item') {
         pk.dead = true;
         if (pk.kind === 'xp') awardXp(st, pk.x, pk.y, pk.value);
         else if (pk.kind === 'cache') {

@@ -108,5 +108,25 @@ const r1 = SIM.enhance(stEn, 'ring', pe);
 T('装备可强化到 +1', !!(r1 && r1.ok && pe.gear.ring.plus === 1), 'plus=' + (pe.gear.ring && pe.gear.ring.plus) + ' 花费=' + (goldBefore - pe.gold));
 const r2 = SIM.enhance(stEn, 'ring', pe);
 T('强化可叠加到 +2 且费用递增', !!(r2 && r2.ok && pe.gear.ring.plus === 2), 'cost1=' + r1.cost + ' cost2=' + r2.cost);
+// 魔盒：开启必出传奇
+const stBx = SIM.create(71, 1);
+SIM.chooseRift(stBx, 0);
+const pbx = stBx.players[0];
+pbx.boxes = 1;
+const bagBefore = pbx.bag.length;
+const rbx = SIM.openBox(stBx, pbx);
+T('魔盒开出传奇装备', !!(rbx && rbx.ok && pbx.bag.length === bagBefore + 1 && pbx.bag[pbx.bag.length - 1].rarity === 3),
+  'rarity=' + (rbx && rbx.item ? rbx.item.rarity : 'none') + ' boxes=' + pbx.boxes);
+
+// 地面装备需要 E 拾取（不会自动进包）
+const stG = SIM.create(72, 1);
+SIM.chooseRift(stG, 0);
+const pg = stG.players[0];
+pg.bag.length = 0;
+stG.pickups.push({ kind: 'item', item: { name: '测试装备', slot: 'ring', ilvl: 5, rarity: 1, mods: [], plus: 0 }, x: pg.x, y: pg.y, t: 0, life: 60 });
+for (let i = 0; i < 30; i++) SIM.step(stG, STEP, {});
+const notAuto = pg.bag.length === 0;
+const rt = SIM.takeItem(stG, pg);
+T('装备不自动拾取，按 E 才能拿', notAuto && !!(rt && rt.ok && pg.bag.length === 1), 'bag=' + pg.bag.length);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
