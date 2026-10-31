@@ -114,6 +114,15 @@
 
     if (SCENE === 'town') { SIM.startTown(st); st.cycle = 2; }
     if (SCENE === 'rift') { SIM.openRiftChoice(st); }
+    // 调试：?loot=1 在脚边撒几件不同稀有度的装备
+    if (params.get('loot') === '1') {
+      const me = st.players[0];
+      const slots = ['helm', 'body', 'ring', 'amulet'];
+      for (let li = 0; li < 4; li++) {
+        const it = window.ENGINE.rollItem(slots[li], 8, Math.random, li);
+        st.pickups.push({ kind: 'item', item: it, x: me.x + (li - 1.5) * 22, y: me.y - 34, t: 0, life: 60000, value: 0 });
+      }
+    }
 
     // 调试：?panel=talent|shop|smith|stash|market|bag|settings|gambler
     const panel = params.get('panel');
@@ -165,6 +174,7 @@
       const k = ev.key.toLowerCase();
       keys[k] = true;
       if (UI.isOpen()) return;
+      if (k === 'm') { RENDER.toggleMinimap(); return; }
       if (k === 'e') {
         if (st.phase === 'combat') {
           const g = SIM.nearestGroundItem(st, st.player.x, st.player.y, 34);

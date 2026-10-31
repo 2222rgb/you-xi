@@ -234,9 +234,33 @@
       } else if (pk.kind === 'item') {
         const iRar = pk.item ? pk.item.rarity : 0;
         const col = D.RARITY_COLOR[iRar];
-        ctx.globalAlpha *= (iRar >= 2 ? 0.55 + 0.35 * Math.sin(time * 6) : 0.5);
+        const bh = 12 + iRar * 9;
+        const pulse = 0.55 + 0.45 * Math.sin(time * (3 + iRar));
+        // 地面光晕
+        ctx.globalAlpha = 0.10 + iRar * 0.05;
         ctx.fillStyle = col;
-        ctx.fillRect(sx(pk.x) - 1, sy(pk.y) - 13, 2, 12);
+        ctx.beginPath();
+        ctx.ellipse(sx(pk.x), sy(pk.y) + 3, 7 + iRar * 2, 3 + iRar, 0, 0, 6.2832);
+        ctx.fill();
+        // 光柱
+        ctx.globalAlpha = (0.28 + iRar * 0.13) * pulse;
+        ctx.fillRect(sx(pk.x) - 1 - iRar, sy(pk.y) - bh, 2 + iRar * 2, bh);
+        ctx.globalAlpha = 0.85 * pulse;
+        ctx.fillStyle = col;
+        ctx.fillRect(sx(pk.x), sy(pk.y) - bh, 1, bh);
+        // 稀有度越高，光柱顶端越亮
+        if (iRar >= 2) {
+          ctx.globalAlpha = 0.7 * pulse;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(sx(pk.x), sy(pk.y) - bh - 2, 1, 2);
+        }
+        // 飘浮微粒
+        for (let sp = 0; sp < 3; sp++) {
+          const ph = (time * 1.4 + sp * 0.33 + (pk.x % 7) * 0.1) % 1;
+          ctx.globalAlpha = (1 - ph) * (0.35 + iRar * 0.15);
+          ctx.fillStyle = col;
+          ctx.fillRect(sx(pk.x) + Math.sin(time * 2 + sp * 2.1) * 3, sy(pk.y) - ph * (bh + 4), 1, 1);
+        }
         ctx.globalAlpha = left < 8 ? (Math.floor(time * 6) % 2 === 0 ? 0.3 : 1) : 1;
         blitWorld('chest', pk.x, pk.y + bob, false, false);
       } else {
@@ -276,6 +300,7 @@
     // 主角永远画在最上层，避免被怪群淹没
     drawOthers(st, time);
     drawPlayer(st, time);
+    drawMinimap(st, time);
 
     if (isTown) drawNpcs(st, time);
 
@@ -592,6 +617,71 @@
     }
   }
 
+  let minimapOn = true;
+
+  function drawMinimap(st, time) {
+    if (!minimapOn) return;
+    const M = 58, pad = 6;
+    const x0 = W - M - pad, y0 = pad;
+    const isTown = st.phase === 'town';
+    const worldW = isTown ? D.TOWN.w : CFG.worldSize;
+    const worldH = isTown ? D.TOWN.h : CFG.worldSize;
+    const k = M / Math.max(worldW, worldH);
+
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = '#05060a';
+    ctx.fillRect(x0, y0, M, M);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#2e2e3c';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x0 + 0.5, y0 + 0.5, M - 1, M - 1);
+
+    const mx = function (wx) { return x0 + wx * k; };
+    const my = function (wy) { return y0 + wy * k; };
+
+    // 掉落物（按稀有度上色）
+    for (let i = 0; i < st.pickups.length; i++) {
+      const pk = st.pickups[i];
+      if (pk.dead) continue;
+      let col = null;
+      if (pk.kind === 'item') col = D.RARITY_COLOR[pk.item ? pk.item.rarity : 0];
+      else if (pk.kind === 'gold') col = '#e0c060';
+      else if (pk.kind === 'heal') col = '#6fdc8f';
+      if (!col) continue;
+      ctx.fillStyle = col;
+      ctx.fillRect(Math.round(mx(pk.x)), Math.round(my(pk.y)), 1, 1);
+    }
+
+    // 敌人
+    for (let i = 0; i < st.enemies.length; i++) {
+      const e = st.enemies[i];
+      if (e.dead) continue;
+      if (e.boss) {
+        ctx.fillStyle = '#ff4d6d';
+        ctx.fillRect(mx(e.x) - 1, my(e.y) - 1, 3, 3);
+      } else {
+        ctx.fillStyle = e.elite ? '#b07cff' : '#7a3a3a';
+        ctx.fillRect(Math.round(mx(e.x)), Math.round(my(e.y)), 1, 1);
+      }
+    }
+
+    // 队友
+    for (let i = 0; i < st.players.length; i++) {
+      const p = st.players[i];
+      if (p === st.player || !p.alive) continue;
+      ctx.fillStyle = '#7fdcff';
+      ctx.fillRect(Math.round(mx(p.x)) - 1, Math.round(my(p.y)) - 1, 2, 2);
+    }
+
+    // 自己
+    const me = st.player;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(Math.round(mx(me.x)) - 1, Math.round(my(me.y)) - 1, 2, 2);
+
+    // 视口框
+    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.strokeRect(mx(camX) + 0.5, my(camY) + 0.5, W * k, H * k);
+  }
   function addShake(mag) {
     shakeMag = mag;
     shakeT = 0.12;
@@ -599,6 +689,7 @@
 
   root.RENDER = {
     init: init, resize: resize, draw: draw, addShake: addShake,
+    toggleMinimap: function () { minimapOn = !minimapOn; return minimapOn; },
     W: W, H: H, blitRaw: blitRaw,
     worldAt: function (clientX, clientY) {
       const r = canvas.getBoundingClientRect();
