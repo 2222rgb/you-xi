@@ -163,17 +163,29 @@
     { id: 'gold', slots: ['ring', 'amulet', 'helm'], m: { k: 'gold' }, pct: true, fmt: '+{v}% 金币获取', tiers: [[8, 14, 1], [15, 24, 5], [25, 36, 9], [37, 52, 13], [53, 70, 17]] }
   ];
 
-  const SLOTS = ['helm', 'body', 'ring', 'amulet'];
-  const SLOT_CN = { helm: '头部', body: '护甲', ring: '戒指', amulet: '护符' };
-  const SLOT_ICON = { helm: 'icon_helm', body: 'icon_body', ring: 'icon_ring', amulet: 'icon_amulet' };
+  const SLOTS = ['helm', 'body', 'ring', 'amulet', 'weapon', 'offhand'];
+  const SLOT_CN = { helm: '头部', body: '护甲', ring: '戒指', amulet: '护符', weapon: '武器', offhand: '副手' };
+  const SLOT_ICON = { helm: 'icon_helm', body: 'icon_body', ring: 'icon_ring', amulet: 'icon_amulet', weapon: 'icon_axe', offhand: 'icon_amulet' };
   const RARITY_CN = ['普通', '魔法', '稀有', '传奇'];
   const RARITY_COLOR = ['#9aa4b8', '#6f8cff', '#e0c060', '#e08a3c'];
+
+  /* ---------------- 武器：单手 / 双手（双手带攻速代价） ---------------- */
+  const WEAPONS = [
+    { id: 'dagger', name: '匕首', hand: 1, mods: [{ k: 'flat', t: 'phys', v: 4 }, { k: 'speed', v: 0.12 }] },
+    { id: 'sword', name: '短剑', hand: 1, mods: [{ k: 'flat', t: 'phys', v: 6 }, { k: 'crit', v: 0.04 }] },
+    { id: 'mace', name: '战锤', hand: 1, mods: [{ k: 'flat', t: 'phys', v: 8 }, { k: 'speed', v: -0.06 }] },
+    { id: 'staff', name: '法杖', hand: 2, mods: [{ k: 'flat', t: 'fire', v: 7 }, { k: 'flat', t: 'cold', v: 7 }, { k: 'inc', t: 'spell', v: 0.22 }, { k: 'speed', v: -0.12 }] },
+    { id: 'greataxe', name: '巨斧', hand: 2, mods: [{ k: 'flat', t: 'phys', v: 13 }, { k: 'critMulti', v: 0.30 }, { k: 'speed', v: -0.18 }] },
+    { id: 'bow', name: '长弓', hand: 2, mods: [{ k: 'flat', t: 'phys', v: 9 }, { k: 'proj', v: 1 }, { k: 'speed', v: -0.10 }] }
+  ];
 
   const BASE_NAMES = {
     helm: ['皮革兜帽', '铁面盔', '灰烬头冠', '苦修者面纱'],
     body: ['布甲', '锁子甲', '暗纹长袍', '殉道者胸甲'],
     ring: ['铜环', '血玉指环', '白骨戒', '裂纹指环'],
-    amulet: ['兽牙护符', '黑曜石坠', '余烬吊坠', '沉默之链']
+    amulet: ['兽牙护符', '黑曜石坠', '余烬吊坠', '沉默之链'],
+    weapon: ['匕首', '短剑', '战锤', '法杖', '巨斧', '长弓'],
+    offhand: ['木盾', '铁盾', '符文宝珠', '战旗']
   };
 
   /* ---------------- 传奇 ---------------- */
@@ -556,7 +568,7 @@
     ELE, TYPE_CN, SKILLS, SKILL_IDS, MAX_SKILL_LEVEL,
     AFFIXES, SLOTS, SLOT_CN, SLOT_ICON, RARITY_CN, RARITY_COLOR, BASE_NAMES, LEGENDARIES,
     TREES: TREES, TALENT_INDEX: TALENT_INDEX, TIER_GATE: TIER_GATE,
-    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES, REACTIONS: REACTIONS, RANKS: RANKS, RANK_GATE: RANK_GATE, RANK_COLOR: RANK_COLOR, STATUE: STATUE,
+    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES, REACTIONS: REACTIONS, WEAPONS: WEAPONS, RANKS: RANKS, RANK_GATE: RANK_GATE, RANK_COLOR: RANK_COLOR, STATUE: STATUE,
     ENEMIES, ELITE_MODS, WAVES, TOWN, PRICES, CONFIG
   };
 })(window);

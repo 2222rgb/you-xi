@@ -40,7 +40,7 @@
       gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0, mats: 0,
       downed: false, downT: 0, reviveProg: 0, supports: {},
       roguePicks: {}, rogueChoices: null,
-      gear: { helm: null, body: null, ring: null, amulet: null },
+      gear: { helm: null, body: null, ring: null, amulet: null, weapon: null, offhand: null },
       bag: [],
       alive: true
     };
@@ -1504,9 +1504,17 @@
   /* ---------------- 装备 ---------------- */
   function equip(st, item, p) {
     if (!p) p = localPlayer(st);
+    if (!item) return null;
+    const w = p.gear.weapon;
+    if (item.slot === 'offhand' && w && w.hand === 2) return null;
     const old = p.gear[item.slot];
     p.gear[item.slot] = item;
     if (old && p.bag.length < BAG_CAP) p.bag.push(old);
+    if (item.slot === 'weapon' && item.hand === 2 && p.gear.offhand) {
+      const off = p.gear.offhand;
+      p.gear.offhand = null;
+      if (p.bag.length < BAG_CAP) p.bag.push(off);
+    }
     recompute(st, p);
     return old;
   }
@@ -1697,7 +1705,7 @@
     p.gold = d.g || 0;
     p.potions = d.po || 0;
     p.talentPoints = d.tp || 0;
-    p.gear = d.ge || { helm: null, body: null, ring: null, amulet: null };
+    p.gear = d.ge || { helm: null, body: null, ring: null, amulet: null, weapon: null, offhand: null };
     p.bag = d.bg || [];
     p.talents = d.tl || {};
     p.treeSpent = d.ts || { blade: 0, ember: 0, storm: 0 };

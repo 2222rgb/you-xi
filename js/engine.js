@@ -242,7 +242,9 @@
   }
 
   function affixPool(slot) {
-    return D.AFFIXES.filter(function (a) { return a.slots.indexOf(slot) >= 0; });
+    const own = D.AFFIXES.filter(function (a) { return a.slots.indexOf(slot) >= 0; });
+    // 武器/副手没有专属词缀时，回退到全池，保证能 roll 出东西
+    return own.length ? own : D.AFFIXES;
   }
 
   function rollAffix(slot, ilvl, rng, used) {
@@ -266,6 +268,16 @@
       mods: l.mods.map(function (m) { return { k: m.k, t: m.t, v: m.v, label: m.label }; }),
       flavor: l.flavor
     };
+  }
+
+  function weaponModLabel(m) {
+    if (m.k === 'flat') return '附加 ' + m.v + ' 点' + ({ phys: '物理', fire: '火焰', cold: '冰霜', lightning: '闪电' }[m.t] || '') + '伤害';
+    if (m.k === 'speed') return (m.v > 0 ? '+' : '') + Math.round(m.v * 100) + '% 攻击速度';
+    if (m.k === 'crit') return '+' + Math.round(m.v * 100) + '% 暴击率';
+    if (m.k === 'critMulti') return '+' + Math.round(m.v * 100) + '% 暴击伤害';
+    if (m.k === 'proj') return '+' + m.v + ' 投射物';
+    if (m.k === 'inc') return '+' + Math.round(m.v * 100) + '% 法术伤害';
+    return '';
   }
 
   function rollItem(slot, ilvl, rng, forceRarity) {
@@ -292,17 +304,25 @@
     const used = {};
     let count = rarity === 0 ? 0 : (rarity === 1 ? 1 + (rng() < 0.45 ? 1 : 0) : 3 + (rng() < 0.5 ? 1 : 0));
     const mods = [];
+    let wdef = null;
+    if (slot === 'weapon' && D.WEAPONS) {
+      wdef = D.WEAPONS[Math.floor(rng() * D.WEAPONS.length)];
+      for (let wi = 0; wi < wdef.mods.length; wi++) {
+        const wm = wdef.mods[wi];
+        mods.push({ k: wm.k, t: wm.t, v: wm.v, label: weaponModLabel(wm) });
+      }
+    }
     for (let i = 0; i < count; i++) {
       const m = rollAffix(slot, ilvl, rng, used);
       if (m) mods.push(m);
     }
     const names = D.BASE_NAMES[slot];
-    const base = names[Math.floor(rng() * names.length)];
+    const base = wdef ? wdef.name : names[Math.floor(rng() * names.length)];
     let name = base;
     if (rarity === 1) name = PREFIX[Math.floor(rng() * PREFIX.length)] + base;
     else if (rarity === 2) name = PREFIX[Math.floor(rng() * PREFIX.length)] + base + SUFFIX[Math.floor(rng() * SUFFIX.length)];
 
-    return { slot: slot, name: name, base: base, rarity: rarity, ilvl: ilvl, mods: mods };
+    return { slot: slot, name: name, base: base, rarity: rarity, ilvl: ilvl, mods: mods, hand: wdef ? wdef.hand : 1 };
   }
 
   /* ---------------- 打造 ---------------- */
@@ -353,7 +373,7 @@
     const t = phaseT / 60;
     const c = Math.max(0, (cycle || 1) - 1) * CFG.enemyScalePerCycle;
     const hpMul = (1 + t * 0.55) * (1 + c);
-    const dmgMul = (1 + t * 0.32) * (1 + c * 3.9);
+    const dmgMul = (1 + t * 0.32) * (1 + c * 6.2);
     return {
       id: b.id, name: b.name, sprite: b.sprite, boss: !!b.boss,
       hp: Math.round(b.hp * hpMul),
