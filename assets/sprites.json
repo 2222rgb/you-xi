@@ -855,5 +855,450 @@
                      "w":  40,
                      "h":  28,
                      "anchor":  "nine-slice:10"
-                 }
+                 },
+    "_batch6":  "ART_REQUEST batch 2: action frames / paperdoll layers / cute gear icons / town background",
+    "hero_attack1":  {
+                         "w":  24,
+                         "file":  "hero_attack1.png",
+                         "anchor":  "bottom-center (24x32, feet y=30)",
+                         "h":  32
+                     },
+    "hero_attack2":  {
+                         "w":  24,
+                         "file":  "hero_attack2.png",
+                         "anchor":  "bottom-center (24x32, feet y=30)",
+                         "h":  32
+                     },
+    "hero_attack3":  {
+                         "w":  24,
+                         "file":  "hero_attack3.png",
+                         "anchor":  "bottom-center (24x32, feet y=30)",
+                         "h":  32
+                     },
+    "hero_cast1":  {
+                       "w":  24,
+                       "file":  "hero_cast1.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_cast2":  {
+                       "w":  24,
+                       "file":  "hero_cast2.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_cast3":  {
+                       "w":  24,
+                       "file":  "hero_cast3.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_hit":  {
+                     "w":  24,
+                     "file":  "hero_hit.png",
+                     "anchor":  "bottom-center (24x32, feet y=30)",
+                     "h":  32
+                 },
+    "hero_dodge1":  {
+                        "w":  24,
+                        "file":  "hero_dodge1.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_dodge2":  {
+                        "w":  24,
+                        "file":  "hero_dodge2.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_jump1":  {
+                       "w":  24,
+                       "file":  "hero_jump1.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_jump2":  {
+                       "w":  24,
+                       "file":  "hero_jump2.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_dance1":  {
+                        "w":  24,
+                        "file":  "hero_dance1.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_dance2":  {
+                        "w":  24,
+                        "file":  "hero_dance2.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_dance3":  {
+                        "w":  24,
+                        "file":  "hero_dance3.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_dance4":  {
+                        "w":  24,
+                        "file":  "hero_dance4.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_sit1":  {
+                      "w":  24,
+                      "file":  "hero_sit1.png",
+                      "anchor":  "bottom-center (24x32, feet y=30)",
+                      "h":  32
+                  },
+    "hero_sit2":  {
+                      "w":  24,
+                      "file":  "hero_sit2.png",
+                      "anchor":  "bottom-center (24x32, feet y=30)",
+                      "h":  32
+                  },
+    "hero_wave1":  {
+                       "w":  24,
+                       "file":  "hero_wave1.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_wave2":  {
+                       "w":  24,
+                       "file":  "hero_wave2.png",
+                       "anchor":  "bottom-center (24x32, feet y=30)",
+                       "h":  32
+                   },
+    "hero_cheer1":  {
+                        "w":  24,
+                        "file":  "hero_cheer1.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_cheer2":  {
+                        "w":  24,
+                        "file":  "hero_cheer2.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_sleep1":  {
+                        "w":  24,
+                        "file":  "hero_sleep1.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_sleep2":  {
+                        "w":  24,
+                        "file":  "hero_sleep2.png",
+                        "anchor":  "bottom-center (24x32, feet y=30)",
+                        "h":  32
+                    },
+    "hero_dead":  {
+                      "w":  24,
+                      "file":  "hero_dead.png",
+                      "anchor":  "bottom-center (24x32, feet y=30)",
+                      "h":  32
+                  },
+    "gear_helm_bear":  {
+                           "w":  24,
+                           "file":  "gear_helm_bear.png",
+                           "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                           "h":  32
+                       },
+    "gear_helm_bunny":  {
+                            "w":  24,
+                            "file":  "gear_helm_bunny.png",
+                            "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                            "h":  32
+                        },
+    "gear_helm_star":  {
+                           "w":  24,
+                           "file":  "gear_helm_star.png",
+                           "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                           "h":  32
+                       },
+    "gear_helm_cloud":  {
+                            "w":  24,
+                            "file":  "gear_helm_cloud.png",
+                            "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                            "h":  32
+                        },
+    "gear_helm_iron":  {
+                           "w":  24,
+                           "file":  "gear_helm_iron.png",
+                           "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                           "h":  32
+                       },
+    "gear_helm_wizard":  {
+                             "w":  24,
+                             "file":  "gear_helm_wizard.png",
+                             "anchor":  "overlay-24x32 (head slot, align hero_side_idle)",
+                             "h":  32
+                         },
+    "gear_body_strawberry":  {
+                                 "w":  24,
+                                 "file":  "gear_body_strawberry.png",
+                                 "anchor":  "overlay-24x32 (body slot)",
+                                 "h":  32
+                             },
+    "gear_body_cathood":  {
+                              "w":  24,
+                              "file":  "gear_body_cathood.png",
+                              "anchor":  "overlay-24x32 (body slot)",
+                              "h":  32
+                          },
+    "gear_body_cloud":  {
+                            "w":  24,
+                            "file":  "gear_body_cloud.png",
+                            "anchor":  "overlay-24x32 (body slot)",
+                            "h":  32
+                        },
+    "gear_body_chain":  {
+                            "w":  24,
+                            "file":  "gear_body_chain.png",
+                            "anchor":  "overlay-24x32 (body slot)",
+                            "h":  32
+                        },
+    "gear_body_robe":  {
+                           "w":  24,
+                           "file":  "gear_body_robe.png",
+                           "anchor":  "overlay-24x32 (body slot)",
+                           "h":  32
+                       },
+    "gear_body_leather":  {
+                              "w":  24,
+                              "file":  "gear_body_leather.png",
+                              "anchor":  "overlay-24x32 (body slot)",
+                              "h":  32
+                          },
+    "gear_weapon_axe":  {
+                            "w":  24,
+                            "file":  "gear_weapon_axe.png",
+                            "anchor":  "overlay-24x32 (weapon slot) + grip:12,12",
+                            "h":  32
+                        },
+    "gear_weapon_bunnystaff":  {
+                                   "w":  24,
+                                   "file":  "gear_weapon_bunnystaff.png",
+                                   "anchor":  "overlay-24x32 (weapon slot) + grip:14,16",
+                                   "h":  32
+                               },
+    "gear_weapon_bow":  {
+                            "w":  24,
+                            "file":  "gear_weapon_bow.png",
+                            "anchor":  "overlay-24x32 (weapon slot) + grip:14,16",
+                            "h":  32
+                        },
+    "gear_weapon_staff":  {
+                              "w":  24,
+                              "file":  "gear_weapon_staff.png",
+                              "anchor":  "overlay-24x32 (weapon slot) + grip:14,14",
+                              "h":  32
+                          },
+    "gear_weapon_hammer":  {
+                               "w":  24,
+                               "file":  "gear_weapon_hammer.png",
+                               "anchor":  "overlay-24x32 (weapon slot) + grip:13,13",
+                               "h":  32
+                           },
+    "gear_weapon_catdagger":  {
+                                  "w":  24,
+                                  "file":  "gear_weapon_catdagger.png",
+                                  "anchor":  "overlay-24x32 (weapon slot) + grip:13,16",
+                                  "h":  32
+                              },
+    "gear_weapon_lollipop":  {
+                                 "w":  24,
+                                 "file":  "gear_weapon_lollipop.png",
+                                 "anchor":  "overlay-24x32 (weapon slot) + grip:14,15",
+                                 "h":  32
+                             },
+    "gear_weapon_bubblegun":  {
+                                  "w":  24,
+                                  "file":  "gear_weapon_bubblegun.png",
+                                  "anchor":  "overlay-24x32 (weapon slot) + grip:11,15",
+                                  "h":  32
+                              },
+    "gear_weapon_sword":  {
+                              "w":  24,
+                              "file":  "gear_weapon_sword.png",
+                              "anchor":  "overlay-24x32 (weapon slot) + grip:13,12",
+                              "h":  32
+                          },
+    "gear_offhand_duck":  {
+                              "w":  24,
+                              "file":  "gear_offhand_duck.png",
+                              "anchor":  "overlay-24x32 (offhand slot)",
+                              "h":  32
+                          },
+    "gear_offhand_balloon":  {
+                                 "w":  24,
+                                 "file":  "gear_offhand_balloon.png",
+                                 "anchor":  "overlay-24x32 (offhand slot)",
+                                 "h":  32
+                             },
+    "gear_offhand_teddy":  {
+                               "w":  24,
+                               "file":  "gear_offhand_teddy.png",
+                               "anchor":  "overlay-24x32 (offhand slot)",
+                               "h":  32
+                           },
+    "gear_offhand_woodshield":  {
+                                    "w":  24,
+                                    "file":  "gear_offhand_woodshield.png",
+                                    "anchor":  "overlay-24x32 (offhand slot)",
+                                    "h":  32
+                                },
+    "gear_offhand_orb":  {
+                             "w":  24,
+                             "file":  "gear_offhand_orb.png",
+                             "anchor":  "overlay-24x32 (offhand slot)",
+                             "h":  32
+                         },
+    "gear_offhand_banner":  {
+                                "w":  24,
+                                "file":  "gear_offhand_banner.png",
+                                "anchor":  "overlay-24x32 (offhand slot)",
+                                "h":  32
+                            },
+    "gear_boot_normal":  {
+                             "w":  24,
+                             "file":  "gear_boot_normal.png",
+                             "anchor":  "overlay-24x32 (boot slot)",
+                             "h":  32
+                         },
+    "gear_boot_wind":  {
+                           "w":  24,
+                           "file":  "gear_boot_wind.png",
+                           "anchor":  "overlay-24x32 (boot slot)",
+                           "h":  32
+                       },
+    "gear_cape_ember":  {
+                            "w":  24,
+                            "file":  "gear_cape_ember.png",
+                            "anchor":  "overlay-24x32 (cape slot, draw BEHIND body)",
+                            "h":  32
+                        },
+    "gear_cape_hero":  {
+                           "w":  24,
+                           "file":  "gear_cape_hero.png",
+                           "anchor":  "overlay-24x32 (cape slot, draw BEHIND body)",
+                           "h":  32
+                       },
+    "icon_gear_bearhood":  {
+                               "w":  24,
+                               "file":  "icon_gear_bearhood.png",
+                               "anchor":  "center",
+                               "h":  24
+                           },
+    "icon_gear_bunnyband":  {
+                                "w":  24,
+                                "file":  "icon_gear_bunnyband.png",
+                                "anchor":  "center",
+                                "h":  24
+                            },
+    "icon_gear_starhelm":  {
+                               "w":  24,
+                               "file":  "icon_gear_starhelm.png",
+                               "anchor":  "center",
+                               "h":  24
+                           },
+    "icon_gear_cloudhat":  {
+                               "w":  24,
+                               "file":  "icon_gear_cloudhat.png",
+                               "anchor":  "center",
+                               "h":  24
+                           },
+    "icon_gear_strawberry":  {
+                                 "w":  24,
+                                 "file":  "icon_gear_strawberry.png",
+                                 "anchor":  "center",
+                                 "h":  24
+                             },
+    "icon_gear_cathoodie":  {
+                                "w":  24,
+                                "file":  "icon_gear_cathoodie.png",
+                                "anchor":  "center",
+                                "h":  24
+                            },
+    "icon_gear_cloudcloak":  {
+                                 "w":  24,
+                                 "file":  "icon_gear_cloudcloak.png",
+                                 "anchor":  "center",
+                                 "h":  24
+                             },
+    "icon_gear_frostring":  {
+                                "w":  24,
+                                "file":  "icon_gear_frostring.png",
+                                "anchor":  "center",
+                                "h":  24
+                            },
+    "icon_gear_starring":  {
+                               "w":  24,
+                               "file":  "icon_gear_starring.png",
+                               "anchor":  "center",
+                               "h":  24
+                           },
+    "icon_gear_heartpendant":  {
+                                   "w":  24,
+                                   "file":  "icon_gear_heartpendant.png",
+                                   "anchor":  "center",
+                                   "h":  24
+                               },
+    "icon_gear_candyamulet":  {
+                                  "w":  24,
+                                  "file":  "icon_gear_candyamulet.png",
+                                  "anchor":  "center",
+                                  "h":  24
+                              },
+    "icon_gear_duckshield":  {
+                                 "w":  24,
+                                 "file":  "icon_gear_duckshield.png",
+                                 "anchor":  "center",
+                                 "h":  24
+                             },
+    "icon_gear_balloonshield":  {
+                                    "w":  24,
+                                    "file":  "icon_gear_balloonshield.png",
+                                    "anchor":  "center",
+                                    "h":  24
+                                },
+    "icon_gear_teddy":  {
+                            "w":  24,
+                            "file":  "icon_gear_teddy.png",
+                            "anchor":  "center",
+                            "h":  24
+                        },
+    "icon_gear_lollipop":  {
+                               "w":  24,
+                               "file":  "icon_gear_lollipop.png",
+                               "anchor":  "center",
+                               "h":  24
+                           },
+    "icon_gear_bubblegun":  {
+                                "w":  24,
+                                "file":  "icon_gear_bubblegun.png",
+                                "anchor":  "center",
+                                "h":  24
+                            },
+    "icon_gear_bunnystaff":  {
+                                 "w":  24,
+                                 "file":  "icon_gear_bunnystaff.png",
+                                 "anchor":  "center",
+                                 "h":  24
+                             },
+    "icon_gear_catdagger":  {
+                                "w":  24,
+                                "file":  "icon_gear_catdagger.png",
+                                "anchor":  "center",
+                                "h":  24
+                            },
+    "town_background":  {
+                            "w":  1120,
+                            "file":  "town_background.png",
+                            "anchor":  "parallax-far (1120x720)",
+                            "h":  720
+                        }
 }
