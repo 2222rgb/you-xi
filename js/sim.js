@@ -1369,7 +1369,7 @@
       const idx = Math.floor(rand(st) * pool.length);
       picks.push(pool.splice(idx, 1)[0].id);
     }
-    p.rogueChoices = picks;
+    p.rogueChoices = picks.length ? picks : null;
   }
 
   function pickRogue(st, idx, p) {

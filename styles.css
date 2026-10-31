@@ -104,7 +104,7 @@ html, body {
 .gslot.filled .icon { border-color: currentColor; }
 
 #bottomleft { position: absolute; left: 16px; bottom: 16px; display: flex; gap: 8px; align-items: center; }
-#tpbtn, #bagbtn {
+#tpbtn, #bagbtn, #altar-btn, #skillbtn, #runebtn {
   pointer-events: auto;
   font-family: inherit; font-size: 11px; color: var(--dim);
   border: 1px solid var(--line); background: rgba(10,10,16,.8);
@@ -486,3 +486,12 @@ body.touch #skillpad { display: flex; }
 }
 #startmenu .smbtn:hover { border-color: var(--gold); color: var(--gold); background: #16140e; }
 #startmenu .smnote { margin-top: 22px; font-size: 10px; color: #4a4f62; letter-spacing: .12em; }
+
+/* 地面掉落标签（DOM，比画布文字清晰） */
+#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.dlabel {
+  position: absolute; transform: translate(-50%, -100%);
+  font-size: 11px; letter-spacing: .04em; white-space: nowrap;
+  text-shadow: 0 1px 0 #000, 0 0 6px rgba(0,0,0,.9);
+  padding: 1px 4px;
+}

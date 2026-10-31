@@ -483,12 +483,47 @@
 
     RENDER.draw(st, ts / 1000);
     UI.tick(st);
+    drawLootLabels(st);
     hostBroadcast(ts);
     flushAudio(st);
     handlePhase();
   }
 
   window.__st = function () { return st; };
+  /* 地面掉落标签：用 DOM 渲染，比画布文字清晰 */
+  const labelPool = [];
+  function drawLootLabels(state) {
+    const box = document.getElementById('labels');
+    if (!box) return;
+    if (!state || !state.pickups || state.phase === 'town') {
+      if (box.childNodes.length) box.innerHTML = '';
+      return;
+    }
+    const me = state.player;
+    let used = 0;
+    for (let i = 0; i < state.pickups.length && used < labelPool.length + 6; i++) {
+      const pk = state.pickups[i];
+      if (pk.dead || pk.kind !== 'item' || !pk.item) continue;
+      if (me && Math.abs(pk.x - me.x) + Math.abs(pk.y - me.y) > 260) continue;
+      const sp = window.RENDER && window.RENDER.worldToScreen ? window.RENDER.worldToScreen(pk.x, pk.y - 16) : null;
+      if (!sp) continue;
+      let el = labelPool[used];
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'dlabel';
+        box.appendChild(el);
+        labelPool.push(el);
+      }
+      el.style.left = sp.x.toFixed(1) + 'px';
+      el.style.top = sp.y.toFixed(1) + 'px';
+      el.textContent = pk.item.name || '';
+      el.style.color = (window.DATA && window.DATA.RARITY_COLOR[pk.item.rarity || 0]) || '#cfd8e8';
+      el.style.display = '';
+      used++;
+    }
+    for (let i = used; i < labelPool.length; i++) labelPool[i].style.display = 'none';
+  }
+
   let rogueDebugDone = false;
   let statueDebugDone = false;
   function handlePhase() {
@@ -505,8 +540,11 @@
       SIM.gainXp(st, st.player, st.player.xpNext + 1);
     }
     if (BOT && st.player && st.player.rogueChoices) { SIM.pickRogue(st, 0, st.player); return; }
-    if (mode !== 'client' && st.phase === 'combat' && st.player && st.player.rogueChoices && !UI.isOpen()) {
-      UI.showRogue(st, function (i) { ACT.run(st, 'rogue', [i]); });
+    if (st.phase === 'combat' && st.player && st.player.rogueChoices && st.player.rogueChoices.length && !UI.isOpen()) {
+      UI.showRogue(st, function (i) {
+        ACT.run(st, 'rogue', [i]);
+        if (st.player) st.player.rogueChoices = null;
+      });
       return;
     }
     if (BOT && st.phase === 'rift') { SIM.chooseRift(st, 0); lastPhase = ''; return; }

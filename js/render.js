@@ -767,6 +767,9 @@
     init: init, resize: resize, draw: draw, addShake: addShake,
     toggleMinimap: function () { minimapOn = !minimapOn; return minimapOn; },
     W: W, H: H, blitRaw: blitRaw,
+    worldToScreen: function (wx, wy) {
+      return { x: (wx - camX) * scale, y: (wy - camY) * scale, s: scale };
+    },
     worldAt: function (clientX, clientY) {
       const r = canvas.getBoundingClientRect();
       return { x: (clientX - r.left) / scale + camX, y: (clientY - r.top) / scale + camY };

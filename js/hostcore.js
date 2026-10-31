@@ -50,7 +50,7 @@
         g: p.gold, po: p.potions, tp: p.talentPoints,
         sk: p.skills.map(function (s) { return { i: s.id, r: s.rank, cd: r1(s.cd) }; }),
         tl: p.talents, ts: p.treeSpent,
-        ge: p.gear, bg: p.bag
+        ge: p.gear, bg: p.bag, rc: p.rogueChoices || null, rou: p.roguePicks || null, m: p.mats || 0
       };
     }
     return { t: 'details', d: out, shop: st.shop, stash: st.stash };
@@ -142,6 +142,9 @@
     me.gold = d.g; me.potions = d.po; me.talentPoints = d.tp;
     me.skills = d.sk.map(function (s) { return { id: s.i, rank: s.r, cd: s.cd }; });
     me.talents = d.tl; me.treeSpent = d.ts;
+    me.rogueChoices = d.rc || null;
+    me.roguePicks = d.rou || {};
+    me.mats = d.m || 0;
     me.gear = d.ge; me.bag = d.bg;
   }
 
