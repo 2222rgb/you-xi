@@ -678,7 +678,7 @@
 
   function drawMinimap(st, time) {
     if (!minimapOn) return;
-    const M = 58, pad = 6;
+    const M = 78, pad = 6;
     const x0 = W - M - pad, y0 = pad;
     const isTown = st.phase === 'town';
     const worldW = isTown ? D.TOWN.w : CFG.worldSize;
@@ -709,17 +709,24 @@
       ctx.fillRect(Math.round(mx(pk.x)), Math.round(my(pk.y)), 1, 1);
     }
 
-    // 敌人
+    // 敌人：按种类上色的小图标
+    const MMC = {
+      slime: '#6fdc8f', bat: '#b07cff', skel: '#d9d4c0', wraith: '#8a5cff',
+      brute: '#c08a4a', spitter: '#4a9a3a', charger: '#ff8a3d',
+      splitter: '#6fdc8f', summoner: '#c0392b', healer: '#6fdc8f',
+      goblin: '#ffd54f', boss: '#ff4d6d', boss2: '#ffd54f', boss3: '#b07cff'
+    };
     for (let i = 0; i < st.enemies.length; i++) {
       const e = st.enemies[i];
       if (e.dead) continue;
-      if (e.boss) {
-        ctx.fillStyle = '#ff4d6d';
-        ctx.fillRect(mx(e.x) - 1, my(e.y) - 1, 3, 3);
-      } else {
-        ctx.fillStyle = e.elite ? '#b07cff' : '#7a3a3a';
-        ctx.fillRect(Math.round(mx(e.x)), Math.round(my(e.y)), 1, 1);
-      }
+      const ecol = MMC[e.typeId] || '#8a3a3a';
+      const esz = e.boss ? 4 : (e.elite ? 3 : 2);
+      const epx = Math.round(mx(e.x)) - (esz >> 1);
+      const epy = Math.round(my(e.y)) - (esz >> 1);
+      ctx.fillStyle = '#05060a';
+      ctx.fillRect(epx - 1, epy - 1, esz + 2, esz + 2);
+      ctx.fillStyle = ecol;
+      ctx.fillRect(epx, epy, esz, esz);
     }
 
     // 队友
