@@ -99,6 +99,10 @@ function run(seed, seconds, verbose) {
   for (let i = 0; i < 60 * seconds; i++) {
     if (st.phase === 'dead') break;
     if (st.phase === 'rift') { SIM.chooseRift(st, 0); continue; }
+    if (st.phase === 'combat' && st.players[0] && st.players[0].bag.length < 20) {
+      const g = SIM.nearestGroundItem(st, st.players[0].x, st.players[0].y, 34);
+      if (g) SIM.takeItem(st, st.players[0]);
+    }
     SIM.step(st, STEP, botStep(st, i / 60));
     if (st.player.talentPoints > 0) autoTalent(st);
     // 主城自动：买装备 + 卖垃圾 + 补药水

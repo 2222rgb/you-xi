@@ -7,7 +7,7 @@
 
   const D = root.DATA, E = root.ENGINE, CFG = D.CONFIG;
   const TAU = Math.PI * 2;
-  const BAG_CAP = 8;
+  const BAG_CAP = 24;
 
   /* ---------------- 随机 ---------------- */
   function rand(st) {
@@ -37,7 +37,7 @@
       speed: CFG.baseSpeed, pickup: CFG.pickupRange,
       face: 1, invuln: 2, hurtFlash: 0, walkT: 0, moving: false,
       skills: [], talents: {}, treeSpent: { blade: 0, ember: 0, storm: 0 }, talentPoints: 0,
-      gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0,
+      gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0,
       downed: false, downT: 0, reviveProg: 0,
       gear: { helm: null, body: null, ring: null, amulet: null },
       bag: [],
@@ -321,6 +321,10 @@
       });
     }
 
+    if (st.players.length && rand(st) < 0.0015) {
+      const bn = nearestPlayer(st, e.x, e.y);
+      if (bn) { bn.boxes = (bn.boxes || 0) + 1; toast(st, '魔盒！' + bn.name + ' 获得了魔盒', 'rare'); ev(st, 'level'); }
+    }
     if (e.flee) {
       for (let g = 0; g < 3; g++) {
         const gi = E.rollItem(D.SLOTS[ri(st, 0, 3)], Math.min(20, 6 + st.cycle * 2), rand.bind(null, st), 2);
@@ -917,14 +921,7 @@
         }
         else if (pk.kind === 'gold') { near.gold += pk.value; st.goldEarned += pk.value; ev(st, 'gold'); }
         else if (pk.kind === 'item') {
-          if (near.bag.length < BAG_CAP) {
-            near.bag.push(pk.item);
-            ev(st, 'item', { r: pk.item.rarity });
-            toast(st, near.name + ' 拾取 ' + pk.item.name, pk.item.rarity >= 2 ? 'rare' : '');
-          } else {
-            near.gold += 5;
-            toast(st, near.name + ' 背包已满，转化为 5 金币', 'bad');
-          }
+          // 装备不再自动拾取：落地后按 E 拾取
         } else if (pk.kind === 'heal') {
           near.hp = Math.min(near.maxHp, near.hp + 30);
           ev(st, 'heal');
@@ -932,6 +929,45 @@
         }
       }
     }
+  }
+
+  /** 附近地上的装备：返回最近的，供 UI 提示 */
+  function nearestGroundItem(st, x, y, r) {
+    const rr2 = (r || 30) * (r || 30);
+    let best = null, bd = rr2;
+    for (let i = 0; i < st.pickups.length; i++) {
+      const pk = st.pickups[i];
+      if (pk.dead || pk.kind !== 'item') continue;
+      const d = dist2(pk.x, pk.y, x, y);
+      if (d < bd) { bd = d; best = pk; }
+    }
+    return best;
+  }
+
+  /** E 拾取最近的装备 */
+  function takeItem(st, p) {
+    if (!p) p = localPlayer(st);
+    const pk = nearestGroundItem(st, p.x, p.y, 34);
+    if (!pk) return { ok: false, msg: '附近没有可拾取的装备' };
+    if (p.bag.length >= BAG_CAP) return { ok: false, msg: '背包已满' };
+    pk.dead = true;
+    p.bag.push(pk.item);
+    ev(st, 'item', { r: pk.item.rarity });
+    toast(st, '拾取 ' + pk.item.name, pk.item.rarity >= 2 ? 'rare' : '');
+    return { ok: true, item: pk.item };
+  }
+
+  /** 开魔盒 */
+  function openBox(st, p) {
+    if (!p) p = localPlayer(st);
+    if (!p.boxes) return { ok: false, msg: '没有魔盒' };
+    if (p.bag.length >= BAG_CAP) return { ok: false, msg: '背包已满' };
+    p.boxes--;
+    const it = E.rollItem(D.SLOTS[ri(st, 0, 3)], Math.min(20, 10 + st.cycle * 2), rand.bind(null, st), 3);
+    p.bag.push(it);
+    ev(st, 'item', { r: 3 });
+    toast(st, '魔盒开出：' + it.name, 'rare');
+    return { ok: true, item: it };
   }
 
   function stepTown(st, dt) {
@@ -1343,6 +1379,7 @@
     awardXp: awardXp, gainXp: gainXp, fireSkill: fireSkill, nearestPlayer: nearestPlayer,
     startCombat: startCombat, startTown: startTown, waveAt: waveAt,
     openRiftChoice: openRiftChoice, chooseRift: chooseRift,
+    takeItem: takeItem, openBox: openBox, nearestGroundItem: nearestGroundItem,
     resonanceInfo: function (p) { return resonanceMods(p.gear); },
     rand: rand
   };

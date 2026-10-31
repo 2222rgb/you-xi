@@ -35,6 +35,8 @@
       case 'gamble': return SIM.gamble(st, a[0], p);
       case 'potion': return SIM.drinkPotion(st, p);
       case 'leave': return SIM.interact(st);
+      case 'take': return SIM.takeItem(st, p);
+      case 'openBox': return SIM.openBox(st, p);
       default: return null;
     }
   }

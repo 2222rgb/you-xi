@@ -232,8 +232,9 @@
         ctx.globalAlpha = left < 8 ? (Math.floor(time * 6) % 2 === 0 ? 0.3 : 1) : 1;
         blitWorld(spr, pk.x, pk.y + bob, false, false);
       } else if (pk.kind === 'item') {
-        const col = D.RARITY_COLOR[pk.item.rarity];
-        ctx.globalAlpha *= (pk.item.rarity >= 2 ? 0.55 + 0.35 * Math.sin(time * 6) : 0.5);
+        const iRar = pk.item ? pk.item.rarity : 0;
+        const col = D.RARITY_COLOR[iRar];
+        ctx.globalAlpha *= (iRar >= 2 ? 0.55 + 0.35 * Math.sin(time * 6) : 0.5);
         ctx.fillStyle = col;
         ctx.fillRect(sx(pk.x) - 1, sy(pk.y) - 13, 2, 12);
         ctx.globalAlpha = left < 8 ? (Math.floor(time * 6) % 2 === 0 ? 0.3 : 1) : 1;
@@ -599,6 +600,10 @@
   root.RENDER = {
     init: init, resize: resize, draw: draw, addShake: addShake,
     W: W, H: H, blitRaw: blitRaw,
+    worldAt: function (clientX, clientY) {
+      const r = canvas.getBoundingClientRect();
+      return { x: (clientX - r.left) / scale + camX, y: (clientY - r.top) / scale + camY };
+    },
     getScale: function () { return scale; },
     debugInfo: function () {
       return {

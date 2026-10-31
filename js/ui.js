@@ -57,6 +57,16 @@
 
   /* ---------------- 初始化 ---------------- */
   UI.init = function (st) {
+    document.addEventListener('mousemove', function (ev) {
+      if (UI._noRowTip) return;
+      const row = ev.target && ev.target.closest ? ev.target.closest('.irow') : null;
+      if (row && UI._tipItems) {
+        const it = UI._tipItems[parseInt(row.getAttribute('data-idx'), 10)];
+        if (it) { UI.showTip(UI.itemTipHTML(it), ev.clientX, ev.clientY); return; }
+      }
+      if (!UI._tipHold) UI.hideTip();
+    });
+    document.addEventListener('mouseleave', function () { UI.hideTip(); });
     UI.st = st;
     buildSkills();
     buildGear();
@@ -465,6 +475,38 @@
   };
 
 
+  /* ---------------- 物品悬浮详情 ---------------- */
+  UI.itemTipHTML = function (it) {
+    if (!it) return '';
+    const rc = D.RARITY_COLOR[it.rarity] || '#cfd8e8';
+    let html = '<div class="tn" style="color:' + rc + '">' + it.name + '</div>';
+    html += '<div class="tm">' + (D.SLOT_CN[it.slot] || it.slot) + ' · ' + (D.RARITY_CN[it.rarity] || '') + ' · ilvl ' + it.ilvl + '</div>';
+    for (let i = 0; i < it.mods.length; i++) {
+      html += '<div class="tmod">· ' + (it.mods[i].label || '') + '</div>';
+    }
+    html += '<div class="tline"></div>';
+    html += '<div class="tfoot">售价 ' + E.itemPrice(it) + ' 金币</div>';
+    return html;
+  };
+
+  UI.showTip = function (html, x, y) {
+    const el = $('tip');
+    if (!el) return;
+    el.innerHTML = html;
+    el.classList.remove('hidden');
+    const w = el.offsetWidth, h = el.offsetHeight;
+    let px = x + 16, py = y + 16;
+    if (px + w > window.innerWidth - 8) px = x - w - 16;
+    if (py + h > window.innerHeight - 8) py = Math.max(8, window.innerHeight - h - 8);
+    el.style.left = px + 'px';
+    el.style.top = py + 'px';
+  };
+
+  UI.hideTip = function () {
+    const el = $('tip');
+    if (el) el.classList.add('hidden');
+  };
+
   /* ---------------- 通用物品行 ---------------- */
   function priceOf(it) { return E.itemPrice(it); }
 
@@ -671,8 +713,9 @@
 
   /* ---------------- 背包 ---------------- */
   UI.showBag = function (st) {
+    UI._tipItems = st.player.bag;
     let html = '<div class="mtitle">背包</div>';
-    html += '<div class="msub">点击装备 · ' + st.player.bag.length + '/8</div>';
+    html += '<div class="msub">点击装备 · ' + st.player.bag.length + '/24' + (st.player.boxes ? ' · 魔盒 ' + st.player.boxes : '') + '</div>';
     html += '<div class="town2col">';
     html += '<div><div class="sect">已装备</div>';
     for (let i = 0; i < D.SLOTS.length; i++) {
@@ -684,6 +727,12 @@
         (it ? it.name : '—') + '</span><span class="lvl">' + D.SLOT_CN[sl] + '</span></div>';
     }
     html += '</div><div><div class="sect">背包</div>';
+    if (st.player.boxes > 0) {
+      html += '<div class="irow box" data-act="openbox" data-idx="0">' +
+        '<div class="ico">' + iconToHtml('icon_ring', 16) + '</div>' +
+        '<span class="nm" style="color:#ffd54f">魔盒 ×' + st.player.boxes + '</span>' +
+        '<span class="lvl">点击开启</span></div>';
+    }
     if (!st.player.bag.length) html += '<div class="empty">空</div>';
     for (let i = 0; i < st.player.bag.length; i++) html += itemRow(st.player.bag[i], '', 'eq', i);
     html += '</div></div>';
@@ -696,6 +745,13 @@
       if (el.getAttribute('data-close')) { UI.close(); return; }
       const act = el.getAttribute('data-act');
       const idx = parseInt(el.getAttribute('data-idx'), 10);
+      if (act === 'openbox') {
+        const r = ACT.run(st, 'openBox', []);
+        if (r && r.ok) { UI.toast('开出 ' + r.item.name, 'rare'); UI.playSfx('item'); }
+        else if (r) UI.toast(r.msg, 'bad');
+        UI.showBag(st);
+        return;
+      }
       if (act === 'eq') { ACT.run(st, 'equip', [idx]); UI.showBag(st); }
       if (act === 'uneq') { ACT.run(st, 'unequip', [D.SLOTS[idx]]); UI.showBag(st); }
     };

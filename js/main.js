@@ -37,6 +37,10 @@
   }
 
   function botStep(state, tt) {
+    if (state.phase === 'combat' && state.players[0] && state.players[0].bag.length < 20) {
+      const gi = SIM.nearestGroundItem(state, state.players[0].x, state.players[0].y, 34);
+      if (gi) SIM.takeItem(state, state.players[0]);
+    }
     if (state.phase === 'town') return { mx: 0, my: 0 };
     const p = state.player;
     if (!p) return { mx: 0, my: 0 };
@@ -161,7 +165,16 @@
       const k = ev.key.toLowerCase();
       keys[k] = true;
       if (UI.isOpen()) return;
-      if (k === 'e') doInteract();
+      if (k === 'e') {
+        if (st.phase === 'combat') {
+          const g = SIM.nearestGroundItem(st, st.player.x, st.player.y, 34);
+          if (g) {
+            const r = ACT.run(st, 'take', []);
+            if (r && r.ok) UI.playSfx('item');
+            else if (r) UI.toast(r.msg, 'bad');
+          } else doInteract();
+        } else doInteract();
+      }
       if (k === 'f') { if (ACT.run(st, 'potion', [])) UI.toast('饮下药水'); }
     });
     window.addEventListener('keyup', function (ev) { keys[ev.key.toLowerCase()] = false; });
@@ -173,6 +186,25 @@
     if (ab) ab.onclick = function () { UI.showAltar(); };
     document.getElementById('bagbtn').onclick = function () { UI.showBag(st); };
     document.getElementById('prompt').onclick = doInteract;
+
+    // 地面物品悬停详情
+    const cvEl = document.getElementById('world');
+    if (cvEl) {
+      cvEl.addEventListener('mousemove', function (ev) {
+        if (st.phase !== 'combat' || (UI.isOpen && UI.isOpen())) { UI._tipHold = false; UI.hideTip(); return; }
+        if (!RENDER.worldAt) return;
+        const w = RENDER.worldAt(ev.clientX, ev.clientY);
+        const pk = SIM.nearestGroundItem(st, w.x, w.y, 11);
+        if (pk) {
+          UI._tipHold = true;
+          UI.showTip(UI.itemTipHTML(pk.item), ev.clientX, ev.clientY);
+        } else {
+          UI._tipHold = false;
+          UI.hideTip();
+        }
+      });
+      cvEl.addEventListener('mouseleave', function () { UI._tipHold = false; UI.hideTip(); });
+    }
     const altarBtn = document.getElementById('altar-btn');
     if (altarBtn) altarBtn.onclick = function () { UI.showAltar(); };
 

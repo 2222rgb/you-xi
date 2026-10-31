@@ -116,7 +116,7 @@
     const picks = [];
     for (let i = 0; i < snap.gs.length; i++) {
       const a = snap.gs[i];
-      picks.push({ x: a[0], y: a[1], kind: a[2], t: 0, item: a[3] ? { rarity: a[3] } : null });
+      picks.push({ x: a[0], y: a[1], kind: a[2], t: 0, item: { rarity: a[3] || 0 } });
     }
     view.pickups = picks;
 
