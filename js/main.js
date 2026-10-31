@@ -117,6 +117,7 @@
     if (SCENE === 'rift') { SIM.openRiftChoice(st); }
     // 调试：?loot=1 在脚边撒几件不同稀有度的装备
     // 调试：?bag=1 背包里塞四件装备，方便看回收/丢弃按钮
+
     if (params.get('bag') === '1') {
       const slotsB = ['helm', 'body', 'ring', 'amulet'];
       for (let bi = 0; bi < 4; bi++) {
@@ -187,6 +188,11 @@
       if (k === 'm') { RENDER.toggleMinimap(); return; }
       if (k === '1' || k === '2' || k === '3') {
         const slot = parseInt(k, 10) - 1;
+        if (st.player && st.player.rogueChoices && UI.isOpen()) {
+          ACT.run(st, 'rogue', [slot]);
+          UI.close();
+          return;
+        }
         const r = ACT.run(st, 'cast', [slot]);
         if (r && !r.ok && r.msg) UI.toast(r.msg, 'bad');
         return;
@@ -468,7 +474,18 @@
     handlePhase();
   }
 
+  let rogueDebugDone = false;
   function handlePhase() {
+    if (params.get('rogue') === '1' && st.phase === 'rift' && st.riftChoices && st.riftChoices.length) { SIM.chooseRift(st, 0); return; }
+    if (params.get('rogue') === '1' && !rogueDebugDone && st.phase === 'combat' && st.player && SIM.classOf(st.player).rogue) {
+      rogueDebugDone = true;
+      SIM.gainXp(st, st.player, st.player.xpNext + 1);
+    }
+    if (BOT && st.player && st.player.rogueChoices) { SIM.pickRogue(st, 0, st.player); return; }
+    if (mode !== 'client' && st.phase === 'combat' && st.player && st.player.rogueChoices && !UI.isOpen()) {
+      UI.showRogue(st, function (i) { ACT.run(st, 'rogue', [i]); });
+      return;
+    }
     if (BOT && st.phase === 'rift') { SIM.chooseRift(st, 0); lastPhase = ''; return; }
     if (mode !== 'client' && st.phase === 'rift' && !UI.isOpen()) {
       lastPhase = 'rift';

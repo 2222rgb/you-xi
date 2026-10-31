@@ -409,6 +409,18 @@
     { id: 'pierce', name: '穿透', mods: [{ k: 'pierce', v: 2 }, { k: 'dmg', v: -0.12 }], desc: '穿透 +2，伤害 -12%' }
   ];
 
+  /* ---------------- 局内 3 选 1（变数职业专属） ---------------- */
+  const ROGUE_UPGRADES = [
+    { id: 'might', name: '蛮力', color: '#e05c4a', desc: '伤害 +35%', mods: [{ k: 'inc', t: 'all', v: 0.35 }] },
+    { id: 'frenzy', name: '狂乱', color: '#ff8a3d', desc: '攻速 +30%，伤害 -8%', mods: [{ k: 'speed', v: 0.30 }, { k: 'inc', t: 'all', v: -0.08 }] },
+    { id: 'ruin', name: '毁灭', color: '#ff6b2b', desc: '40% 更多伤害，生命 -20%', mods: [{ k: 'more', t: 'all', v: 0.40 }, { k: 'lifePct', v: -0.20 }] },
+    { id: 'titan', name: '泰坦', color: '#cfd8e8', desc: '生命 +60，范围 +20%', mods: [{ k: 'life', v: 60 }, { k: 'inc', t: 'area', v: 0.20 }] },
+    { id: 'swift', name: '疾影', color: '#7fdcff', desc: '移速 +25%，攻速 +15%', mods: [{ k: 'move', v: 0.25 }, { k: 'speed', v: 0.15 }] },
+    { id: 'gamble', name: '孤注', color: '#e0c060', desc: '70% 更多伤害，生命 -35%', mods: [{ k: 'more', t: 'all', v: 0.70 }, { k: 'lifePct', v: -0.35 }] },
+    { id: 'chill', name: '寒心', color: '#9fd7ff', desc: '暴击 +12%，暴伤 +25%', mods: [{ k: 'crit', v: 0.12 }, { k: 'critMulti', v: 0.25 }] },
+    { id: 'greed', name: '贪欲', color: '#ffd54f', desc: '金币 +60%，拾取范围 +40', mods: [{ k: 'gold', v: 0.60 }, { k: 'pickup', v: 40 }] }
+  ];
+
   const CLASSES = [
     { id: 'blade', name: '刃行者', color: '#e05c4a', skill: 'dagger', talent: 'b1',
       desc: '近战物理，暴击高，血厚一点',
@@ -419,6 +431,9 @@
     { id: 'frost', name: '霜卫', color: '#7fdcff', skill: 'frostnova', talent: 's1',
       desc: '冰霜控场，最肉，移速略慢',
       hp: 1.28, speed: 0.93, mods: [{ k: 'inc', t: 'cold', v: 0.22 }, { k: 'life', v: 40 }] },
+    { id: 'chaos', name: '变数', color: '#b07cff', skill: 'dagger', talent: 'b1', rogue: true,
+      desc: '每级 3 选 1，波次结束重置——上下限都极高',
+      hp: 1.0, speed: 1.05, mods: [] },
     { id: 'storm', name: '雷游侠', color: '#ffe066', skill: 'bolt', talent: 's2',
       desc: '闪电连锁，跑得最快',
       hp: 0.94, speed: 1.14, mods: [{ k: 'inc', t: 'lightning', v: 0.22 }, { k: 'rate', v: 0.08 }] }
@@ -444,7 +459,7 @@
     ELE, TYPE_CN, SKILLS, SKILL_IDS, MAX_SKILL_LEVEL,
     AFFIXES, SLOTS, SLOT_CN, SLOT_ICON, RARITY_CN, RARITY_COLOR, BASE_NAMES, LEGENDARIES,
     TREES: TREES, TALENT_INDEX: TALENT_INDEX, TIER_GATE: TIER_GATE,
-    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS,
+    RIFTS: RIFTS, RESONANCE: RESONANCE, CLASSES: CLASSES, SUPPORTS: SUPPORTS, ROGUE_UPGRADES: ROGUE_UPGRADES,
     ENEMIES, ELITE_MODS, WAVES, TOWN, PRICES, CONFIG
   };
 })(window);

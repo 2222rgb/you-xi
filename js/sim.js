@@ -39,6 +39,7 @@
       skills: [], talents: {}, treeSpent: { blade: 0, ember: 0, storm: 0 }, talentPoints: 0,
       gold: 0, potions: 2, potionCd: 0, frenzy: 0, frenzyT: 0, boxes: 0, mats: 0,
       downed: false, downT: 0, reviveProg: 0, supports: {},
+      roguePicks: {}, rogueChoices: null,
       gear: { helm: null, body: null, ring: null, amulet: null },
       bag: [],
       alive: true
@@ -250,7 +251,7 @@
     const res = resonanceMods(p.gear);
     p.resonance = res.active;
     const cls = classOf(p);
-    const agg = E.buildAgg(p.gear, p.talents, res.mods.concat(cls.mods || []));
+    const agg = E.buildAgg(p.gear, p.talents, res.mods.concat(cls.mods || []).concat(rogueModsOf(p)));
     p.agg = agg;
     const maxHp = Math.max(1, Math.round((CFG.baseHp + CFG.hpPerLevel * (p.level - 1) + agg.life + ((st.meta && st.meta.hp) || 0)) * (1 + agg.lifePct) * (cls.hp || 1)));
     const ratio = p.maxHp > 0 ? p.hp / p.maxHp : 1;
@@ -326,7 +327,12 @@
   function startCombat(st) {
     st.phase = 'combat';
     st.phaseT = 0;
-    for (let k = 0; k < st.players.length; k++) { st.players[k].frenzy = 0; st.players[k].frenzyT = 0; }
+    for (let k = 0; k < st.players.length; k++) {
+      st.players[k].frenzy = 0;
+      st.players[k].frenzyT = 0;
+      st.players[k].roguePicks = {};
+      st.players[k].rogueChoices = null;
+    }
     st.bossSpawned = false;
     st.bossId = 0;
     st.enemies = [];
@@ -1252,6 +1258,41 @@
     }
   }
 
+  function rollRogue(st, p) {
+    const pool = D.ROGUE_UPGRADES.slice();
+    const picks = [];
+    for (let i = 0; i < 3 && pool.length; i++) {
+      const idx = Math.floor(rand(st) * pool.length);
+      picks.push(pool.splice(idx, 1)[0].id);
+    }
+    p.rogueChoices = picks;
+  }
+
+  function pickRogue(st, idx, p) {
+    if (!p) p = localPlayer(st);
+    if (!p.rogueChoices) return { ok: false, msg: '没有待选' };
+    const id = p.rogueChoices[idx];
+    if (!id) return { ok: false, msg: '无效选项' };
+    p.roguePicks = p.roguePicks || {};
+    p.roguePicks[id] = (p.roguePicks[id] || 0) + 1;
+    p.rogueChoices = null;
+    recompute(st, p);
+    return { ok: true, id: id };
+  }
+
+  function rogueModsOf(p) {
+    const out = [];
+    if (!p.roguePicks) return out;
+    for (const id in p.roguePicks) {
+      const n = p.roguePicks[id];
+      let up = null;
+      for (let i = 0; i < D.ROGUE_UPGRADES.length; i++) if (D.ROGUE_UPGRADES[i].id === id) up = D.ROGUE_UPGRADES[i];
+      if (!up) continue;
+      for (let k = 0; k < n; k++) for (let mi = 0; mi < up.mods.length; mi++) out.push(up.mods[mi]);
+    }
+    return out;
+  }
+
   function gainXp(st, p, v) {
     p.xp += v;
     while (p.xp >= p.xpNext && p.level < CFG.maxLevel) {
@@ -1261,6 +1302,7 @@
       ev(st, 'level');
       toast(st, p.name + ' 等级 ' + p.level + ' · +1 天赋点', 'good');
       p.xpNext = E.xpForLevel(p.level);
+      if (classOf(p).rogue && !p.rogueChoices) rollRogue(st, p);
     }
     if (p.level >= CFG.maxLevel) p.xp = Math.min(p.xp, p.xpNext);
     recompute(st, p);
@@ -1581,7 +1623,7 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
-    setRune: setRune, runeModsOf: runeModsOf, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
+    setRune: setRune, runeModsOf: runeModsOf, pickRogue: pickRogue, rogueModsOf: rogueModsOf, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

@@ -172,5 +172,17 @@ SIM.setSupport(stSup, 'dagger', 'empower', psup);
 const dpsSup1 = psup.skillCalc.dagger.dps;
 SIM.setSupport(stSup, 'dagger', 'empower', psup);
 T('辅助影响技能数值', psup.skillCalc.dagger.dps < dpsSup1, 'dps=' + Math.round(psup.skillCalc.dagger.dps) + ' vs ' + Math.round(dpsSup1));
+// 变数职业：升级 3 选 1，波次重置
+const stRg = SIM.create(111, 1);
+SIM.chooseRift(stRg, 0);
+SIM.setClass(stRg, 0, 3);   // 索引 3 = 变数
+const prg = stRg.players[0];
+const cls = SIM.classOf(prg);
+T('变数职业存在', !!cls && cls.rogue === true, 'cls=' + cls.name);
+SIM.gainXp(stRg, prg, prg.xpNext + 1);
+T('升级后出现 3 个选项', !!(prg.rogueChoices && prg.rogueChoices.length === 3), 'choices=' + (prg.rogueChoices && prg.rogueChoices.join(',')));
+const incBefore = prg.agg.inc.all || 0;
+const rp = SIM.pickRogue(stRg, 0, prg);
+T('选择后生效并清空选项', !!(rp && rp.ok && prg.rogueChoices === null && Object.keys(prg.roguePicks).length === 1), 'picks=' + JSON.stringify(prg.roguePicks));
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);

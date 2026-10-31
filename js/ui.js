@@ -1066,6 +1066,35 @@
     };
   };
 
+  /* ---------------- 变数：局内 3 选 1 ---------------- */
+  UI.showRogue = function (st, onPick) {
+    const p = st.player;
+    const picks = p.rogueChoices;
+    if (!picks) return;
+    let html = '<div class="mtitle">变数</div>';
+    html += '<div class="msub">每级三选一，波次结束全部重置 —— 选错就是这一轮的下限</div>';
+    html += '<div class="riftcards">';
+    for (let i = 0; i < picks.length; i++) {
+      let up = null;
+      for (let k = 0; k < D.ROGUE_UPGRADES.length; k++) if (D.ROGUE_UPGRADES[k].id === picks[i]) up = D.ROGUE_UPGRADES[k];
+      if (!up) continue;
+      html += '<div class="riftcard" data-rg="' + i + '">' +
+        '<div class="rn" style="color:' + up.color + '">' + up.name + '</div>' +
+        '<div class="rd">' + up.desc + '</div>' +
+        '<div class="rk">按 ' + (i + 1) + ' 选择</div></div>';
+    }
+    html += '</div>';
+    openModal(html, 'wide');
+    $('modalbox').onclick = function (ev) {
+      let el = ev.target;
+      const box = $('modalbox');
+      while (el && el !== box && el.getAttribute('data-rg') === null) el = el.parentNode;
+      if (!el || el === box) return;
+      UI.close();
+      if (onPick) onPick(parseInt(el.getAttribute('data-rg'), 10));
+    };
+  };
+
   /* ---------------- 技能面板（辅助插槽） ---------------- */
   UI.showSkills = function (st) {
     const p = st.player;
