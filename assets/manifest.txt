@@ -20,3 +20,9 @@ npc24_gambler2.png  24x32  bottom-center  anim:idle-2frames
 npc24_warehouse2.png  24x32  bottom-center  anim:idle-2frames
 npc24_wardenkeeper2.png  24x32  bottom-center  anim:idle-2frames
 npc24_horsekeeper2.png  24x32  bottom-center  anim:idle-2frames
+ASHFALL art batch 4 (ground tile 3rd variants) - manifest
+license: original work, hand-coded pixel art - rights transfer with project
+
+tile_stone3.png  16x16  tileable
+tile_grass3.png  16x16  tileable
+tile_dirt3.png  16x16  tileable

@@ -1433,5 +1433,24 @@
                                "h":  32,
                                "anchor":  "bottom-center",
                                "anim":  "idle 2 frames (alternate with npc24_horsekeeper.png)"
-                           }
+                           },
+    "_batch8":  "third ground tile variants (spec max 3 per type)",
+    "tile_stone3":  {
+                        "file":  "tile_stone3.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_grass3":  {
+                        "file":  "tile_grass3.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_dirt3":  {
+                       "file":  "tile_dirt3.png",
+                       "w":  16,
+                       "h":  16,
+                       "anchor":  "tileable"
+                   }
 }
