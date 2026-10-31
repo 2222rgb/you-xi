@@ -63,7 +63,13 @@
     for (let i = 0; i < D.SLOTS.length; i++) {
       const it = gear[D.SLOTS[i]];
       if (!it) continue;
-      for (let j = 0; j < it.mods.length; j++) applyMod(agg, it.mods[j]);
+      const plus = it.plus || 0;
+      const pmul = 1 + plus * 0.05;
+      for (let j = 0; j < it.mods.length; j++) {
+        const m = it.mods[j];
+        if (plus > 0 && m.v) applyMod(agg, { k: m.k, t: m.t, v: m.v * pmul });
+        else applyMod(agg, m);
+      }
     }
     return agg;
   }
@@ -238,6 +244,12 @@
   }
 
   function rollItem(slot, ilvl, rng, forceRarity) {
+    const out = rollItemRaw(slot, ilvl, rng, forceRarity);
+    if (out) out.plus = 0;
+    return out;
+  }
+
+  function rollItemRaw(slot, ilvl, rng, forceRarity) {
     let rarity = forceRarity;
     if (rarity === undefined) {
       const r = rng();
@@ -304,6 +316,11 @@
   }
 
   function itemPrice(item) { return D.PRICES.sell(item); }
+
+  /** 强化费用：随 +N 指数上涨 */
+  function enhanceCost(item) {
+    return Math.round((80 + item.ilvl * 35) * Math.pow(1.35, item.plus || 0));
+  }
 
   /* ---------------- 怪物 ---------------- */
   function enemyStats(typeId, phaseT, cycle) {
@@ -390,7 +407,7 @@
     mulberry32: mulberry32, clamp: clamp,
     emptyAgg: emptyAgg, applyMod: applyMod, gearAgg: gearAgg, talentAgg: talentAgg, buildAgg: buildAgg,
     computeSkill: computeSkill, rollHit: rollHit,
-    rollItem: rollItem, itemPrice: itemPrice,
+    rollItem: rollItem, itemPrice: itemPrice, enhanceCost: enhanceCost,
     craftReroll: craftReroll, craftAdd: craftAdd, craftUpgrade: craftUpgrade,
     enemyStats: enemyStats, xpForLevel: xpForLevel,
     selfTest: selfTest

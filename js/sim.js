@@ -1333,6 +1333,22 @@
     return id;
   }
 
+  /** 强化：+1 级，费用随等级指数上涨 */
+  function enhance(st, slot, p) {
+    if (!p) p = localPlayer(st);
+    const it = p.gear[slot];
+    if (!it) return { ok: false, msg: '该部位没有装备' };
+    if ((it.plus || 0) >= 15) return { ok: false, msg: '已达 +15 上限' };
+    const cost = E.enhanceCost(it);
+    if (p.gold < cost) return { ok: false, msg: '金币不足（需 ' + cost + '）' };
+    p.gold -= cost;
+    it.plus = (it.plus || 0) + 1;
+    recompute(st, p);
+    ev(st, 'item', { r: it.rarity });
+    toast(st, it.name + ' 强化至 +' + it.plus, 'good');
+    return { ok: true, plus: it.plus, cost: cost };
+  }
+
   function gamble(st, slot, p) {
     if (!p) p = localPlayer(st);
     const ilvl = 12 + st.cycle * 3;
@@ -1416,7 +1432,7 @@
     recompute: recompute, recomputeAll: recomputeAll, skillLevel: skillLevel,
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
-    classOf: classOf, setClass: setClass,
+    classOf: classOf, setClass: setClass, enhance: enhance,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,
     equip: equip, unequip: unequip, sellItem: sellItem, buyItem: buyItem, buyPotion: buyPotion,

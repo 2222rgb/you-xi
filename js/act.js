@@ -33,6 +33,7 @@
       case 'stashOut': return SIM.stashOut(st, a[0], p);
       case 'marketBuy': return SIM.marketBuy(st, a[0], p);
       case 'gamble': return SIM.gamble(st, a[0], p);
+      case 'enhance': return SIM.enhance(st, a[0], p);
       case 'potion': return SIM.drinkPotion(st, p);
       case 'leave': return SIM.interact(st);
       case 'take': return SIM.takeItem(st, p);

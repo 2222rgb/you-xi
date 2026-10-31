@@ -583,6 +583,24 @@
     let html = '<div class="mtitle">铁匠 格罗姆</div>';
     html += '<div class="msub">金币 ' + coin(p.gold) + ' · 选择一件装备进行打造</div>';
 
+    // 强化区：已装备部位 +N
+    html += '<div class="sect">强化（+N，每级 +5% 词缀效果）</div>';
+    for (let si = 0; si < D.SLOTS.length; si++) {
+      const sl = D.SLOTS[si];
+      const it = p.gear[sl];
+      if (!it) {
+        html += '<div class="irow"><div class="ico"></div><span class="nm">' + D.SLOT_CN[sl] + ' · 未装备</span></div>';
+        continue;
+      }
+      const cost = E.enhanceCost(it);
+      const maxed = (it.plus || 0) >= 15;
+      html += '<div class="irow" data-act="enh" data-slot="' + sl + '">' +
+        '<div class="ico">' + iconToHtml(D.SLOT_ICON[sl], 16) + '</div>' +
+        '<span class="nm" style="color:' + D.RARITY_COLOR[it.rarity] + '">' + it.name + ' <b style="color:#e0c060">+' + (it.plus || 0) + '</b></span>' +
+        '<span class="lvl">' + (maxed ? '已满' : cost + ' 金币') + '</span></div>';
+    }
+    html += '<div class="sect">打造（PoE 式，第 3 层后解锁）</div>';
+
     if (UI.selBag === null || !st.player.bag[UI.selBag]) {
       html += '<div class="sect">背包</div>';
       if (!st.player.bag.length) html += '<div class="empty">背包是空的。</div>';
@@ -595,6 +613,13 @@
         const el = pickRow(ev);
         if (!el) return;
         if (el.getAttribute('data-close')) { UI.close(); return; }
+        if (el.getAttribute('data-act') === 'enh') {
+          const r = ACT.run(st, 'enhance', [el.getAttribute('data-slot')]);
+          if (r && r.ok) { UI.playSfx('craft'); UI.toast('强化成功 +' + r.plus, 'good'); }
+          else if (r) UI.toast(r.msg, 'bad');
+          UI.showSmith(st);
+          return;
+        }
         if (el.getAttribute('data-act') === 'pick') {
           UI.selBag = parseInt(el.getAttribute('data-idx'), 10);
           UI.showSmith(st);
@@ -614,6 +639,9 @@
     const canAdd = it.rarity === 0 ? it.mods.length < 1 : (it.rarity === 1 ? it.mods.length < 3 : it.mods.length < 5);
     const canUp = it.rarity < 2;
 
+    if (st.cycle < 3) {
+      html += '<div class="note" style="color:#e0c060">附魔与重铸在第 3 层后解锁。现在先把装备强化上去。</div>';
+    } else {
     html += '<div class="craftlist">';
     html += '<button class="btn craft" data-craft="reroll" ' + (p.gold < c.reroll(it.ilvl) ? 'disabled' : '') + '>' +
       '重铸词缀 <span class="price">' + coin(c.reroll(it.ilvl)) + '</span></button>';
@@ -622,6 +650,7 @@
     html += '<button class="btn craft" data-craft="upgrade" ' + (!canUp || p.gold < c.upgrade(it.ilvl) ? 'disabled' : '') + '>' +
       '提升品质 <span class="price">' + coin(c.upgrade(it.ilvl)) + '</span></button>';
     html += '</div>';
+    }
 
     html += '<div class="mfoot"><button class="btn" data-back="1">换一件</button><button class="btn primary" data-close="1">完成</button></div>';
     openModal(html);

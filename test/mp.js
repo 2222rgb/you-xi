@@ -96,5 +96,17 @@ for (let i = 0; i < 5; i++) SIM.allocate(stB, 'h1');
 for (let i = 0; i < 3; i++) SIM.allocate(stB, 'h2');
 const okH5 = SIM.allocate(stB, 'h5');
 T('毒雾节点解锁', !!okH5, 'treeSpent=' + (pb.treeSpent.blood || 0) + ' 技能数=' + pb.skills.length);
+// 强化系统
+const stEn = SIM.create(61, 1);
+SIM.chooseRift(stEn, 0);
+const pe = stEn.players[0];
+pe.gold = 90000;
+SIM.gamble(stEn, 'ring', pe);
+SIM.equip(stEn, pe.bag[pe.bag.length - 1], pe);
+const goldBefore = pe.gold;
+const r1 = SIM.enhance(stEn, 'ring', pe);
+T('装备可强化到 +1', !!(r1 && r1.ok && pe.gear.ring.plus === 1), 'plus=' + (pe.gear.ring && pe.gear.ring.plus) + ' 花费=' + (goldBefore - pe.gold));
+const r2 = SIM.enhance(stEn, 'ring', pe);
+T('强化可叠加到 +2 且费用递增', !!(r2 && r2.ok && pe.gear.ring.plus === 2), 'cost1=' + r1.cost + ' cost2=' + r2.cost);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
