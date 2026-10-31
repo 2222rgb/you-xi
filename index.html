@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ASHFALL · 灰烬降临</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="world"></canvas>
+</div>
+
+<div id="ui">
+  <div id="xpbar"><div id="xpfill"></div></div>
+
+  <div id="top">
+    <div id="hpwrap">
+      <div id="hpbar"><div id="hpfill"></div></div>
+      <div id="hptext">100 / 100</div>
+      <div id="clstext"></div>
+      <div id="frenzy"><div id="frenzyfill"></div></div>
+    </div>
+    <div id="timer">第1层 03:00</div>
+    <div id="evchip" class="hidden"></div>
+    <button id="gear-btn" title="设置">≡</button>
+  </div>
+
+  <div id="kills">击杀 <b id="killnum">0</b></div>
+  <div id="dpsbox">DPS <b id="dpsnum">0</b></div>
+
+  <div id="wallet">
+    <span class="w"><span class="dotcoin"></span><b id="goldnum">0</b></span>
+    <span class="w">药水 <b id="potnum">2</b></span>
+  </div>
+
+  <div id="party"></div>
+
+  <div id="skills"></div>
+  <div id="gear"></div>
+
+  <div id="bottomleft">
+    <button id="altar-btn">祭坛 <b id="essnum">0</b></button>
+    <button id="tpbtn">天赋 <b id="tpnum">0</b></button>
+    <div id="bagbtn"><span class="key">TAB</span> 背包 <b id="bagcount">0</b></div>
+  </div>
+
+  <div id="downed" class="hidden"><div id="downtitle">你倒下了</div><div id="downsub">队友靠近 2.5 秒可以救起</div><div id="downbar"><div id="downfill"></div></div></div>
+  <button id="invite" class="hidden">邀请队友</button>
+  <div id="prompt" class="hidden"></div>
+  <div id="hint">WASD 移动 · 技能自动释放 · P 天赋 · TAB 背包 · F 药水</div>
+  <div id="toasts"></div>
+
+  <div id="joystick" class="hidden"><div id="knob"></div></div>
+</div>
+
+<div id="lobby" class="hidden">
+  <div class="lobby-box">
+    <div class="lobby-title">联机</div>
+    <div class="lobby-sub" id="lobby-sub">连接中…</div>
+    <div class="lobby-room" id="lobby-room"></div>
+    <div class="lobby-players" id="lobby-players"></div>
+    <div class="lobby-foot">
+      <button class="btn" id="lobby-copy">复制邀请链接</button>
+      <button class="btn primary" id="lobby-start">开始（房主操作）</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal" class="hidden">
+  <div id="modalbox"></div>
+</div>
+
+<div id="err" class="hidden"></div>
+
+<script src="js/sprites.js"></script>
+<script src="js/meta.js"></script>
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/hostcore.js"></script>
+<script src="js/render.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/net.js"></script>
+<script src="js/act.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
