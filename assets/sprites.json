@@ -1,71 +1,859 @@
-{
-  "_comment": "ashfall 美术批次#1+#2+#3（代码生成）。规格见 docs/ART.md：PNG 透明底、1x 不放大、统一调色板、描边 #0a0a12、左上受光。对齐：角色/坐骑/物品脚底对齐底边，Boss/图标/特效中心对齐。house* 四层（wall 底层 / door、window 中层 / roof 顶层），roof 含烟囱与出檐，96x64 同画布直接叠放。turtle_cannon 为独立图层，与 turtle.png 同画布叠加。ui_panel 为 9-slice，slice=8。fence 水平无缝平铺（周期48）。",
-  "hero_idle":   { "file": "hero_idle.png",   "w": 12, "h": 18 },
-  "hero_walk1":  { "file": "hero_walk1.png",  "w": 12, "h": 18 },
-  "hero_walk2":  { "file": "hero_walk2.png",  "w": 12, "h": 18 },
-  "slime":       { "file": "slime.png",       "w": 12, "h": 12 },
-  "bat":         { "file": "bat.png",         "w": 14, "h": 12 },
-  "skel":        { "file": "skel.png",        "w": 12, "h": 20 },
-  "wraith":      { "file": "wraith.png",      "w": 14, "h": 18 },
-  "brute":       { "file": "brute.png",       "w": 16, "h": 20 },
-  "spitter":     { "file": "spitter.png",     "w": 12, "h": 12 },
-  "charger":     { "file": "charger.png",     "w": 14, "h": 16 },
-  "boss":        { "file": "boss.png",        "w": 32, "h": 32, "align": "center" },
-  "boss2":       { "file": "boss2.png",       "w": 32, "h": 32 },
-  "warden":      { "file": "warden.png",      "w": 32, "h": 32 },
-  "crystal":     { "file": "crystal.png",     "w": 16, "h": 18 },
-  "totem":       { "file": "totem.png",       "w": 12, "h": 18 },
-  "npc_merchant":     { "file": "npc_merchant.png",     "w": 12, "h": 16 },
-  "npc_smith":        { "file": "npc_smith.png",        "w": 12, "h": 16 },
-  "npc_market":       { "file": "npc_market.png",       "w": 12, "h": 16 },
-  "npc_wardenkeeper": { "file": "npc_wardenkeeper.png", "w": 12, "h": 16 },
-  "horse":       { "file": "horse.png",       "w": 24, "h": 20, "facing": "right" },
-  "pony":        { "file": "pony.png",        "w": 24, "h": 20, "facing": "right" },
-  "giant":       { "file": "giant.png",       "w": 24, "h": 20, "facing": "right" },
-  "pinata":      { "file": "pinata.png",      "w": 24, "h": 20, "facing": "right" },
-  "raptor":      { "file": "raptor.png",      "w": 24, "h": 20, "facing": "right", "legs": 2 },
-  "ostrich":     { "file": "ostrich.png",     "w": 24, "h": 20, "facing": "right", "legs": 2 },
-  "turtle":      { "file": "turtle.png",      "w": 24, "h": 20, "facing": "right" },
-  "turtle_cannon": { "file": "turtle_cannon.png", "w": 24, "h": 20, "layer_of": "turtle" },
-  "icon_mount_horse":   { "file": "icon_mount_horse.png",   "w": 24, "h": 24, "align": "center" },
-  "icon_mount_pony":    { "file": "icon_mount_pony.png",    "w": 24, "h": 24, "align": "center" },
-  "icon_mount_giant":   { "file": "icon_mount_giant.png",   "w": 24, "h": 24, "align": "center" },
-  "icon_mount_pinata":  { "file": "icon_mount_pinata.png",  "w": 24, "h": 24, "align": "center" },
-  "icon_mount_raptor":  { "file": "icon_mount_raptor.png",  "w": 24, "h": 24, "align": "center" },
-  "icon_mount_ostrich": { "file": "icon_mount_ostrich.png", "w": 24, "h": 24, "align": "center" },
-  "icon_mount_turtle":  { "file": "icon_mount_turtle.png",  "w": 24, "h": 24, "align": "center" },
-  "house1_wall":   { "file": "house1_wall.png",   "w": 96, "h": 64, "layer": "wall", "anchor": "bottom" },
-  "house1_roof":   { "file": "house1_roof.png",   "w": 96, "h": 64, "layer": "roof" },
-  "house1_door":   { "file": "house1_door.png",   "w": 96, "h": 64, "layer": "door" },
-  "house1_window": { "file": "house1_window.png", "w": 96, "h": 64, "layer": "window" },
-  "house2_wall":   { "file": "house2_wall.png",   "w": 96, "h": 64, "layer": "wall", "anchor": "bottom" },
-  "house2_roof":   { "file": "house2_roof.png",   "w": 96, "h": 64, "layer": "roof" },
-  "house2_door":   { "file": "house2_door.png",   "w": 96, "h": 64, "layer": "door" },
-  "house2_window": { "file": "house2_window.png", "w": 96, "h": 64, "layer": "window" },
-  "house3_wall":   { "file": "house3_wall.png",   "w": 96, "h": 64, "layer": "wall", "anchor": "bottom" },
-  "house3_roof":   { "file": "house3_roof.png",   "w": 96, "h": 64, "layer": "roof" },
-  "house3_door":   { "file": "house3_door.png",   "w": 96, "h": 64, "layer": "door" },
-  "house3_window": { "file": "house3_window.png", "w": 96, "h": 64, "layer": "window" },
-  "football":      { "file": "football.png",      "w": 16, "h": 16, "align": "center" },
-  "sandbag":       { "file": "sandbag.png",       "w": 28, "h": 24 },
-  "bar_counter":   { "file": "bar_counter.png",   "w": 64, "h": 36 },
-  "fence":         { "file": "fence.png",         "w": 48, "h": 40, "tileable_x": 48 },
-  "icon_helm":   { "file": "icon_helm.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_body":   { "file": "icon_body.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_amulet": { "file": "icon_amulet.png", "w": 16, "h": 16, "align": "center" },
-  "icon_ring":   { "file": "icon_ring.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_boot":   { "file": "icon_boot.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_dagger": { "file": "icon_dagger.png", "w": 16, "h": 16, "align": "center" },
-  "icon_fire":   { "file": "icon_fire.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_frost":  { "file": "icon_frost.png",  "w": 16, "h": 16, "align": "center" },
-  "icon_bolt":   { "file": "icon_bolt.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_axe":    { "file": "icon_axe.png",    "w": 16, "h": 16, "align": "center" },
-  "icon_meteor": { "file": "icon_meteor.png", "w": 16, "h": 16, "align": "center" },
-  "icon_shadow": { "file": "icon_shadow.png", "w": 16, "h": 16, "align": "center" },
-  "icon_lava":   { "file": "icon_lava.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_mark":   { "file": "icon_mark.png",   "w": 16, "h": 16, "align": "center" },
-  "icon_totem":  { "file": "icon_totem.png",  "w": 16, "h": 16, "align": "center" },
-  "tile_ground": { "file": "tile_ground.png", "w": 16, "h": 16, "tileable": true },
-  "tile_town":   { "file": "tile_town.png",   "w": 16, "h": 16, "tileable": true },
-  "ui_panel":    { "file": "ui_panel.png",    "w": 24, "h": 24, "nine_slice": 8 }
+﻿{
+    "_comment":  "ashfall 美术批次#1+#2+#3（代码生成）。规格见 docs/ART.md：PNG 透明底、1x 不放大、统一调色板、描边 #0a0a12、左上受光。对齐：角色/坐骑/物品脚底对齐底边，Boss/图标/特效中心对齐。house* 四层（wall 底层 / door、window 中层 / roof 顶层），roof 含烟囱与出檐，96x64 同画布直接叠放。turtle_cannon 为独立图层，与 turtle.png 同画布叠加。ui_panel 为 9-slice，slice=8。fence 水平无缝平铺（周期48）。",
+    "hero_idle":  {
+                      "file":  "hero_idle.png",
+                      "w":  12,
+                      "h":  18
+                  },
+    "hero_walk1":  {
+                       "file":  "hero_walk1.png",
+                       "w":  12,
+                       "h":  18
+                   },
+    "hero_walk2":  {
+                       "file":  "hero_walk2.png",
+                       "w":  12,
+                       "h":  18
+                   },
+    "slime":  {
+                  "file":  "slime.png",
+                  "w":  12,
+                  "h":  12
+              },
+    "bat":  {
+                "file":  "bat.png",
+                "w":  14,
+                "h":  12
+            },
+    "skel":  {
+                 "file":  "skel.png",
+                 "w":  12,
+                 "h":  20
+             },
+    "wraith":  {
+                   "file":  "wraith.png",
+                   "w":  14,
+                   "h":  18
+               },
+    "brute":  {
+                  "file":  "brute.png",
+                  "w":  16,
+                  "h":  20
+              },
+    "spitter":  {
+                    "file":  "spitter.png",
+                    "w":  12,
+                    "h":  12
+                },
+    "charger":  {
+                    "file":  "charger.png",
+                    "w":  14,
+                    "h":  16
+                },
+    "boss":  {
+                 "file":  "boss.png",
+                 "w":  32,
+                 "h":  32,
+                 "align":  "center"
+             },
+    "boss2":  {
+                  "file":  "boss2.png",
+                  "w":  32,
+                  "h":  32
+              },
+    "warden":  {
+                   "file":  "warden.png",
+                   "w":  32,
+                   "h":  32
+               },
+    "crystal":  {
+                    "file":  "crystal.png",
+                    "w":  16,
+                    "h":  18
+                },
+    "totem":  {
+                  "file":  "totem.png",
+                  "w":  12,
+                  "h":  18
+              },
+    "npc_merchant":  {
+                         "file":  "npc_merchant.png",
+                         "w":  12,
+                         "h":  16
+                     },
+    "npc_smith":  {
+                      "file":  "npc_smith.png",
+                      "w":  12,
+                      "h":  16
+                  },
+    "npc_market":  {
+                       "file":  "npc_market.png",
+                       "w":  12,
+                       "h":  16
+                   },
+    "npc_wardenkeeper":  {
+                             "file":  "npc_wardenkeeper.png",
+                             "w":  12,
+                             "h":  16
+                         },
+    "horse":  {
+                  "file":  "horse.png",
+                  "w":  24,
+                  "h":  20,
+                  "facing":  "right"
+              },
+    "pony":  {
+                 "file":  "pony.png",
+                 "w":  24,
+                 "h":  20,
+                 "facing":  "right"
+             },
+    "giant":  {
+                  "file":  "giant.png",
+                  "w":  24,
+                  "h":  20,
+                  "facing":  "right"
+              },
+    "pinata":  {
+                   "file":  "pinata.png",
+                   "w":  24,
+                   "h":  20,
+                   "facing":  "right"
+               },
+    "raptor":  {
+                   "file":  "raptor.png",
+                   "w":  24,
+                   "h":  20,
+                   "facing":  "right",
+                   "legs":  2
+               },
+    "ostrich":  {
+                    "file":  "ostrich.png",
+                    "w":  24,
+                    "h":  20,
+                    "facing":  "right",
+                    "legs":  2
+                },
+    "turtle":  {
+                   "file":  "turtle.png",
+                   "w":  24,
+                   "h":  20,
+                   "facing":  "right"
+               },
+    "turtle_cannon":  {
+                          "file":  "turtle_cannon.png",
+                          "w":  24,
+                          "h":  20,
+                          "layer_of":  "turtle"
+                      },
+    "icon_mount_horse":  {
+                             "file":  "icon_mount_horse.png",
+                             "w":  24,
+                             "h":  24,
+                             "align":  "center"
+                         },
+    "icon_mount_pony":  {
+                            "file":  "icon_mount_pony.png",
+                            "w":  24,
+                            "h":  24,
+                            "align":  "center"
+                        },
+    "icon_mount_giant":  {
+                             "file":  "icon_mount_giant.png",
+                             "w":  24,
+                             "h":  24,
+                             "align":  "center"
+                         },
+    "icon_mount_pinata":  {
+                              "file":  "icon_mount_pinata.png",
+                              "w":  24,
+                              "h":  24,
+                              "align":  "center"
+                          },
+    "icon_mount_raptor":  {
+                              "file":  "icon_mount_raptor.png",
+                              "w":  24,
+                              "h":  24,
+                              "align":  "center"
+                          },
+    "icon_mount_ostrich":  {
+                               "file":  "icon_mount_ostrich.png",
+                               "w":  24,
+                               "h":  24,
+                               "align":  "center"
+                           },
+    "icon_mount_turtle":  {
+                              "file":  "icon_mount_turtle.png",
+                              "w":  24,
+                              "h":  24,
+                              "align":  "center"
+                          },
+    "house1_wall":  {
+                        "file":  "house1_wall.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "wall",
+                        "anchor":  "bottom"
+                    },
+    "house1_roof":  {
+                        "file":  "house1_roof.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "roof"
+                    },
+    "house1_door":  {
+                        "file":  "house1_door.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "door"
+                    },
+    "house1_window":  {
+                          "file":  "house1_window.png",
+                          "w":  96,
+                          "h":  64,
+                          "layer":  "window"
+                      },
+    "house2_wall":  {
+                        "file":  "house2_wall.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "wall",
+                        "anchor":  "bottom"
+                    },
+    "house2_roof":  {
+                        "file":  "house2_roof.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "roof"
+                    },
+    "house2_door":  {
+                        "file":  "house2_door.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "door"
+                    },
+    "house2_window":  {
+                          "file":  "house2_window.png",
+                          "w":  96,
+                          "h":  64,
+                          "layer":  "window"
+                      },
+    "house3_wall":  {
+                        "file":  "house3_wall.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "wall",
+                        "anchor":  "bottom"
+                    },
+    "house3_roof":  {
+                        "file":  "house3_roof.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "roof"
+                    },
+    "house3_door":  {
+                        "file":  "house3_door.png",
+                        "w":  96,
+                        "h":  64,
+                        "layer":  "door"
+                    },
+    "house3_window":  {
+                          "file":  "house3_window.png",
+                          "w":  96,
+                          "h":  64,
+                          "layer":  "window"
+                      },
+    "football":  {
+                     "file":  "football.png",
+                     "w":  16,
+                     "h":  16,
+                     "align":  "center"
+                 },
+    "sandbag":  {
+                    "file":  "sandbag.png",
+                    "w":  28,
+                    "h":  24
+                },
+    "bar_counter":  {
+                        "file":  "bar_counter.png",
+                        "w":  64,
+                        "h":  36
+                    },
+    "fence":  {
+                  "file":  "fence.png",
+                  "w":  48,
+                  "h":  40,
+                  "tileable_x":  48
+              },
+    "icon_helm":  {
+                      "file":  "icon_helm.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_body":  {
+                      "file":  "icon_body.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_amulet":  {
+                        "file":  "icon_amulet.png",
+                        "w":  16,
+                        "h":  16,
+                        "align":  "center"
+                    },
+    "icon_ring":  {
+                      "file":  "icon_ring.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_boot":  {
+                      "file":  "icon_boot.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_dagger":  {
+                        "file":  "icon_dagger.png",
+                        "w":  16,
+                        "h":  16,
+                        "align":  "center"
+                    },
+    "icon_fire":  {
+                      "file":  "icon_fire.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_frost":  {
+                       "file":  "icon_frost.png",
+                       "w":  16,
+                       "h":  16,
+                       "align":  "center"
+                   },
+    "icon_bolt":  {
+                      "file":  "icon_bolt.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_axe":  {
+                     "file":  "icon_axe.png",
+                     "w":  16,
+                     "h":  16,
+                     "align":  "center"
+                 },
+    "icon_meteor":  {
+                        "file":  "icon_meteor.png",
+                        "w":  16,
+                        "h":  16,
+                        "align":  "center"
+                    },
+    "icon_shadow":  {
+                        "file":  "icon_shadow.png",
+                        "w":  16,
+                        "h":  16,
+                        "align":  "center"
+                    },
+    "icon_lava":  {
+                      "file":  "icon_lava.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_mark":  {
+                      "file":  "icon_mark.png",
+                      "w":  16,
+                      "h":  16,
+                      "align":  "center"
+                  },
+    "icon_totem":  {
+                       "file":  "icon_totem.png",
+                       "w":  16,
+                       "h":  16,
+                       "align":  "center"
+                   },
+    "tile_ground":  {
+                        "file":  "tile_ground.png",
+                        "w":  16,
+                        "h":  16,
+                        "tileable":  true
+                    },
+    "tile_town":  {
+                      "file":  "tile_town.png",
+                      "w":  16,
+                      "h":  16,
+                      "tileable":  true
+                  },
+    "ui_panel":  {
+                     "file":  "ui_panel.png",
+                     "w":  24,
+                     "h":  24,
+                     "nine_slice":  8
+                 },
+    "_batch5":  "ART_REQUEST.md batch: side hero / mounts v2 / town / emotes+actions / UI",
+    "hero_side_idle":  {
+                           "file":  "hero_side_idle.png",
+                           "w":  24,
+                           "h":  32,
+                           "anchor":  "bottom-center"
+                       },
+    "hero_side_walk1":  {
+                            "file":  "hero_side_walk1.png",
+                            "w":  24,
+                            "h":  32,
+                            "anchor":  "bottom-center"
+                        },
+    "hero_side_walk2":  {
+                            "file":  "hero_side_walk2.png",
+                            "w":  24,
+                            "h":  32,
+                            "anchor":  "bottom-center"
+                        },
+    "mount_horse":  {
+                        "file":  "mount_horse.png",
+                        "w":  24,
+                        "h":  20,
+                        "anchor":  "bottom-center"
+                    },
+    "mount_pony":  {
+                       "file":  "mount_pony.png",
+                       "w":  20,
+                       "h":  16,
+                       "anchor":  "bottom-center"
+                   },
+    "mount_pinata":  {
+                         "file":  "mount_pinata.png",
+                         "w":  24,
+                         "h":  20,
+                         "anchor":  "bottom-center"
+                     },
+    "mount_giant":  {
+                        "file":  "mount_giant.png",
+                        "w":  32,
+                        "h":  24,
+                        "anchor":  "bottom-center"
+                    },
+    "mount_raptor":  {
+                         "file":  "mount_raptor.png",
+                         "w":  28,
+                         "h":  20,
+                         "anchor":  "bottom-center"
+                     },
+    "mount_ostrich":  {
+                          "file":  "mount_ostrich.png",
+                          "w":  24,
+                          "h":  28,
+                          "anchor":  "bottom-center"
+                      },
+    "mount_turtle":  {
+                         "file":  "mount_turtle.png",
+                         "w":  24,
+                         "h":  16,
+                         "anchor":  "bottom-center"
+                     },
+    "mount_turtle_cannon":  {
+                                "file":  "mount_turtle_cannon.png",
+                                "w":  24,
+                                "h":  16,
+                                "anchor":  "layer-of:mount_turtle"
+                            },
+    "town_smithy_wall":  {
+                             "file":  "town_smithy_wall.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_smithy_roof":  {
+                             "file":  "town_smithy_roof.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "town_smithy_door":  {
+                             "file":  "town_smithy_door.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_smithy_window":  {
+                               "file":  "town_smithy_window.png",
+                               "w":  96,
+                               "h":  80,
+                               "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                           },
+    "town_smithy_sign":  {
+                             "file":  "town_smithy_sign.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "town_grocer_wall":  {
+                             "file":  "town_grocer_wall.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_grocer_roof":  {
+                             "file":  "town_grocer_roof.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "town_grocer_door":  {
+                             "file":  "town_grocer_door.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_grocer_window":  {
+                               "file":  "town_grocer_window.png",
+                               "w":  96,
+                               "h":  80,
+                               "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                           },
+    "town_grocer_sign":  {
+                             "file":  "town_grocer_sign.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "town_bar_wall":  {
+                          "file":  "town_bar_wall.png",
+                          "w":  96,
+                          "h":  80,
+                          "anchor":  "bottom-center"
+                      },
+    "town_bar_roof":  {
+                          "file":  "town_bar_roof.png",
+                          "w":  96,
+                          "h":  80,
+                          "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                      },
+    "town_bar_door":  {
+                          "file":  "town_bar_door.png",
+                          "w":  96,
+                          "h":  80,
+                          "anchor":  "bottom-center"
+                      },
+    "town_bar_window":  {
+                            "file":  "town_bar_window.png",
+                            "w":  96,
+                            "h":  80,
+                            "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                        },
+    "town_bar_sign":  {
+                          "file":  "town_bar_sign.png",
+                          "w":  96,
+                          "h":  80,
+                          "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                      },
+    "town_stable_wall":  {
+                             "file":  "town_stable_wall.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_stable_roof":  {
+                             "file":  "town_stable_roof.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "town_stable_door":  {
+                             "file":  "town_stable_door.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "bottom-center"
+                         },
+    "town_stable_window":  {
+                               "file":  "town_stable_window.png",
+                               "w":  96,
+                               "h":  80,
+                               "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                           },
+    "town_stable_sign":  {
+                             "file":  "town_stable_sign.png",
+                             "w":  96,
+                             "h":  80,
+                             "anchor":  "overlay-96x80 (stack over wall; draw sign above roof)"
+                         },
+    "tile_stone1":  {
+                        "file":  "tile_stone1.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_stone2":  {
+                        "file":  "tile_stone2.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_grass1":  {
+                        "file":  "tile_grass1.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_grass2":  {
+                        "file":  "tile_grass2.png",
+                        "w":  16,
+                        "h":  16,
+                        "anchor":  "tileable"
+                    },
+    "tile_dirt1":  {
+                       "file":  "tile_dirt1.png",
+                       "w":  16,
+                       "h":  16,
+                       "anchor":  "tileable"
+                   },
+    "tile_dirt2":  {
+                       "file":  "tile_dirt2.png",
+                       "w":  16,
+                       "h":  16,
+                       "anchor":  "tileable"
+                   },
+    "tile_grass_to_dirt":  {
+                               "file":  "tile_grass_to_dirt.png",
+                               "w":  16,
+                               "h":  16,
+                               "anchor":  "tileable"
+                           },
+    "tile_dirt_to_grass":  {
+                               "file":  "tile_dirt_to_grass.png",
+                               "w":  16,
+                               "h":  16,
+                               "anchor":  "tileable"
+                           },
+    "prop_fountain":  {
+                          "file":  "prop_fountain.png",
+                          "w":  48,
+                          "h":  48,
+                          "anchor":  "bottom-center"
+                      },
+    "prop_bench":  {
+                       "file":  "prop_bench.png",
+                       "w":  32,
+                       "h":  16,
+                       "anchor":  "bottom-center"
+                   },
+    "prop_barrel":  {
+                        "file":  "prop_barrel.png",
+                        "w":  16,
+                        "h":  20,
+                        "anchor":  "bottom-center"
+                    },
+    "prop_crate":  {
+                       "file":  "prop_crate.png",
+                       "w":  16,
+                       "h":  16,
+                       "anchor":  "bottom-center"
+                   },
+    "prop_flowerbed":  {
+                           "file":  "prop_flowerbed.png",
+                           "w":  24,
+                           "h":  12,
+                           "anchor":  "bottom-center"
+                       },
+    "prop_lamp":  {
+                      "file":  "prop_lamp.png",
+                      "w":  12,
+                      "h":  40,
+                      "anchor":  "bottom-center"
+                  },
+    "prop_board":  {
+                       "file":  "prop_board.png",
+                       "w":  24,
+                       "h":  28,
+                       "anchor":  "bottom-center"
+                   },
+    "prop_stall":  {
+                       "file":  "prop_stall.png",
+                       "w":  48,
+                       "h":  40,
+                       "anchor":  "bottom-center"
+                   },
+    "prop_well":  {
+                      "file":  "prop_well.png",
+                      "w":  28,
+                      "h":  32,
+                      "anchor":  "bottom-center"
+                  },
+    "prop_tree_oak":  {
+                          "file":  "prop_tree_oak.png",
+                          "w":  32,
+                          "h":  48,
+                          "anchor":  "bottom-center"
+                      },
+    "prop_tree_pine":  {
+                           "file":  "prop_tree_pine.png",
+                           "w":  24,
+                           "h":  40,
+                           "anchor":  "bottom-center"
+                       },
+    "prop_tree_ember":  {
+                            "file":  "prop_tree_ember.png",
+                            "w":  28,
+                            "h":  44,
+                            "anchor":  "bottom-center"
+                        },
+    "npc24_smith":  {
+                        "file":  "npc24_smith.png",
+                        "w":  24,
+                        "h":  32,
+                        "anchor":  "bottom-center"
+                    },
+    "npc24_merchant":  {
+                           "file":  "npc24_merchant.png",
+                           "w":  24,
+                           "h":  32,
+                           "anchor":  "bottom-center"
+                       },
+    "npc24_gambler":  {
+                          "file":  "npc24_gambler.png",
+                          "w":  24,
+                          "h":  32,
+                          "anchor":  "bottom-center"
+                      },
+    "npc24_warehouse":  {
+                            "file":  "npc24_warehouse.png",
+                            "w":  24,
+                            "h":  32,
+                            "anchor":  "bottom-center"
+                        },
+    "npc24_wardenkeeper":  {
+                               "file":  "npc24_wardenkeeper.png",
+                               "w":  24,
+                               "h":  32,
+                               "anchor":  "bottom-center"
+                           },
+    "npc24_horsekeeper":  {
+                              "file":  "npc24_horsekeeper.png",
+                              "w":  24,
+                              "h":  32,
+                              "anchor":  "bottom-center"
+                          },
+    "emote_laugh":  {
+                        "file":  "emote_laugh.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "center"
+                    },
+    "emote_cry":  {
+                      "file":  "emote_cry.png",
+                      "w":  32,
+                      "h":  32,
+                      "anchor":  "center"
+                  },
+    "emote_angry":  {
+                        "file":  "emote_angry.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "center"
+                    },
+    "emote_heart":  {
+                        "file":  "emote_heart.png",
+                        "w":  32,
+                        "h":  32,
+                        "anchor":  "center"
+                    },
+    "emote_thumbs":  {
+                         "file":  "emote_thumbs.png",
+                         "w":  32,
+                         "h":  32,
+                         "anchor":  "center"
+                     },
+    "emote_question":  {
+                           "file":  "emote_question.png",
+                           "w":  32,
+                           "h":  32,
+                           "anchor":  "center"
+                       },
+    "emote_gg":  {
+                     "file":  "emote_gg.png",
+                     "w":  32,
+                     "h":  32,
+                     "anchor":  "center"
+                 },
+    "emote_speechless":  {
+                             "file":  "emote_speechless.png",
+                             "w":  32,
+                             "h":  32,
+                             "anchor":  "center"
+                         },
+    "act_dance":  {
+                      "file":  "act_dance.png",
+                      "w":  32,
+                      "h":  32,
+                      "anchor":  "center"
+                  },
+    "act_sit":  {
+                    "file":  "act_sit.png",
+                    "w":  32,
+                    "h":  32,
+                    "anchor":  "center"
+                },
+    "act_wave":  {
+                     "file":  "act_wave.png",
+                     "w":  32,
+                     "h":  32,
+                     "anchor":  "center"
+                 },
+    "act_cheer":  {
+                      "file":  "act_cheer.png",
+                      "w":  32,
+                      "h":  32,
+                      "anchor":  "center"
+                  },
+    "act_taunt":  {
+                      "file":  "act_taunt.png",
+                      "w":  32,
+                      "h":  32,
+                      "anchor":  "center"
+                  },
+    "act_sleep":  {
+                      "file":  "act_sleep.png",
+                      "w":  32,
+                      "h":  32,
+                      "anchor":  "center"
+                  },
+    "act_spin":  {
+                     "file":  "act_spin.png",
+                     "w":  32,
+                     "h":  32,
+                     "anchor":  "center"
+                 },
+    "act_clap":  {
+                     "file":  "act_clap.png",
+                     "w":  32,
+                     "h":  32,
+                     "anchor":  "center"
+                 },
+    "ui_panel32":  {
+                       "file":  "ui_panel32.png",
+                       "w":  32,
+                       "h":  32,
+                       "anchor":  "nine-slice:8"
+                   },
+    "ui_button":  {
+                      "file":  "ui_button.png",
+                      "w":  32,
+                      "h":  20,
+                      "anchor":  "nine-slice:6"
+                  },
+    "ui_slot_octagon":  {
+                            "file":  "ui_slot_octagon.png",
+                            "w":  24,
+                            "h":  24,
+                            "anchor":  "center"
+                        },
+    "ui_popup":  {
+                     "file":  "ui_popup.png",
+                     "w":  40,
+                     "h":  28,
+                     "anchor":  "nine-slice:10"
+                 }
 }
