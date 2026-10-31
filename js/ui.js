@@ -385,10 +385,19 @@
           def.name + ' <b>' + n + '</b>/' + top + (on ? ' · ' + on : '') + '</span>';
       }
       html += '</div>';
+      const tabId = (UI.talentTab && D.TREES.some(function (x) { return x.id === UI.talentTab; })) ? UI.talentTab : D.TREES[0].id;
+      html += '<div class="ttabs">';
+      for (let t = 0; t < D.TREES.length; t++) {
+        const tr = D.TREES[t];
+        html += '<button class="ttab' + (tr.id === tabId ? ' on' : '') + '" data-tab="' + tr.id + '" style="--tc:' + tr.color + '">' +
+          tr.name + '<span>' + (p.treeSpent[tr.id] || 0) + '</span></button>';
+      }
+      html += '</div>';
+
       html += '<div class="tcols">';
 
-      for (let t = 0; t < D.TREES.length; t++) {
-        const tree = D.TREES[t];
+      {
+        const tree = D.TREES.find(function (x) { return x.id === tabId; });
         const spent = p.treeSpent[tree.id] || 0;
         html += '<div class="tcol" style="--tc:' + tree.color + '">';
         html += '<div class="thead">' + tree.name + '<span>' + spent + ' 点</span></div>';
@@ -428,11 +437,12 @@
     function onClick(ev) {
       let el = ev.target;
       const box = $('modalbox');
-      while (el && el !== box && !el.getAttribute('data-node') && !el.getAttribute('data-close') && !el.getAttribute('data-reset')) {
+      while (el && el !== box && !el.getAttribute('data-node') && !el.getAttribute('data-close') && !el.getAttribute('data-reset') && !el.getAttribute('data-tab')) {
         el = el.parentNode;
       }
       if (!el || el === box) return;
       if (el.getAttribute('data-close')) { UI.close(); return; }
+      if (el.getAttribute('data-tab')) { UI.talentTab = el.getAttribute('data-tab'); render(); return; }
       if (el.getAttribute('data-reset')) {
         const n = ACT.run(st, 'resetTalents', []);
         UI.toast('返还 ' + n + ' 点');
@@ -976,6 +986,7 @@
         while (el && el !== box && !el.getAttribute('data-id') && !el.getAttribute('data-close')) el = el.parentNode;
         if (!el || el === box) return;
         if (el.getAttribute('data-close')) { UI.close(); return; }
+      if (el.getAttribute('data-tab')) { UI.talentTab = el.getAttribute('data-tab'); render(); return; }
         if (el.getAttribute('data-daily')) { location.href = location.pathname + '?daily=1'; return; }
         if (M.buy(el.getAttribute('data-id'))) { UI.playSfx('craft'); render(); }
         else UI.toast('精华不足', 'bad');

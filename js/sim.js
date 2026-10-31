@@ -425,6 +425,7 @@
       if (!hit.length) return false;
       const aim = Math.atan2(target.y - p.y, target.x - p.x);
       let any = false;
+      let dealt = 0;
       for (let i = 0; i < hit.length; i++) {
         const e = hit[i];
         const ang = Math.atan2(e.y - p.y, e.x - p.x);
@@ -433,9 +434,15 @@
         if (diff > sk.arc / 2 + 0.35) continue;
         const h = E.rollHit(calc, rand.bind(null, st));
         damageEnemy(st, e, h.dmg, h.crit, calc.parts[0].type);
+        dealt += h.dmg;
         any = true;
       }
       if (!any) return false;
+      if (sk.lifesteal && dealt > 0) {
+        const heal = dealt * sk.lifesteal;
+        p.hp = Math.min(p.maxHp, p.hp + heal);
+        addText(st, p.x, p.y, Math.round(heal), false, '#6fdc8f');
+      }
       addFx(st, 'slash', p.x, p.y, sk.range, '#e8e2d0', 0.16, { ang: aim });
       return true;
     }
@@ -445,7 +452,12 @@
       if (!hit.length) return false;
       for (let i = 0; i < hit.length; i++) {
         const h = E.rollHit(calc, rand.bind(null, st));
-        damageEnemy(st, hit[i], h.dmg, h.crit, 'cold');
+        damageEnemy(st, hit[i], h.dmg, h.crit, calc.parts[0].type);
+        if (sk.dot) {
+          const dps = calc.parts[0].max * sk.dot;
+          hit[i].burn = Math.max(hit[i].burn || 0, sk.dotDur || 3);
+          hit[i].burnDps = Math.max(hit[i].burnDps || 0, dps);
+        }
         hit[i].chill = Math.max(hit[i].chill || 0, 1.2);
       }
       addFx(st, 'ring', p.x, p.y, sk.radius, '#7fdcff', 0.34);

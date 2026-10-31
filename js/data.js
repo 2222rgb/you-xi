@@ -44,6 +44,20 @@
       rate: 0.75, speed: 160, radius: 22, range: 220, pierce: 4,
       desc: '掷出会回旋的战斧，穿透路径上的所有敌人。'
     },
+    bloodlet: {
+      id: 'bloodlet', name: '血刃', icon: 'icon_dagger', color: '#c0392b',
+      kind: 'melee', tags: ['phys', 'melee', 'strike'],
+      base: { phys: [9, 14] }, perLevel: 1.24,
+      rate: 1.9, range: 48, arc: 1.8, lifesteal: 0.3,
+      desc: '挥出带血的斩击，命中伤害的 30% 转化为生命。'
+    },
+    toxic: {
+      id: 'toxic', name: '毒雾', icon: 'icon_frost', color: '#6fdc8f',
+      kind: 'aura', tags: ['phys', 'area', 'dot', 'spell'],
+      base: { phys: [5, 8] }, perLevel: 1.22,
+      rate: 0.9, radius: 64, dot: 0.55, dotDur: 3.5,
+      desc: '向四周扩散剧毒，命中的敌人持续掉血。'
+    },
     meteor: {
       id: 'meteor', name: '陨星', icon: 'icon_meteor', color: '#ff6b2b',
       kind: 'meteor', tags: ['fire', 'area', 'spell'],
@@ -186,6 +200,21 @@
         { id: 's8', tier: 4, name: '迅捷', kind: 'passive', max: 5, icon: 'icon_boot', mods: [{ k: 'speed', v: 0.05 }], desc: '每级 +5% 攻击速度。' },
         { id: 's9', tier: 5, name: '疾影', kind: 'keystone', max: 1, icon: 'icon_frost', mods: [{ k: 'moreSpeed', v: 0.35 }, { k: 'more', t: 'all', v: -0.15 }], desc: '35% 更多攻速，但伤害 -15%。' },
         { id: 's10', tier: 5, name: '静电', kind: 'passive', max: 5, icon: 'icon_bolt', mods: [{ k: 'inc', t: 'lightning', v: 0.15 }], desc: '每级 +15% 闪电伤害。' }
+      ]
+    },
+    {
+      id: 'blood', name: '血', color: '#c0392b',
+      nodes: [
+        { id: 'h1', tier: 1, name: '血刃', kind: 'active', skill: 'bloodlet', max: 5, icon: 'icon_dagger', desc: '解锁血刃，每级提升技能等级。' },
+        { id: 'h2', tier: 1, name: '铁血', kind: 'passive', max: 5, icon: 'icon_axe', mods: [{ k: 'inc', t: 'phys', v: 0.10 }], desc: '每级 +10% 物理伤害。' },
+        { id: 'h3', tier: 2, name: '淬毒', kind: 'passive', max: 5, icon: 'icon_frost', mods: [{ k: 'inc', t: 'phys', v: 0.12 }], desc: '每级 +12% 物理伤害（持续伤害同源）。' },
+        { id: 'h4', tier: 2, name: '嗜血', kind: 'passive', max: 3, icon: 'icon_ring', mods: [{ k: 'crit', v: 0.07 }], desc: '每级 +7% 暴击率。' },
+        { id: 'h5', tier: 3, name: '毒雾', kind: 'active', skill: 'toxic', max: 5, icon: 'icon_frost', desc: '解锁毒雾，每级提升技能等级。' },
+        { id: 'h6', tier: 3, name: '血偿', kind: 'passive', max: 5, icon: 'icon_amulet', mods: [{ k: 'life', v: 45 }], desc: '每级 +45 最大生命。' },
+        { id: 'h7', tier: 4, name: '深创', kind: 'passive', max: 3, icon: 'icon_fire', mods: [{ k: 'more', t: 'phys', v: 0.08 }], desc: '每级 8% 更多物理伤害。' },
+        { id: 'h8', tier: 4, name: '蔓延', kind: 'passive', max: 5, icon: 'icon_meteor', mods: [{ k: 'inc', t: 'area', v: 0.12 }], desc: '每级 +12% 范围伤害。' },
+        { id: 'h9', tier: 5, name: '血祭', kind: 'keystone', max: 1, icon: 'icon_fire', mods: [{ k: 'more', t: 'all', v: 0.40 }, { k: 'lifePct', v: -0.25 }], desc: '40% 更多全部伤害，但最大生命 -25%。' },
+        { id: 'h10', tier: 5, name: '蚀骨', kind: 'passive', max: 5, icon: 'icon_dagger', mods: [{ k: 'inc', t: 'all', v: 0.07 }], desc: '每级 +7% 全部伤害。' }
       ]
     }
   ];

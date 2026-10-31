@@ -83,5 +83,18 @@ stD.players[1].x = da.x + 500; stD.players[1].y = da.y;
 const inpD = {}; inpD[da.id] = { mx: 0, my: 0 }; inpD[stD.players[1].id] = { mx: 0, my: 0 };
 for (let i = 0; i < 60; i++) { stD.enemies.length = 0; SIM.step(stD, STEP, inpD); }
 T('无人救援会真正死亡', da.alive === false, 'alive=' + da.alive);
+// 第四棵树：血刃可学习并进入技能栏
+const stB = SIM.create(51, 1);
+SIM.chooseRift(stB, 0);
+const pb = stB.players[0];
+pb.talentPoints = 6;
+const okB = SIM.allocate(stB, 'h1');
+const learned = pb.skills.some(function (s) { return s.id === 'bloodlet'; });
+T('血树技能可学习', !!okB && learned, 'skills=' + pb.skills.map(function (s) { return s.id; }).join(','));
+pb.talentPoints = 40;
+for (let i = 0; i < 5; i++) SIM.allocate(stB, 'h1');
+for (let i = 0; i < 3; i++) SIM.allocate(stB, 'h2');
+const okH5 = SIM.allocate(stB, 'h5');
+T('毒雾节点解锁', !!okH5, 'treeSpent=' + (pb.treeSpent.blood || 0) + ' 技能数=' + pb.skills.length);
 console.log('\n' + pass + '/' + (pass + fail) + ' passed');
 process.exit(fail === 0 ? 0 : 1);
