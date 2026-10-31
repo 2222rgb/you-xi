@@ -194,11 +194,11 @@
     {
       id: 'blade', name: '刃', color: '#cfd8e8',
       nodes: [
-        { id: 'b1', tier: 1, name: '影刃', kind: 'active', skill: 'dagger', max: 5, icon: 'icon_dagger', desc: '解锁影刃，每级提升技能等级。' },
+        { id: 'b1', tier: 1, name: '淬刃', kind: 'passive', max: 5, icon: 'icon_dagger', mods: [{ k: 'inc', t: 'phys', v: 0.14 }], desc: '每级 +14% 物理伤害。' },
         { id: 'b2', tier: 1, name: '锋芒', kind: 'passive', max: 5, icon: 'icon_axe', mods: [{ k: 'inc', t: 'phys', v: 0.10 }], desc: '每级 +10% 物理伤害。' },
         { id: 'b3', tier: 2, name: '重击', kind: 'passive', max: 5, icon: 'icon_axe', mods: [{ k: 'inc', t: 'melee', v: 0.12 }], desc: '每级 +12% 近战伤害。' },
         { id: 'b4', tier: 2, name: '嗜血', kind: 'passive', max: 3, icon: 'icon_ring', mods: [{ k: 'crit', v: 0.08 }], desc: '每级 +8% 暴击率。' },
-        { id: 'b5', tier: 3, name: '回旋斧', kind: 'active', skill: 'axe', max: 5, icon: 'icon_axe', desc: '解锁回旋斧，每级提升技能等级。' },
+        { id: 'b5', tier: 3, name: '重劈', kind: 'passive', max: 5, icon: 'icon_axe', mods: [{ k: 'inc', t: 'melee', v: 0.15 }], desc: '每级 +15% 近战伤害。' },
         { id: 'b6', tier: 3, name: '裂甲', kind: 'passive', max: 5, icon: 'icon_dagger', mods: [{ k: 'inc', t: 'phys', v: 0.15 }], desc: '每级 +15% 物理伤害。' },
         { id: 'b7', tier: 4, name: '屠戮', kind: 'passive', max: 3, icon: 'icon_ring', mods: [{ k: 'critMulti', v: 0.12 }], desc: '每级 +12% 暴击伤害。' },
         { id: 'b8', tier: 4, name: '狂怒', kind: 'passive', max: 5, icon: 'icon_bolt', mods: [{ k: 'speed', v: 0.06 }], desc: '每级 +6% 攻击速度。' },
@@ -209,11 +209,11 @@
     {
       id: 'ember', name: '焰', color: '#ff8a3d',
       nodes: [
-        { id: 'e1', tier: 1, name: '炎爆', kind: 'active', skill: 'fireball', max: 5, icon: 'icon_fire', desc: '解锁炎爆，每级提升技能等级。' },
+        { id: 'e1', tier: 1, name: '烈焰', kind: 'passive', max: 5, icon: 'icon_fire', mods: [{ k: 'inc', t: 'fire', v: 0.14 }], desc: '每级 +14% 火焰伤害。' },
         { id: 'e2', tier: 1, name: '炽心', kind: 'passive', max: 5, icon: 'icon_fire', mods: [{ k: 'inc', t: 'fire', v: 0.10 }], desc: '每级 +10% 火焰伤害。' },
         { id: 'e3', tier: 2, name: '扩散', kind: 'passive', max: 5, icon: 'icon_meteor', mods: [{ k: 'inc', t: 'area', v: 0.10 }], desc: '每级 +10% 范围伤害。' },
         { id: 'e4', tier: 2, name: '余烬', kind: 'passive', max: 3, icon: 'icon_fire', mods: [{ k: 'inc', t: 'projectile', v: 0.12 }], desc: '每级 +12% 投射物伤害。' },
-        { id: 'e5', tier: 3, name: '陨星', kind: 'active', skill: 'meteor', max: 5, icon: 'icon_meteor', desc: '解锁陨星，每级提升技能等级。' },
+        { id: 'e5', tier: 3, name: '焚天', kind: 'passive', max: 5, icon: 'icon_meteor', mods: [{ k: 'inc', t: 'area', v: 0.14 }], desc: '每级 +14% 范围伤害。' },
         { id: 'e6', tier: 3, name: '薪柴', kind: 'passive', max: 5, icon: 'icon_amulet', mods: [{ k: 'life', v: 40 }], desc: '每级 +40 最大生命。' },
         { id: 'e7', tier: 4, name: '焚尽', kind: 'passive', max: 3, icon: 'icon_fire', mods: [{ k: 'more', t: 'fire', v: 0.08 }], desc: '每级 8% 更多火焰伤害。' },
         { id: 'e8', tier: 4, name: '火种', kind: 'passive', max: 5, icon: 'icon_meteor', mods: [{ k: 'flat', t: 'fire', v: 6 }], desc: '每级附加 6 点火焰伤害。' },
@@ -224,11 +224,11 @@
     {
       id: 'storm', name: '雷', color: '#ffe066',
       nodes: [
-        { id: 's1', tier: 1, name: '链雷', kind: 'active', skill: 'bolt', max: 5, icon: 'icon_bolt', desc: '解锁链雷，每级提升技能等级。' },
+        { id: 's1', tier: 1, name: '引雷', kind: 'passive', max: 5, icon: 'icon_bolt', mods: [{ k: 'inc', t: 'lightning', v: 0.14 }], desc: '每级 +14% 闪电伤害。' },
         { id: 's2', tier: 1, name: '雷引', kind: 'passive', max: 5, icon: 'icon_bolt', mods: [{ k: 'inc', t: 'lightning', v: 0.10 }], desc: '每级 +10% 闪电伤害。' },
         { id: 's3', tier: 2, name: '寒触', kind: 'passive', max: 5, icon: 'icon_frost', mods: [{ k: 'inc', t: 'cold', v: 0.10 }], desc: '每级 +10% 冰霜伤害。' },
         { id: 's4', tier: 2, name: '锐目', kind: 'passive', max: 5, icon: 'icon_ring', mods: [{ k: 'crit', v: 0.05 }], desc: '每级 +5% 暴击率。' },
-        { id: 's5', tier: 3, name: '霜环', kind: 'active', skill: 'frostnova', max: 5, icon: 'icon_frost', desc: '解锁霜环，每级提升技能等级。' },
+        { id: 's5', tier: 3, name: '霜触', kind: 'passive', max: 5, icon: 'icon_frost', mods: [{ k: 'inc', t: 'cold', v: 0.14 }], desc: '每级 +14% 冰霜伤害。' },
         { id: 's6', tier: 3, name: '风步', kind: 'passive', max: 5, icon: 'icon_boot', mods: [{ k: 'move', v: 0.04 }], desc: '每级 +4% 移动速度。' },
         { id: 's7', tier: 4, name: '雷暴', kind: 'passive', max: 3, icon: 'icon_bolt', mods: [{ k: 'inc', t: 'lightning', v: 0.10 }, { k: 'critMulti', v: 0.10 }], desc: '每级 +10% 闪电伤害，+10% 暴击伤害。' },
         { id: 's8', tier: 4, name: '迅捷', kind: 'passive', max: 5, icon: 'icon_boot', mods: [{ k: 'speed', v: 0.05 }], desc: '每级 +5% 攻击速度。' },
@@ -239,11 +239,11 @@
     {
       id: 'blood', name: '血', color: '#c0392b',
       nodes: [
-        { id: 'h1', tier: 1, name: '血刃', kind: 'active', skill: 'bloodlet', max: 5, icon: 'icon_dagger', desc: '解锁血刃，每级提升技能等级。' },
+        { id: 'h1', tier: 1, name: '血契', kind: 'passive', max: 5, icon: 'icon_dagger', mods: [{ k: 'inc', t: 'phys', v: 0.14 }], desc: '每级 +14% 物理伤害。' },
         { id: 'h2', tier: 1, name: '铁血', kind: 'passive', max: 5, icon: 'icon_axe', mods: [{ k: 'inc', t: 'phys', v: 0.10 }], desc: '每级 +10% 物理伤害。' },
         { id: 'h3', tier: 2, name: '淬毒', kind: 'passive', max: 5, icon: 'icon_frost', mods: [{ k: 'inc', t: 'phys', v: 0.12 }], desc: '每级 +12% 物理伤害（持续伤害同源）。' },
         { id: 'h4', tier: 2, name: '嗜血', kind: 'passive', max: 3, icon: 'icon_ring', mods: [{ k: 'crit', v: 0.07 }], desc: '每级 +7% 暴击率。' },
-        { id: 'h5', tier: 3, name: '毒雾', kind: 'active', skill: 'toxic', max: 5, icon: 'icon_frost', desc: '解锁毒雾，每级提升技能等级。' },
+        { id: 'h5', tier: 3, name: '蚀毒', kind: 'passive', max: 5, icon: 'icon_frost', mods: [{ k: 'inc', t: 'area', v: 0.14 }], desc: '每级 +14% 范围伤害。' },
         { id: 'h6', tier: 3, name: '血偿', kind: 'passive', max: 5, icon: 'icon_amulet', mods: [{ k: 'life', v: 45 }], desc: '每级 +45 最大生命。' },
         { id: 'h7', tier: 4, name: '深创', kind: 'passive', max: 3, icon: 'icon_fire', mods: [{ k: 'more', t: 'phys', v: 0.08 }], desc: '每级 8% 更多物理伤害。' },
         { id: 'h8', tier: 4, name: '蔓延', kind: 'passive', max: 5, icon: 'icon_meteor', mods: [{ k: 'inc', t: 'area', v: 0.12 }], desc: '每级 +12% 范围伤害。' },
@@ -438,19 +438,19 @@
   ];
 
   const CLASSES = [
-    { id: 'blade', name: '刃行者', color: '#e05c4a', skill: 'dagger', talent: 'b1',
+    { id: 'blade', name: '刃行者', color: '#e05c4a', skills: ['dagger', 'axe', 'bloodlet'], talent: 'b1',
       desc: '近战物理，暴击高，血厚一点',
       hp: 1.12, speed: 1.0, mods: [{ k: 'inc', t: 'phys', v: 0.18 }, { k: 'crit', v: 0.06 }] },
-    { id: 'ember', name: '焚术士', color: '#ff8a3d', skill: 'fireball', talent: 'e1',
+    { id: 'ember', name: '焚术士', color: '#ff8a3d', skills: ['fireball', 'meteor', 'toxic'], talent: 'e1',
       desc: '火焰爆发，清怪快，但很脆',
       hp: 0.84, speed: 1.02, mods: [{ k: 'inc', t: 'fire', v: 0.28 }, { k: 'more', t: 'fire', v: 0.08 }] },
-    { id: 'frost', name: '霜卫', color: '#7fdcff', skill: 'frostnova', talent: 's1',
+    { id: 'frost', name: '霜卫', color: '#7fdcff', skills: ['frostnova', 'toxic', 'bolt'], talent: 's1',
       desc: '冰霜控场，最肉，移速略慢',
       hp: 1.28, speed: 0.93, mods: [{ k: 'inc', t: 'cold', v: 0.22 }, { k: 'life', v: 40 }] },
-    { id: 'chaos', name: '变数', color: '#b07cff', skill: 'dagger', talent: 'b1', rogue: true,
+    { id: 'chaos', name: '变数', color: '#b07cff', skills: ['dagger', 'fireball', 'axe'], talent: 'b1', rogue: true,
       desc: '每级 3 选 1，波次结束重置——上下限都极高',
       hp: 1.0, speed: 1.05, mods: [] },
-    { id: 'storm', name: '雷游侠', color: '#ffe066', skill: 'bolt', talent: 's2',
+    { id: 'storm', name: '雷游侠', color: '#ffe066', skills: ['bolt', 'frostnova', 'fireball'], talent: 's2',
       desc: '闪电连锁，跑得最快',
       hp: 0.94, speed: 1.14, mods: [{ k: 'inc', t: 'lightning', v: 0.22 }, { k: 'rate', v: 0.08 }] }
   ];

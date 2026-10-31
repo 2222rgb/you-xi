@@ -84,18 +84,18 @@ const inpD = {}; inpD[da.id] = { mx: 0, my: 0 }; inpD[stD.players[1].id] = { mx:
 for (let i = 0; i < 60; i++) { stD.enemies.length = 0; SIM.step(stD, STEP, inpD); }
 T('无人救援会真正死亡', da.alive === false, 'alive=' + da.alive);
 // 第四棵树：血刃可学习并进入技能栏
-const stB = SIM.create(51, 1);
-SIM.chooseRift(stB, 0);
-const pb = stB.players[0];
+// 天赋只给被动，技能靠技能面板配置
+const stSep = SIM.create(51, 1);
+SIM.chooseRift(stSep, 0);
+const pb = stSep.players[0];
 pb.talentPoints = 6;
-const okB = SIM.allocate(stB, 'h1');
-const learned = pb.skills.some(function (s) { return s.id === 'bloodlet'; });
-T('血树技能可学习', !!okB && learned, 'skills=' + pb.skills.map(function (s) { return s.id; }).join(','));
-pb.talentPoints = 40;
-for (let i = 0; i < 5; i++) SIM.allocate(stB, 'h1');
-for (let i = 0; i < 3; i++) SIM.allocate(stB, 'h2');
-const okH5 = SIM.allocate(stB, 'h5');
-T('毒雾节点解锁', !!okH5, 'treeSpent=' + (pb.treeSpent.blood || 0) + ' 技能数=' + pb.skills.length);
+const beforeSkills = pb.skills.length;
+const okB = SIM.allocate(stSep, 'h1');
+T('天赋不再授予技能', !!(okB && pb.skills.length === beforeSkills), 'skills=' + pb.skills.map(function (s) { return s.id; }).join(','));
+const rsk = SIM.setSkill(stSep, 0, 'fireball', pb);
+T('技能栏可自由换技能', !!(rsk && rsk.ok && pb.skills[0].id === 'fireball'), 'slot0=' + pb.skills[0].id);
+const rsk2 = SIM.setSkill(stSep, 1, 'fireball', pb);
+T('同一技能不能重复装备', !(rsk2 && rsk2.ok), 'msg=' + (rsk2 && rsk2.msg));
 // 强化系统
 const stEn = SIM.create(61, 1);
 SIM.chooseRift(stEn, 0);

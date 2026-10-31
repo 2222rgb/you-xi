@@ -51,7 +51,7 @@
     p.treeSpent = { blade: 0, ember: 0, storm: 0 };
     const entry = D.TALENT_INDEX && D.TALENT_INDEX[cls.talent];
     if (entry && entry.tree) p.treeSpent[entry.tree] = 1;
-    p.skills = [{ id: cls.skill, rank: 1, cd: 0 }];
+    p.skills = (cls.skills || ['dagger']).map(function (sid) { return { id: sid, rank: 1, cd: 0 }; });
     return p;
   }
 
@@ -68,7 +68,7 @@
     p.treeSpent = { blade: 0, ember: 0, storm: 0 };
     const entry = D.TALENT_INDEX && D.TALENT_INDEX[cls.talent];
     if (entry && entry.tree) p.treeSpent[entry.tree] = 1;
-    p.skills = [{ id: cls.skill, rank: 1, cd: 0 }];
+    p.skills = (cls.skills || ['dagger']).map(function (sid) { return { id: sid, rank: 1, cd: 0 }; });
     recompute(st, p);
     p.hp = p.maxHp;
     return true;
@@ -205,6 +205,20 @@
   }
 
   /** 增删辅助（每技能最多 3 个） */
+  /** 把某个技能放进技能栏 */
+  function setSkill(st, slot, skillId, p) {
+    if (!p) p = localPlayer(st);
+    if (!D.SKILLS[skillId]) return { ok: false, msg: '没有这个技能' };
+    if (slot < 0 || slot > 2) return { ok: false, msg: '无效技能栏' };
+    for (let i = 0; i < p.skills.length; i++) {
+      if (i !== slot && p.skills[i] && p.skills[i].id === skillId) return { ok: false, msg: '该技能已在其他栏位' };
+    }
+    const old = p.skills[slot];
+    p.skills[slot] = { id: skillId, rank: old ? old.rank : 1, cd: 0 };
+    recompute(st, p);
+    return { ok: true };
+  }
+
   function setSupport(st, skillId, supportId, p) {
     if (!p) p = localPlayer(st);
     p.supports = p.supports || {};
@@ -223,6 +237,13 @@
     p.supports[skillId] = cur;
     recompute(st, p);
     return { ok: true, list: cur };
+  }
+
+  /** 祭坛买到新加成后，立刻作用到当前这局 */
+  function applyMeta(st, bonus) {
+    if (bonus) st.meta = Object.assign({}, st.meta, bonus);
+    for (let i = 0; i < st.players.length; i++) recompute(st, st.players[i]);
+    return st.meta;
   }
 
   function setRune(st, skillId, runeId, p) {
@@ -265,7 +286,8 @@
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
       const modsAll = (runeModsOf(p, s.id) || []).concat(supportModsOf(p, s.id) || []);
-        p.skillCalc[s.id] = E.computeSkill(s.id, skillLevel(p, s), agg, modsAll.length ? modsAll : null);
+        s.rank = skillRankOf(p);
+        p.skillCalc[s.id] = E.computeSkill(s.id, s.rank, agg, modsAll.length ? modsAll : null);
     }
     if (p === localPlayer(st)) {
       st.agg = agg;
@@ -280,6 +302,11 @@
   }
 
   function skillLevel(p, s) { return Math.min(D.MAX_SKILL_LEVEL, s.rank || 1); }
+
+  /** 技能等级随角色等级自动成长（1~5） */
+  function skillRankOf(p) {
+    return Math.min(5, 1 + Math.floor((p.level - 1) / 6));
+  }
 
   function syncSkillRank(p, skillId, rank) {
     const s = p.skills.find(function (x) { return x.id === skillId; });
@@ -1426,7 +1453,7 @@
     p.treeSpent[entry.tree] = (p.treeSpent[entry.tree] || 0) + 1;
     p.talentPoints--;
 
-    if (node.kind === 'active') syncSkillRank(p, node.skill, p.talents[id]);
+    // 天赋只提供被动，不再授予技能
     recompute(st, p);
     return true;
   }
@@ -1553,7 +1580,7 @@
     for (let i = 0; i < p.skills.length; i++) {
       const s = p.skills[i];
       const modsAll2 = (runeModsOf(p, s.id) || []).concat(supportModsOf(p, s.id) || []);
-        const c = E.computeSkill(s.id, skillLevel(p, s), agg, modsAll2.length ? modsAll2 : null);
+        const c = E.computeSkill(s.id, s.rank || 1, agg, modsAll2.length ? modsAll2 : null);
       if (c) dps += c.dps;
     }
     const hp = Math.max(1, Math.round((CFG.baseHp + CFG.hpPerLevel * (p.level - 1) + agg.life) * (1 + agg.lifePct)));
@@ -1698,7 +1725,7 @@
     localPlayer: localPlayer, setLocal: setLocal, alivePlayers: alivePlayers,
     addPlayer: addPlayer, removePlayer: removePlayer, applyPlayerDetails: applyPlayerDetails,
     classOf: classOf, setClass: setClass, enhance: enhance, salvage: salvage, dropItem: dropItem,
-    setRune: setRune, runeModsOf: runeModsOf, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
+    setRune: setRune, runeModsOf: runeModsOf, applyMeta: applyMeta, setSkill: setSkill, pickRogue: pickRogue, rogueModsOf: rogueModsOf,
     activateStatue: activateStatue, giveUp: giveUp, castSkill: castSkill, setSupport: setSupport, autoCast: autoCast,
     addSkill: addSkill,
     allocate: allocate, resetTalents: resetTalents, drinkPotion: drinkPotion,

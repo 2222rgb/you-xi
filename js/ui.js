@@ -1185,41 +1185,55 @@
   /* ---------------- 技能面板（辅助插槽） ---------------- */
   UI.showSkills = function (st) {
     const p = st.player;
+    const ALL = ['dagger', 'axe', 'fireball', 'meteor', 'bolt', 'frostnova', 'bloodlet', 'toxic'];
     function render() {
       let html = '<div class="mtitle">技能</div>';
-      html += '<div class="msub">按 <b>1 / 2 / 3</b> 手动施放；插「触媒·自动」后自动释放。每技能最多 3 个辅助。</div>';
+      html += '<div class="msub">选 3 个技能 · 按 <b>1 / 2 / 3</b> 施放 · 插「触媒·自动」可自动释放 · 符文在「符文」面板</div>';
       for (let si = 0; si < 3; si++) {
         const s = p.skills[si];
-        if (!s) {
-          html += '<div class="sect">技能栏 ' + (si + 1) + '</div><div class="empty">空</div>';
-          continue;
-        }
-        const def = D.SKILLS[s.id];
-        const sup = (p.supports && p.supports[s.id]) || [];
-        const auto = root.SIM.autoCast(p, s.id);
-        html += '<div class="sect">技能栏 ' + (si + 1) + ' · ' + def.name + ' Lv' + s.rank +
-          '<span style="color:' + (auto ? '#6fdc8f' : '#6f7a90') + ';font-size:10px"> · ' + (auto ? '自动释放' : '手动释放') + '</span></div>';
+        const def = s ? D.SKILLS[s.id] : null;
+        html += '<div class="sect">技能栏 ' + (si + 1) + (def ? ' · ' + def.name : ' · 空') + '</div>';
         html += '<div class="opts">';
-        for (let k = 0; k < D.SUPPORTS.length; k++) {
-          const sp = D.SUPPORTS[k];
-          const on = sup.indexOf(sp.id) >= 0;
-          html += '<button class="opt' + (on ? ' on' : '') + '" data-sup="' + s.id + '|' + sp.id + '" title="' + sp.desc + '">' + sp.name + '</button>';
+        for (let k = 0; k < ALL.length; k++) {
+          const sk = D.SKILLS[ALL[k]];
+          if (!sk) continue;
+          const on = def && def.id === ALL[k];
+          html += '<button class="opt' + (on ? ' on' : '') + '" data-skset="' + si + '|' + ALL[k] + '">' + sk.name + '</button>';
         }
         html += '</div>';
+        if (def) {
+          const sup = (p.supports && p.supports[s.id]) || [];
+          const auto = root.SIM.autoCast(p, s.id);
+          html += '<div class="note" style="margin:2px 0 4px;color:' + (auto ? '#6fdc8f' : '#6f7a90') + '">' + (auto ? '自动释放' : '手动释放') + ' · 辅助 ' + sup.length + '/3</div>';
+          html += '<div class="opts">';
+          for (let k = 0; k < D.SUPPORTS.length; k++) {
+            const sp = D.SUPPORTS[k];
+            const on2 = sup.indexOf(sp.id) >= 0;
+            html += '<button class="opt' + (on2 ? ' on' : '') + '" data-sup="' + s.id + '|' + sp.id + '" title="' + sp.desc + '">' + sp.name + '</button>';
+          }
+          html += '</div>';
+        }
       }
       html += '<div class="note">' + D.SUPPORTS.map(function (x) { return '<b>' + x.name + '</b> ' + x.desc; }).join('<br>') + '</div>';
       html += '<div class="mfoot"><button class="btn primary" data-close="1">关闭</button></div>';
       openModal(html, 'wide');
-      $('modalbox').onclick = function (ev) {
+      modalbox.onclick = function (ev) {
         let el = ev.target;
-        const box = $('modalbox');
-        while (el && el !== box && !el.getAttribute('data-sup') && !el.getAttribute('data-close')) el = el.parentNode;
+        const box = modalbox;
+        while (el && el !== box && !el.getAttribute('data-sup') && !el.getAttribute('data-close') && !el.getAttribute('data-skset')) el = el.parentNode;
         if (!el || el === box) return;
         if (el.getAttribute('data-close')) { UI.close(); return; }
+        const kset = el.getAttribute('data-skset');
+        if (kset) {
+          const pp = kset.split('|');
+          const r = ACT.run(st, 'setskill', [parseInt(pp[0], 10), pp[1]]);
+          if (r && r.ok) UI.playSfx('ui'); else if (r) UI.toast(r.msg, 'bad');
+          render();
+          return;
+        }
         const parts = el.getAttribute('data-sup').split('|');
-        const r = ACT.run(st, 'support', [parts[0], parts[1]]);
-        if (r && r.ok) UI.playSfx('ui');
-        else if (r) UI.toast(r.msg, 'bad');
+        const rs = ACT.run(st, 'support', [parts[0], parts[1]]);
+        if (rs && rs.ok) UI.playSfx('ui'); else if (rs) UI.toast(rs.msg, 'bad');
         render();
       };
     }
@@ -1311,7 +1325,11 @@
         if (el.getAttribute('data-close')) { UI.close(); return; }
       if (el.getAttribute('data-tab')) { UI.talentTab = el.getAttribute('data-tab'); render(); return; }
         if (el.getAttribute('data-daily')) { location.href = location.pathname + '?daily=1'; return; }
-        if (M.buy(el.getAttribute('data-id'))) { UI.playSfx('craft'); render(); }
+        if (M.buy(el.getAttribute('data-id'))) {
+          UI.playSfx('craft');
+          if (window.__st && root.SIM) root.SIM.applyMeta(window.__st(), M.bonus());
+          render();
+        }
         else UI.toast('精华不足', 'bad');
       };
     }

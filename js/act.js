@@ -39,6 +39,7 @@
       case 'rune': return SIM.setRune(st, a[0], a[1], p);
       case 'cast': return SIM.castSkill(st, a[0], p);
       case 'support': return SIM.setSupport(st, a[0], a[1], p);
+      case 'setskill': return SIM.setSkill(st, a[0], a[1], p);
       case 'rogue': return SIM.pickRogue(st, a[0], p);
       case 'statue': return SIM.activateStatue(st, p);
       case 'giveup': return SIM.giveUp(st, p);
