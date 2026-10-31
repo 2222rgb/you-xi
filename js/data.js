@@ -68,7 +68,7 @@
       id: 'bloodlet', name: '血刃', icon: 'icon_dagger', color: '#c0392b',
       kind: 'melee', tags: ['phys', 'melee', 'strike'],
       base: { phys: [9, 14] }, perLevel: 1.24,
-      rate: 1.9, range: 48, arc: 1.8, lifesteal: 0.3,
+      rate: 2.0, range: 58, arc: 2.5, lifesteal: 0.3,
       runes: [
         { id: 'thirst', name: '渴血', desc: '范围 +40%，伤害 -10%，材料 30', mods: [{ k: 'range', v: 0.40 }, { k: 'dmg', v: -0.10 }], cost: 30 },
         { id: 'rend', name: '撕裂', desc: '伤害 +30%，材料 30', mods: [{ k: 'dmg', v: 0.30 }], cost: 30 }
@@ -78,8 +78,8 @@
     toxic: {
       id: 'toxic', name: '毒雾', icon: 'icon_frost', color: '#6fdc8f',
       kind: 'aura', tags: ['phys', 'area', 'dot', 'spell'],
-      base: { phys: [5, 8] }, perLevel: 1.22,
-      rate: 0.9, radius: 64, dot: 0.55, dotDur: 3.5,
+      base: { phys: [11, 16] }, perLevel: 1.24,
+      rate: 0.95, radius: 66, dot: 0.85, dotDur: 4,
       runes: [
         { id: 'spread', name: '扩散', desc: '范围 +45%，伤害 -12%，材料 30', mods: [{ k: 'radius', v: 0.45 }, { k: 'dmg', v: -0.12 }], cost: 30 },
         { id: 'rot', name: '腐化', desc: '伤害 +30%，范围 -10%，材料 30', mods: [{ k: 'dmg', v: 0.30 }, { k: 'radius', v: -0.10 }], cost: 30 }

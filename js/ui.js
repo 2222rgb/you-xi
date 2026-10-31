@@ -951,12 +951,33 @@
   }
 
   UI.applyControls = function () {
-    const touch = UI.controls === 'touch' || (UI.controls === 'auto' && ('ontouchstart' in window));
+    if (typeof buildSkillPad === 'function') buildSkillPad();
+    const touch = window.__forceTouch || UI.controls === 'touch' || (UI.controls === 'auto' && ('ontouchstart' in window));
     document.body.classList.toggle('touch', touch);
-    $('joystick').classList.toggle('hidden', !touch);
+    joystick.classList.toggle('hidden', !touch);
+    skillpad.classList.toggle('hidden', !touch);
   };
 
   /* ---------------- 触屏摇杆 ---------------- */
+  function buildSkillPad() {
+    const st = UI._st || (root.SIM && window.__st ? window.__st() : null);
+    const pad = $('skillpad');
+    if (!pad) return;
+    pad.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'skbtn';
+      btn.textContent = String(i + 1);
+      btn.onclick = function (ev) {
+        ev.stopPropagation();
+        if (!root.SIM) return;
+        const r = ACT.run(st, 'cast', [i]);
+        if (r && !r.ok && r.msg) UI.toast(r.msg, 'bad');
+      };
+      pad.appendChild(btn);
+    }
+  }
+
   function bindTouch() {
     const stick = $('joystick');
     const knob = $('knob');

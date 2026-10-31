@@ -453,3 +453,20 @@ body.touch #joystick { display: block; }
 #bossname { font-size: 12px; letter-spacing: .24em; color: #ff8a8a; margin-bottom: 3px; text-shadow: 0 0 10px rgba(192,57,43,.8); }
 #bosstrack { height: 10px; background: #14090a; border: 1px solid #6a2020; }
 #bossfill { height: 100%; width: 100%; background: linear-gradient(90deg, #7a1f1f, #ff4d6d); transition: width .12s linear; }
+
+/* 触屏技能按钮 */
+#skillpad { position: absolute; right: 22px; bottom: 210px; display: flex; flex-direction: column; gap: 10px; pointer-events: auto; }
+#skillpad.hidden { display: none; }
+.skbtn {
+  width: 58px; height: 58px; border-radius: 50%;
+  border: 2px solid #3a3a4a; background: rgba(14,14,22,.85);
+  color: #cfd8e8; font-family: inherit; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none; -webkit-user-select: none; touch-action: none;
+}
+.skbtn:active { border-color: var(--gold); color: var(--gold); background: rgba(40,32,12,.9); }
+.skbtn .cd { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,.6); }
+
+#skillpad { right: 16px !important; bottom: 150px !important; }
+.skbtn { width: 54px; height: 54px; }
+body.touch #skillpad { display: flex; }

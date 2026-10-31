@@ -21,6 +21,7 @@
   let snapT = 0, detailT = 0;
 
   const params = new URLSearchParams(location.search);
+  window.__forceTouch = params.get('touch') === '1';
   const BOT = params.get('bot') === '1';
   const FF = parseFloat(params.get('ff') || '0');
   const SCENE = params.get('scene');
